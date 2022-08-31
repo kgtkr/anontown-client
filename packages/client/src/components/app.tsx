@@ -41,7 +41,7 @@ declare const gtag: any;
 
 const muiTheme = getMuiTheme(lightBaseTheme);
 
-interface AppProps extends RouteComponentProps<{}> {}
+interface AppProps extends RouteComponentProps<{}, {}, { modal: boolean }> {}
 
 interface AppState {
   initUserData?: UserData | null;
@@ -393,7 +393,9 @@ export const App = withRouter(
                   );
                 }}
               </User>
-            ) : null
+            ) : (
+              <></>
+            )
           ) : (
             <div>
               <p>
