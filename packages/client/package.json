@@ -136,6 +136,9 @@
 		},
 		"@apollo/react-hooks": {
 			"graphql": "^15.0.0"
+		},
+		"@apollo/react-components": {
+			"graphql": "^15.0.0"
 		}
 	}
 }
