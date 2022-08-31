@@ -11,7 +11,9 @@ jobs:
       - run: |
           npm ci
           npx lerna bootstrap --ci
-      - run: npm run lint
+      - run: |
+          npx lerna run codegen --parallel --scope=@anontown/client --include-filtered-dependencies
+          npm run lint
   docker:
     runs-on: ubuntu-latest
     steps:
