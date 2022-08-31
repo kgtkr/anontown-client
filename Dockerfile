@@ -1,4 +1,4 @@
-FROM node:10.15.3-alpine as base
+FROM node:16.17.0-alpine
 
 WORKDIR /home
 
@@ -15,18 +15,6 @@ COPY schema.json .eslintignore .eslintrc.js .prettierrc ./
 COPY packages ./packages
 
 COPY bin/ bin
-
-FROM base as dev
-
-COPY restart-dummy ./restart-dummy
-CMD ./bin/start-watch.sh
-
-FROM base as dev-webpack-dev-server
-
-COPY restart-dummy ./restart-dummy
-CMD ./bin/start-watch-webpack-dev-server.sh
-
-FROM base
 
 RUN npx lerna run codegen --scope @anontown/client --include-filtered-dependencies \
   && npx lerna run build --scope @anontown/bff \
