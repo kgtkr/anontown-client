@@ -74,10 +74,8 @@ export const ResWrite = (props: ResWriteProps) => {
       });
   };
 
-  const [
-    focusCounter,
-    { inc: incFocusCounter, dec: decFocusCounter },
-  ] = useCounter(0);
+  const [focusCounter, { inc: incFocusCounter, dec: decFocusCounter }] =
+    useCounter(0);
 
   return (
     <form
