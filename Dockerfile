@@ -11,7 +11,6 @@ COPY packages/client/package.json packages/client/package-lock.json ./packages/c
 COPY packages/common/package.json packages/common/package-lock.json ./packages/common/
 RUN npx lerna bootstrap --ci
 
-COPY schema.json ./
 COPY packages ./packages
 
 COPY bin/ bin
