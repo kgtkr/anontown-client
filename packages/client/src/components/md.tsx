@@ -7,9 +7,7 @@ import { camo } from "../effects";
 
 import * as style from "./md.scss";
 import { Modal } from "./modal";
-
-// TODO: ここに置くべきではない。DIできるべき
-const CLIENT_ORIGIN = location.origin;
+import { Env } from "../env";
 
 type URLType =
   | { type: "normal"; url: string }
@@ -92,10 +90,10 @@ function urlEnum(url: string): URLType {
     };
   }
 
-  if (url.startsWith(CLIENT_ORIGIN)) {
+  if (url.startsWith(Env.client.origin)) {
     return {
       type: "router",
-      path: url.substring(CLIENT_ORIGIN.length),
+      path: url.substring(Env.client.origin.length),
     };
   }
 
