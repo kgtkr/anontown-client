@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  server:
+    image: ghcr.io/kgtkr/anontown-server:20220831161349197-1a60963
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres?schema=public
+      - SERVER_PORT=8080
+      - REDIS_HOST=redis:6379
+      - SALT_PASS=aaa
+      - SALT_HASH=bbb
+      - SALT_TOKEN=ccc
+      - SALT_TOKEN_REQ=ddd
+      - RECAPTCHA_SITE_KET=xxxxxxxxxxxx
+      - RECAPTCHA_SECRET_KET=xxxxxxxxxxx
+    depends_on:
+      - postgres
+      - redis
+  redis:
+    image: redis:5.0.14
+    volumes:
+      - redis:/var/lib/postgresql/data
+  postgres:
+    image: postgres:14.5
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+volumes:
+  postgres:
+  redis:
