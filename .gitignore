@@ -1,5 +1,4 @@
 /node_modules/
 /packages/*/node_modules/
 *.tsbuildinfo
-/restart-dummy/*
-!/restart-dummy/.gitkeep
+.env.local

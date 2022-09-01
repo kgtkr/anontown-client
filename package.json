@@ -13,7 +13,6 @@
   },
   "scripts": {
     "lint": "eslint --ext .ts,.tsx packages/*/src",
-    "lint:quiet": "eslint --ext .ts,.tsx packages/*/src --quiet",
     "lint:fix": "eslint --ext .ts,.tsx --fix packages/*/src",
     "format:check": "prettier --check packages/*/src/**/*.{ts,tsx}",
     "format": "prettier --write packages/*/src/**/*.{ts,tsx}"
