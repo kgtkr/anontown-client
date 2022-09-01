@@ -52,6 +52,6 @@ export function loadEnv(env: Record<string, string | undefined>): Env {
     imgur: {
       clientID: unwrap(env["IMGUR_CLIENT_ID"]),
     },
-    ga: env["IMGUR_CLIENT_ID"] ? { id: env["IMGUR_CLIENT_ID"] } : null,
+    ga: env["GA"] ? { id: env["GA"] } : null,
   };
 }
