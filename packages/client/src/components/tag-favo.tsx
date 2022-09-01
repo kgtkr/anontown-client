@@ -21,7 +21,7 @@ export class TagFavo extends React.Component<TagFavoProps, TagFavoState> {
   render() {
     const tagsFavo = Sto.getTagsFavo(this.props.userData.storage);
     return tagsFavo.length !== 0 ? (
-      tagsFavo.map(tags => {
+      tagsFavo.map((tags) => {
         const sortedTags = RA.sort(OrdT.ordString)(tags);
         return (
           <Card key={sortedTags.join(",")}>

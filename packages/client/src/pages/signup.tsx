@@ -34,7 +34,7 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
       <Page>
         <Helmet title="登録" />
         <UserContext.Consumer>
-          {user =>
+          {(user) =>
             user.value !== null ? (
               <Redirect to={routes.home.to({})} />
             ) : (
@@ -81,11 +81,11 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
                         errors: ["アカウント作成に失敗しました"],
                       });
                     }}
-                    onCompleted={async x => {
+                    onCompleted={async (x) => {
                       user.update(
                         await createUserData(
-                          x.createUser.token as G.TokenMasterFragment,
-                        ),
+                          x.createUser.token as G.TokenMasterFragment
+                        )
                       );
                     }}
                     variables={{
@@ -94,7 +94,7 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
                       recaptcha: this.state.recaptcha!,
                     }}
                   >
-                    {create => (
+                    {(create) => (
                       <div>
                         <RaisedButton
                           label="利用規約に同意して登録"

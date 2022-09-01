@@ -14,13 +14,13 @@ export async function load(token: G.TokenMasterFragment) {
     },
   });
   const key = [...Sto.verArray, "main"].find(
-    ver => storages.data.storages.findIndex(x => x.key === ver) !== -1,
+    (ver) => storages.data.storages.findIndex((x) => x.key === ver) !== -1
   );
-  const sto = storages.data.storages.find(x => x.key === key);
+  const sto = storages.data.storages.find((x) => x.key === key);
   return Sto.toStorage(
     await Sto.convert(
-      sto !== undefined ? JSON.parse(sto.value) : Sto.initStorage,
-    ),
+      sto !== undefined ? JSON.parse(sto.value) : Sto.initStorage
+    )
   );
 }
 

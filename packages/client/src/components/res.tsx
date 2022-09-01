@@ -49,7 +49,7 @@ export const Res = React.memo((props: ResProps) => {
   return user.value !== null &&
     !props.res.self &&
     !disableNG &&
-    Sto.getNG(user.value.storage).some(x => ng.isNG(x, props.res)) ? (
+    Sto.getNG(user.value.storage).some((x) => ng.isNG(x, props.res)) ? (
     <Card>
       あぼーん<a onClick={() => setDisableNG(true)}>[見る]</a>
     </Card>
@@ -157,7 +157,7 @@ export const Res = React.memo((props: ResProps) => {
                     state: {
                       modal: true,
                     },
-                  },
+                  }
                 )}
               >
                 @{props.res.profile.sn}
@@ -167,7 +167,7 @@ export const Res = React.memo((props: ResProps) => {
             <Link
               to={routes.res.to(
                 { id: props.res.id, topic: props.res.topic.id },
-                { state: { modal: true } },
+                { state: { modal: true } }
               )}
             >
               {dateFormat.format(props.res.date)}
@@ -180,7 +180,7 @@ export const Res = React.memo((props: ResProps) => {
                   state: {
                     modal: true,
                   },
-                },
+                }
               )}
             >
               #{props.res.hash.substr(0, 6)}
@@ -203,7 +203,7 @@ export const Res = React.memo((props: ResProps) => {
                 {props.res.self && props.res.__typename === "ResNormal" ? (
                   <G.DelResComponent
                     variables={{ res: props.res.id }}
-                    onCompleted={data => {
+                    onCompleted={(data) => {
                       if (props.update) {
                         props.update(data.delRes);
                       }
@@ -289,7 +289,7 @@ export const Res = React.memo((props: ResProps) => {
                     <Link
                       to={routes.res.to(
                         { id: props.res.reply.id, topic: props.res.topic.id },
-                        { state: { modal: true } },
+                        { state: { modal: true } }
                       )}
                     />
                   }
@@ -306,7 +306,7 @@ export const Res = React.memo((props: ResProps) => {
                       <Link
                         to={routes.resReply.to(
                           { id: props.res.id, topic: props.res.topic.id },
-                          { state: { modal: true } },
+                          { state: { modal: true } }
                         )}
                       />
                     }
@@ -359,7 +359,7 @@ export const Res = React.memo((props: ResProps) => {
                   topic={props.res.topic.id}
                   reply={props.res.id}
                   userData={user.value}
-                  changeStorage={x => {
+                  changeStorage={(x) => {
                     if (user.value !== null) {
                       user.update({
                         ...user.value,

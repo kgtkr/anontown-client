@@ -41,10 +41,10 @@ export const TopicSearchPage = (_props: {}) => {
   const { history } = useRouter();
 
   const init = useOnChnageUrlSearch(
-    query => routes.topicSearch.parseQuery(query),
-    query => {
+    (query) => routes.topicSearch.parseQuery(query),
+    (query) => {
       dispatch({ type: "UPDATE_URL_QUERY", query: query });
-    },
+    }
   );
 
   const [state, dispatch] = React.useReducer(
@@ -95,7 +95,7 @@ export const TopicSearchPage = (_props: {}) => {
     {
       input: init,
       query: init,
-    },
+    }
   );
 
   const [onInput] = useDebouncedCallback(() => {
@@ -109,8 +109,8 @@ export const TopicSearchPage = (_props: {}) => {
             dead: state.input.dead,
             tags: state.input.tags,
           },
-        },
-      ),
+        }
+      )
     );
   }, 500);
 
@@ -159,7 +159,7 @@ export const TopicSearchPage = (_props: {}) => {
           <TagsInput
             fullWidth={true}
             value={state.input.tags}
-            onChange={v => {
+            onChange={(v) => {
               dispatch({ type: "UPDATE_INPUT_TAGS", tags: v });
               onInput();
             }}
@@ -197,7 +197,7 @@ export const TopicSearchPage = (_props: {}) => {
       </div>
       <div>
         {topics.data !== undefined
-          ? topics.data.topics.map(t => (
+          ? topics.data.topics.map((t) => (
               <TopicListItem key={t.id} topic={t} detail={true} />
             ))
           : null}

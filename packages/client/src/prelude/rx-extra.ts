@@ -4,10 +4,10 @@ import { Task } from "fp-ts/lib/Task";
 import { rx, rxOps } from "./rx-exports";
 
 export function fromZen<A>(zen$: zen.Observable<A>): rx.Observable<A> {
-  return new rx.Observable(subscriber => {
+  return new rx.Observable((subscriber) => {
     const subs = zen$.subscribe({
-      next: x => subscriber.next(x),
-      error: e => subscriber.error(e),
+      next: (x) => subscriber.next(x),
+      error: (e) => subscriber.error(e),
       complete: () => subscriber.complete(),
     });
 
@@ -36,7 +36,7 @@ export function fromTask<A>(taskA: Task<A>): rx.Observable<A> {
  * 最低でも一定時間遅延するオペレーター
  */
 export function delayMinMergeMap<A, B>(
-  ab: (a: A, index: number) => rx.Observable<[number | null, B]>,
+  ab: (a: A, index: number) => rx.Observable<[number | null, B]>
 ): rx.OperatorFunction<A, B> {
   return (a$: rx.Observable<A>): rx.Observable<B> =>
     a$.pipe(
@@ -46,10 +46,10 @@ export function delayMinMergeMap<A, B>(
           rxOps.delayWhen(([ms, _b]) =>
             ms !== null
               ? rx.timer(Math.max(0, ms + startTime - Date.now()))
-              : rx.of(null),
+              : rx.of(null)
           ),
-          rxOps.map(([_ms, b]) => b),
+          rxOps.map(([_ms, b]) => b)
         );
-      }),
+      })
     );
 }

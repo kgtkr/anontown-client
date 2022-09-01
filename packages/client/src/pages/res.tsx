@@ -38,7 +38,7 @@ const ResBase = withRouter(
         </div>
       );
     }
-  },
+  }
 );
 
 export function ResPage() {

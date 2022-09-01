@@ -27,20 +27,20 @@ export class NG extends React.Component<NGProps, NGState> {
         <IconButton
           onClick={() =>
             this.props.onChangeStorage(
-              Sto.addNG(ng.createDefaultNG())(this.props.userData.storage),
+              Sto.addNG(ng.createDefaultNG())(this.props.userData.storage)
             )
           }
         >
           <FontIcon className="material-icons">add_circle</FontIcon>
         </IconButton>
         <List>
-          {Sto.getNG(this.props.userData.storage).map(node => (
+          {Sto.getNG(this.props.userData.storage).map((node) => (
             <ListItem
               rightIconButton={
                 <IconButton
                   onClick={() =>
                     this.props.onChangeStorage(
-                      Sto.removeNG(node.id)(this.props.userData.storage),
+                      Sto.removeNG(node.id)(this.props.userData.storage)
                     )
                   }
                 >
@@ -58,9 +58,9 @@ export class NG extends React.Component<NGProps, NGState> {
                 <h1>{node.name}</h1>
                 <NGEditor
                   ng={node}
-                  onUpdate={v =>
+                  onUpdate={(v) =>
                     this.props.onChangeStorage(
-                      Sto.updateNG(v)(this.props.userData.storage),
+                      Sto.updateNG(v)(this.props.userData.storage)
                     )
                   }
                 />

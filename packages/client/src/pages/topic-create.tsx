@@ -58,14 +58,14 @@ export const TopicCreatePage = userSwitch(
                   tags: this.state.tags,
                   text: this.state.text,
                 }}
-                onCompleted={x => {
+                onCompleted={(x) => {
                   this.props.history.push(
                     routes.topic.to({
                       id: ("createTopicNormal" in x
                         ? x.createTopicNormal
                         : x.createTopicOne
                       ).id,
-                    }),
+                    })
                   );
                 }}
               >
@@ -115,12 +115,12 @@ export const TopicCreatePage = userSwitch(
                       <div>
                         <TagsInput
                           value={this.state.tags}
-                          onChange={v => this.setState({ tags: v })}
+                          onChange={(v) => this.setState({ tags: v })}
                         />
                       </div>
                       <MdEditor
                         value={this.state.text}
-                        onChange={v => this.setState({ text: v })}
+                        onChange={(v) => this.setState({ text: v })}
                       />
                       <div>
                         <RaisedButton
@@ -142,6 +142,6 @@ export const TopicCreatePage = userSwitch(
           </Page>
         );
       }
-    },
-  ),
+    }
+  )
 );

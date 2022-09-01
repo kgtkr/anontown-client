@@ -36,12 +36,14 @@ export class TagsInput extends React.Component<TagsInputProps, TagsInputState> {
     return (
       <>
         <div>
-          {this.props.value.map(t => (
+          {this.props.value.map((t) => (
             <span key={t} className={style.tag}>
               <span
                 className={style.tagButton}
                 onClick={() => {
-                  this.props.onChange?.(this.props.value.filter(x => x !== t));
+                  this.props.onChange?.(
+                    this.props.value.filter((x) => x !== t)
+                  );
                 }}
               >
                 ×
@@ -63,7 +65,7 @@ export class TagsInput extends React.Component<TagsInputProps, TagsInputState> {
               <AutoComplete
                 fullWidth={this.props.fullWidth}
                 floatingLabelText="タグ"
-                dataSource={data.topicTags.map(t => ({
+                dataSource={data.topicTags.map((t) => ({
                   text: t.name,
                   value: (
                     <MenuItem
@@ -78,8 +80,8 @@ export class TagsInput extends React.Component<TagsInputProps, TagsInputState> {
                   !this.props.value.includes(key)
                 }
                 searchText={this.state.inputValue}
-                onUpdateInput={v => this.setState({ inputValue: v })}
-                onKeyDown={e => {
+                onUpdateInput={(v) => this.setState({ inputValue: v })}
+                onKeyDown={(e) => {
                   // エンター/半角スペ
                   if (e.keyCode === 13 || e.keyCode === 32) {
                     e.preventDefault();

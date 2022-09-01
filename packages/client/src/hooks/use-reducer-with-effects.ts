@@ -13,7 +13,7 @@ interface State<S, A> {
 
 export function useReducerWithEffects<S, A>(
   reducer: (prevState: S, action: A) => [S, Effect<S, A>],
-  initialState: S,
+  initialState: S
 ): [S, (action: A) => void] {
   const [state, dispatch] = React.useReducer(
     (prevState: State<S, A>, action: Action<S, A>): State<S, A> => {
@@ -21,7 +21,7 @@ export function useReducerWithEffects<S, A>(
         case "APP_ACTION": {
           const [newAppState, newEffect] = reducer(
             prevState.appState,
-            action.appAction,
+            action.appAction
           );
           return {
             ...prevState,
@@ -37,7 +37,7 @@ export function useReducerWithEffects<S, A>(
         }
       }
     },
-    { appState: initialState, effects: [] },
+    { appState: initialState, effects: [] }
   );
 
   const appDispatch = React.useCallback((action: A) => {

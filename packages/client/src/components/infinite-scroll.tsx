@@ -74,8 +74,8 @@ export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
       // 速度的な問題で先に参照比較
       prevItems === props.items ||
       RA.getEq(EqT.eqString).equals(
-        prevItems.map(item => props.itemToKey(item)),
-        props.items.map(item => props.itemToKey(item)),
+        prevItems.map((item) => props.itemToKey(item)),
+        props.items.map((item) => props.itemToKey(item))
       )
     ) {
       return;
@@ -85,7 +85,7 @@ export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
     const diff = scroll.getDiff(
       { ratio: 1 },
       // elementに存在するkeyでなければいけないのでcurrentItemKeyを使う
-      { ratio: 1, key: currentItemKey },
+      { ratio: 1, key: currentItemKey }
     );
     if (O.isSome(diff)) {
       fixedDataRef.current = {
@@ -106,7 +106,7 @@ export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
     scroll.setDiff(
       { ratio: 1 },
       { ratio: 1, key: fixedData.key },
-      fixedData.diff,
+      fixedData.diff
     );
   });
 
@@ -145,12 +145,12 @@ export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
         const headKey = pipe(
           RA.head(items),
           O.map(props.itemToKey),
-          O.toNullable,
+          O.toNullable
         );
         const lastKey = pipe(
           RA.last(items),
           O.map(props.itemToKey),
-          O.toNullable,
+          O.toNullable
         );
 
         if (
@@ -174,7 +174,7 @@ export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
               return pipe(RA.last(items), O.toNullable);
             }
           }
-        })(),
+        })()
       );
 
       if (currentItemKeyRef.current !== null) {
@@ -182,15 +182,15 @@ export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
           pipe(
             Do(O.option)
               .bindL("topShowKey", () =>
-                pipe(RA.head(items), O.map(props.itemToKey)),
+                pipe(RA.head(items), O.map(props.itemToKey))
               )
               .bindL("topItemKey", () =>
-                pipe(RA.head(props.items), O.map(props.itemToKey)),
+                pipe(RA.head(props.items), O.map(props.itemToKey))
               )
               .return(
-                ({ topShowKey, topItemKey }) => topShowKey === topItemKey,
+                ({ topShowKey, topItemKey }) => topShowKey === topItemKey
               ),
-            O.getOrElse(() => false),
+            O.getOrElse(() => false)
           )
         ) {
           props.onScrollTop();
@@ -200,23 +200,23 @@ export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
           pipe(
             Do(O.option)
               .bindL("bottomShowKey", () =>
-                pipe(RA.last(items), O.map(props.itemToKey)),
+                pipe(RA.last(items), O.map(props.itemToKey))
               )
               .bindL("bottomItemKey", () =>
-                pipe(RA.last(props.items), O.map(props.itemToKey)),
+                pipe(RA.last(props.items), O.map(props.itemToKey))
               )
               .return(
                 ({ bottomShowKey, bottomItemKey }) =>
-                  bottomShowKey === bottomItemKey,
+                  bottomShowKey === bottomItemKey
               ),
-            O.getOrElse(() => false),
+            O.getOrElse(() => false)
           )
         ) {
           props.onScrollBottom();
         }
       }
     },
-    [props.currentItemBase, props.itemToKey],
+    [props.currentItemBase, props.itemToKey]
   );
 
   const ScrollT = Scroll<T>();

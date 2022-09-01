@@ -22,11 +22,11 @@ function ProfileBase(props: ProfileBaseProps) {
     pipe(
       profilesResult.data,
       option.fromNullable,
-      option.map(x => x.profiles),
+      option.map((x) => x.profiles),
       option.chain(RA.head),
-      option.map(x => `@${x.sn}`),
-      option.getOrElse(() => "プロフィール"),
-    ),
+      option.map((x) => `@${x.sn}`),
+      option.getOrElse(() => "プロフィール")
+    )
   );
 
   return (
@@ -39,12 +39,12 @@ function ProfileBase(props: ProfileBaseProps) {
         ? pipe(
             profilesResult.data.profiles,
             RA.head,
-            option.map(p => (
+            option.map((p) => (
               <Paper zDepth={props.zDepth} key={p.id}>
                 <Profile profile={p} />
               </Paper>
             )),
-            option.getOrElse(() => <Snack msg="プロフィールが存在しません" />),
+            option.getOrElse(() => <Snack msg="プロフィールが存在しません" />)
           )
         : undefined}
     </div>
@@ -61,5 +61,5 @@ export function ProfilePage() {
 
 export const ProfileModal = withModal(
   () => <ProfileBase zDepth={0} />,
-  "プロフィール",
+  "プロフィール"
 );

@@ -23,7 +23,7 @@ export const TopicFork = (props: TopicForkProps) => {
             title,
             parent: props.topic.id,
           }}
-          onCompleted={data => {
+          onCompleted={(data) => {
             props.onCreate?.(data.createTopicFork);
           }}
         >
@@ -53,7 +53,7 @@ export const TopicFork = (props: TopicForkProps) => {
           }
           return (
             <div>
-              {data.topics.map(t => (
+              {data.topics.map((t) => (
                 <TopicListItem key={t.id} topic={t} detail={false} />
               ))}
             </div>

@@ -3,7 +3,7 @@ import * as React from "react";
 
 export function useOnChnageUrlSearch<A>(
   parse: (query: string) => A,
-  onChange: (x: A) => void,
+  onChange: (x: A) => void
 ): A {
   const { history, location } = useRouter();
 

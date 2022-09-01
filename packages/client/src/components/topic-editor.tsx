@@ -40,7 +40,7 @@ export class TopicEditor extends React.Component<
           text: this.state.text,
           tags: this.state.tags,
         }}
-        onCompleted={data => {
+        onCompleted={(data) => {
           this.props.onUpdate?.(data.updateTopic);
         }}
       >
@@ -56,13 +56,13 @@ export class TopicEditor extends React.Component<
               />
               <TagsInput
                 value={this.state.tags}
-                onChange={v => this.setState({ tags: v })}
+                onChange={(v) => this.setState({ tags: v })}
                 fullWidth={true}
               />
               <MdEditor
                 fullWidth={true}
                 value={this.state.text}
-                onChange={v => this.setState({ text: v })}
+                onChange={(v) => this.setState({ text: v })}
               />
               <RaisedButton onClick={() => submit()} label="OK" />
             </form>

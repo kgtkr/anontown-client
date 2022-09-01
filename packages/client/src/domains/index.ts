@@ -36,7 +36,7 @@ export function configureStore(): Store<RootState, RootAction> & {
 
   const store = createStore<RootState, RootAction, unknown, unknown>(
     createRootReducer(history),
-    applyMiddleware(...middlewares),
+    applyMiddleware(...middlewares)
   );
 
   epicMiddleware.run(epics);

@@ -32,7 +32,7 @@ export function Md(props: MdProps) {
       className: style.md,
     },
     // eslint-disable-next-line react/jsx-key
-    ...node.children.map(c => <MdNode node={c} />),
+    ...node.children.map((c) => <MdNode node={c} />)
   );
 }
 
@@ -119,7 +119,7 @@ function MdLink(props: { node: mdParser.Link }) {
           rel: "noopener noreferrer",
         },
         // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map(c => <MdNode node={c} />),
+        ...props.node.children.map((c) => <MdNode node={c} />)
       );
     case "image":
       return (
@@ -142,7 +142,7 @@ function MdLink(props: { node: mdParser.Link }) {
           to: link.path,
         },
         // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map(c => <MdNode node={c} />),
+        ...props.node.children.map((c) => <MdNode node={c} />)
       );
   }
 }
@@ -152,7 +152,7 @@ function MdHeading(props: { node: mdParser.Heading }) {
     `h${props.node.depth}`,
     {},
     // eslint-disable-next-line react/jsx-key
-    ...props.node.children.map(c => <MdNode node={c} />),
+    ...props.node.children.map((c) => <MdNode node={c} />)
   );
 }
 
@@ -176,11 +176,11 @@ function MdTable(props: { node: mdParser.Table }) {
                   },
                   ...(cell.type === "tableCell"
                     ? // eslint-disable-next-line react/jsx-key
-                      cell.children.map(c => <MdNode node={c} />)
-                    : []),
-                ),
+                      cell.children.map((c) => <MdNode node={c} />)
+                    : [])
+                )
               )
-            : []),
+            : [])
         )}
       </thead>
       {React.createElement(
@@ -188,7 +188,7 @@ function MdTable(props: { node: mdParser.Table }) {
         {},
         ...props.node.children
           .filter((_, i) => i !== 0)
-          .map(row =>
+          .map((row) =>
             row.type === "tableRow"
               ? React.createElement(
                   "tr",
@@ -203,13 +203,13 @@ function MdTable(props: { node: mdParser.Table }) {
                             },
                           },
                           // eslint-disable-next-line react/jsx-key
-                          ...cell.children.map(c => <MdNode node={c} />),
+                          ...cell.children.map((c) => <MdNode node={c} />)
                         )
-                      : [],
-                  ),
+                      : []
+                  )
                 )
-              : [],
-          ),
+              : []
+          )
       )}
     </table>
   );
@@ -222,14 +222,14 @@ function MdNode(props: { node: mdParser.MdNode }): JSX.Element {
         "p",
         {},
         // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map(c => <MdNode node={c} />),
+        ...props.node.children.map((c) => <MdNode node={c} />)
       );
     case "blockquote":
       return React.createElement(
         "blockquote",
         {},
         // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map(c => <MdNode node={c} />),
+        ...props.node.children.map((c) => <MdNode node={c} />)
       );
     case "heading":
       return <MdHeading node={props.node} />;
@@ -247,14 +247,14 @@ function MdNode(props: { node: mdParser.MdNode }): JSX.Element {
           "ol",
           {},
           // eslint-disable-next-line react/jsx-key
-          ...props.node.children.map(c => <MdNode node={c} />),
+          ...props.node.children.map((c) => <MdNode node={c} />)
         );
       } else {
         return React.createElement(
           "ul",
           {},
           // eslint-disable-next-line react/jsx-key
-          ...props.node.children.map(c => <MdNode node={c} />),
+          ...props.node.children.map((c) => <MdNode node={c} />)
         );
       }
     case "listItem":
@@ -262,7 +262,7 @@ function MdNode(props: { node: mdParser.MdNode }): JSX.Element {
         "li",
         {},
         // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map(c => <MdNode node={c} />),
+        ...props.node.children.map((c) => <MdNode node={c} />)
       );
     case "table":
       return <MdTable node={props.node} />;
@@ -275,21 +275,21 @@ function MdNode(props: { node: mdParser.MdNode }): JSX.Element {
         "em",
         {},
         // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map(c => <MdNode node={c} />),
+        ...props.node.children.map((c) => <MdNode node={c} />)
       );
     case "strong":
       return React.createElement(
         "strong",
         {},
         // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map(c => <MdNode node={c} />),
+        ...props.node.children.map((c) => <MdNode node={c} />)
       );
     case "delete":
       return React.createElement(
         "del",
         {},
         // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map(c => <MdNode node={c} />),
+        ...props.node.children.map((c) => <MdNode node={c} />)
       );
     case "link":
       return <MdLink node={props.node} />;

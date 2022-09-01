@@ -58,7 +58,7 @@ export const App = withRouter(
         serverStatus: true,
       };
       this.changeLocation(this.props);
-      getServerStatus().then(x => {
+      getServerStatus().then((x) => {
         this.setState({ serverStatus: x });
       });
     }
@@ -106,7 +106,7 @@ export const App = withRouter(
         }
         this.setState({
           initUserData: await createUserData(
-            res.data.token as G.TokenMasterFragment, // TODO: ここのキャストおかしい
+            res.data.token as G.TokenMasterFragment // TODO: ここのキャストおかしい
           ),
         });
       } catch {
@@ -141,7 +141,7 @@ export const App = withRouter(
           {this.state.serverStatus ? (
             this.state.initUserData !== undefined ? (
               <User initUserData={this.state.initUserData}>
-                {user => {
+                {(user) => {
                   return (
                     <div className={style.container}>
                       <Toolbar className={style.header}>
@@ -413,5 +413,5 @@ export const App = withRouter(
         </MuiThemeProvider>
       );
     }
-  },
+  }
 );

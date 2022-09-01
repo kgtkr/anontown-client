@@ -36,7 +36,7 @@ export function History(props: HistoryProps) {
               state: {
                 modal: true,
               },
-            },
+            }
           )}
         >
           HASH:{props.history.hash.substr(0, 6)}

@@ -18,7 +18,7 @@ function ResHashBase(_props: {}) {
         <Snack msg="レス取得に失敗しました" />
       ) : null}
       {resesResult.data !== undefined
-        ? resesResult.data.reses.map(res => <Res res={res} key={res.id} />)
+        ? resesResult.data.reses.map((res) => <Res res={res} key={res.id} />)
         : undefined}
     </div>
   );

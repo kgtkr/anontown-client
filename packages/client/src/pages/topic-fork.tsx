@@ -34,7 +34,7 @@ const TopicForkBase = userSwitch((props: TopicForkBaseProps) => {
       {topic !== null && topic.__typename === "TopicNormal" ? (
         <TopicFork
           topic={topic}
-          onCreate={x => {
+          onCreate={(x) => {
             history.push(routes.topic.to({ id: x.id }));
           }}
         />
@@ -53,5 +53,5 @@ export function TopicForkPage() {
 
 export const TopicForkModal = withModal(
   () => <TopicForkBase zDepth={0} />,
-  "派生トピック",
+  "派生トピック"
 );

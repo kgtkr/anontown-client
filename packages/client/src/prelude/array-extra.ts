@@ -6,7 +6,7 @@ import { RA, Ord, O } from "./fp-ts-exports";
  */
 export function mergeAndUniqSortedArray<K>(ord: Ord<K>) {
   return <A>(f: (a: A) => K, ys: ReadonlyArray<A>) => (
-    xs: ReadonlyArray<A>,
+    xs: ReadonlyArray<A>
   ): ReadonlyArray<A> => {
     let ix = 0;
     let iy = 0;

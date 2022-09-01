@@ -20,7 +20,7 @@ export function CheckBox(props: CheckBoxProps) {
         checked={props.value}
         style={props.checkBoxStyle}
         className={style.checkbox}
-        onChange={e => props.onChange(e.target.checked)}
+        onChange={(e) => props.onChange(e.target.checked)}
         onFocus={props.onFocus}
         onBlur={props.onBlur}
       />

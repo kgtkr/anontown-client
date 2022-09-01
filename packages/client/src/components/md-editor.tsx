@@ -44,31 +44,31 @@ export class MdEditor extends React.Component<MdEditorProps, MdEditorState> {
   upload(datas: Array<FormData>) {
     rx.of(...datas)
       .pipe(
-        rxOps.mergeMap(form => imgur.upload(form)),
-        rxOps.map(url => `![](${url})`),
-        rxOps.reduce((tags, tag) => tags + tag + "\n", ""),
+        rxOps.mergeMap((form) => imgur.upload(form)),
+        rxOps.map((url) => `![](${url})`),
+        rxOps.reduce((tags, tag) => tags + tag + "\n", "")
       )
       .subscribe(
-        tags => {
+        (tags) => {
           this.setState({ slowImage: false, oekakiErrors: undefined });
           this.props.onChange?.(this.props.value + tags);
         },
         () => {
           this.setState({ imageErrors: ["アップロードに失敗しました"] });
-        },
+        }
       );
   }
 
   render() {
     return (
       <div
-        onPaste={e => {
+        onPaste={(e) => {
           const items = e.clipboardData.items;
           const datas = Array.from(items)
-            .filter(x => x.type.includes("image"))
-            .map(x => x.getAsFile())
+            .filter((x) => x.type.includes("image"))
+            .map((x) => x.getAsFile())
             .filter<File>((x): x is File => x !== null)
-            .map(x => {
+            .map((x) => {
               const data = new FormData();
               data.append("image", x, "image.png");
               return data;
@@ -84,7 +84,7 @@ export class MdEditor extends React.Component<MdEditorProps, MdEditorState> {
           <Errors errors={this.state.oekakiErrors} />
           <Oekaki
             size={{ x: 320, y: 240 }}
-            onSubmit={data => this.upload([data])}
+            onSubmit={(data) => this.upload([data])}
           />
         </Modal>
         <Modal
@@ -95,11 +95,11 @@ export class MdEditor extends React.Component<MdEditorProps, MdEditorState> {
           <Errors errors={this.state.imageErrors} />
           <input
             type="file"
-            onChange={e => {
+            onChange={(e) => {
               const target = e.target as HTMLInputElement;
               const files = target.files;
               if (files !== null) {
-                const datas = Array.from(files).map(file => {
+                const datas = Array.from(files).map((file) => {
                   const formData = new FormData();
                   formData.append("image", file);
                   return formData;
@@ -164,7 +164,7 @@ export class MdEditor extends React.Component<MdEditorProps, MdEditorState> {
               rows={this.props.minRows || this.defaltMinRows}
               rowsMax={this.props.maxRows || this.defaltMinRows}
               value={this.props.value}
-              onChange={v => {
+              onChange={(v) => {
                 if (this.props.onChange) {
                   this.props.onChange(v);
                 }

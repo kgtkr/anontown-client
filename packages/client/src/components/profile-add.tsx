@@ -35,7 +35,7 @@ export function ProfileAdd(props: ProfileAddProps) {
           value={name}
           onChange={(_e, v) => setName(v)}
         />
-        <MdEditor fullWidth={true} value={text} onChange={v => setText(v)} />
+        <MdEditor fullWidth={true} value={text} onChange={(v) => setText(v)} />
         <RaisedButton
           onClick={async () => {
             const result = await submit({

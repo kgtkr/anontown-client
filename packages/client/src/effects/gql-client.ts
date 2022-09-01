@@ -47,7 +47,7 @@ const request = (opt: Operation) => {
 
 const requestLink = new ApolloLink(
   (operation, forward) =>
-    new zen.Observable(observer => {
+    new zen.Observable((observer) => {
       let handle: zen.ZenObservable.Subscription | undefined;
       Promise.resolve(request(operation))
         .then(() => {
@@ -64,7 +64,7 @@ const requestLink = new ApolloLink(
           handle.unsubscribe();
         }
       };
-    }),
+    })
 );
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
@@ -77,8 +77,8 @@ export const gqlClient = new ApolloClient({
       if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
           console.log(
-            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-          ),
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+          )
         );
       }
       if (networkError) {
@@ -95,7 +95,7 @@ export const gqlClient = new ApolloClient({
         );
       },
       wsLink,
-      httpLink,
+      httpLink
     ),
   ]),
   cache: new InMemoryCache({

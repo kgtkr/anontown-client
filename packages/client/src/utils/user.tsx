@@ -34,10 +34,10 @@ export const User = (props: UserProps): JSX.Element => {
   }, [userData]);
   const storageSave = useSave();
   useEffectRef(
-    f => {
+    (f) => {
       const subs = subjectRef.current
         .pipe(rxOps.debounceTime(5000))
-        .subscribe(data => {
+        .subscribe((data) => {
           f.current(data);
         });
 
@@ -50,7 +50,7 @@ export const User = (props: UserProps): JSX.Element => {
         storageSave(data.storage);
       }
     },
-    [],
+    []
   );
 
   useEffectSkipN(() => {
@@ -60,7 +60,7 @@ export const User = (props: UserProps): JSX.Element => {
         JSON.stringify({
           id: userData.token.id,
           key: userData.token.key,
-        }),
+        })
       );
     } else {
       localStorage.removeItem("token");
@@ -73,7 +73,7 @@ export const User = (props: UserProps): JSX.Element => {
 
   const context: UserContextType = {
     value: userData,
-    update: x => {
+    update: (x) => {
       setUserData(x);
       setAuth(x !== null ? x.token : null);
     },

@@ -5,7 +5,7 @@ import { useEffectRef } from "./ref";
 export function useInputCache<T>(
   init: T,
   update: (x: T) => void,
-  dueTime = 1000,
+  dueTime = 1000
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
   const subject = React.useMemo(() => new rx.Subject<T>(), []);
   const [cache, setCache] = React.useState(init);
@@ -15,8 +15,8 @@ export function useInputCache<T>(
   }, [cache]);
 
   useEffectRef(
-    f => {
-      const subs = subject.pipe(rxOps.debounceTime(dueTime)).subscribe(x => {
+    (f) => {
+      const subs = subject.pipe(rxOps.debounceTime(dueTime)).subscribe((x) => {
         f.current(x);
       });
 
@@ -25,7 +25,7 @@ export function useInputCache<T>(
       };
     },
     update,
-    [],
+    []
   );
 
   return [cache, setCache];

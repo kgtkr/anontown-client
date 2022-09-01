@@ -37,7 +37,7 @@ export const ClientAdd = (props: ClientAddProps) => {
         onChange={(_e, v) => setUrl(v)}
       />
       <RaisedButton
-        onClick={() => submit().catch(e => setError(e))}
+        onClick={() => submit().catch((e) => setError(e))}
         label="OK"
       />
     </form>

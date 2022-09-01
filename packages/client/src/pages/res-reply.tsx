@@ -31,7 +31,7 @@ const ResReplyBase = withRouter(
               }
               return (
                 <>
-                  {data.reses.map(res => (
+                  {data.reses.map((res) => (
                     <Res res={res} key={res.id} />
                   ))}
                 </>
@@ -41,7 +41,7 @@ const ResReplyBase = withRouter(
         </div>
       );
     }
-  },
+  }
 );
 
 export function ResReplyPage() {

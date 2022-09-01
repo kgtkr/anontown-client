@@ -26,7 +26,7 @@ export const ProfilesPage = userSwitch((_props: ProfilesPageProps) => {
         <Link to={routes.profileCreate.to({})}>作成</Link>
       </Paper>
       {profiles.data !== undefined
-        ? profiles.data.profiles.map(p => (
+        ? profiles.data.profiles.map((p) => (
             <Paper key={p.id} style={{ padding: 10 }}>
               <Link to={routes.profileEdit.to({ id: p.id })}>@{p.sn}</Link>
             </Paper>

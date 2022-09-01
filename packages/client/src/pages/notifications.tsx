@@ -66,7 +66,7 @@ export const NotificationsPage = userSwitch(
           </div>
           <div>
             {reses.data !== undefined
-              ? reses.data.reses.map(r => <Res res={r} key={r.id} />)
+              ? reses.data.reses.map((r) => <Res res={r} key={r.id} />)
               : null}
           </div>
           <div>
@@ -107,5 +107,5 @@ export const NotificationsPage = userSwitch(
         </div>
       </Page>
     );
-  },
+  }
 );

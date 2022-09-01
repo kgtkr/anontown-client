@@ -37,7 +37,7 @@ export const DevSettingPage = userSwitch((props: DevSettingPageProps) => {
                     __typename: "Query",
                     clients: cs.clients.concat([data.data.createClient]),
                   },
-                },
+                }
               );
             }
           }}
@@ -52,7 +52,7 @@ export const DevSettingPage = userSwitch((props: DevSettingPageProps) => {
             {clients.data.clients.length === 0 ? (
               <Paper>クライアントがありません</Paper>
             ) : null}
-            {clients.data.clients.map(c => (
+            {clients.data.clients.map((c) => (
               <ClientEditor key={c.id} client={c} userData={props.userData} />
             ))}
           </>

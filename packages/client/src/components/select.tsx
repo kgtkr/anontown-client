@@ -16,13 +16,13 @@ export function Select(props: SelectProps) {
       style={props.style}
       className={style.select}
       value={props.value}
-      onChange={e => {
+      onChange={(e) => {
         props.onChange(e.target.value);
       }}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
     >
-      {props.options.map(x => (
+      {props.options.map((x) => (
         <option value={x.value} key={x.value}>
           {x.text}
         </option>

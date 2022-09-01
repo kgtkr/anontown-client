@@ -49,16 +49,16 @@ export class TopicFavo extends React.Component<TopicFavoProps, TopicFavoState> {
                     data.topics,
                     RA.sortBy([
                       OrdT.contramap((x: G.TopicFragment) =>
-                        new Date(x.update).valueOf(),
+                        new Date(x.update).valueOf()
                       )(OrdT.ordNumber),
                     ]),
-                    RA.reverse,
+                    RA.reverse
                   );
 
                   return (
                     <div>
                       {topics.length !== 0 ? (
-                        topics.map(topic => (
+                        topics.map((topic) => (
                           <TopicListItem
                             key={topic.id}
                             topic={topic}

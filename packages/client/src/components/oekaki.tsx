@@ -87,7 +87,7 @@ export class Oekaki extends React.Component<OekakiProps, OekakiState> {
       this.setState({
         pictureStack: pipe(
           this.state.pictureStack,
-          HS.modifyPush(picture => ({ lines: RA.snoc(picture.lines, line) })),
+          HS.modifyPush((picture) => ({ lines: RA.snoc(picture.lines, line) }))
         ),
         drawingLine: null,
       });
@@ -100,8 +100,8 @@ export class Oekaki extends React.Component<OekakiProps, OekakiState> {
       this.setState({
         drawingLine: {
           ...this.state.drawingLine,
-          dots: pipe(this.state.drawingLine.dots, xs =>
-            RNEA.snoc(xs, { x, y }),
+          dots: pipe(this.state.drawingLine.dots, (xs) =>
+            RNEA.snoc(xs, { x, y })
           ),
         },
       });
@@ -112,11 +112,11 @@ export class Oekaki extends React.Component<OekakiProps, OekakiState> {
     const val = pipe(
       this.state.drawingLine,
       O.fromNullable,
-      O.map(line => (picture: Picture) => ({
+      O.map((line) => (picture: Picture) => ({
         lines: RA.snoc(picture.lines, line),
       })),
       O.getOrElse<Endomorphism<Picture>>(() => identity),
-      updater => pipe(this.state.pictureStack, HS.getCurrentValue, updater),
+      (updater) => pipe(this.state.pictureStack, HS.getCurrentValue, updater)
     );
 
     return `
@@ -125,13 +125,13 @@ export class Oekaki extends React.Component<OekakiProps, OekakiState> {
   xmlns="http://www.w3.org/2000/svg">
   ${val.lines
     .map(
-      p => `
+      (p) => `
       <g stroke-linecap="round"
         stroke-width="${p.width}"
         stroke="${toColorString(p.color)}"
         fill="${p.fill ? toColorString(p.color) : "none"}">
-        <path d="M ${p.dots.map(l => `L ${l.x} ${l.y}`).join(" ")}"/>
-      </g>`,
+        <path d="M ${p.dots.map((l) => `L ${l.x} ${l.y}`).join(" ")}"/>
+      </g>`
     )
     .join("\n")}
 </svg>
@@ -152,7 +152,7 @@ export class Oekaki extends React.Component<OekakiProps, OekakiState> {
           />
           <ColorPicker
             color={this.state.color}
-            onChange={color => this.setState({ color })}
+            onChange={(color) => this.setState({ color })}
           />
           <Checkbox
             label="塗りつぶす"
@@ -187,7 +187,7 @@ export class Oekaki extends React.Component<OekakiProps, OekakiState> {
               const ctx = canvas.getContext("2d");
               if (ctx !== null) {
                 ctx.drawImage(img, 0, 0, this.props.size.x, this.props.size.y);
-                canvas.toBlob(blob => {
+                canvas.toBlob((blob) => {
                   if (blob !== null) {
                     const data = new FormData();
                     data.append("image", blob, "oekaki.png");
@@ -208,34 +208,34 @@ export class Oekaki extends React.Component<OekakiProps, OekakiState> {
           src={"data:image/svg+xml," + encodeURIComponent(this.svg)}
           width={this.props.size.x}
           height={this.props.size.y}
-          onMouseDown={e => {
+          onMouseDown={(e) => {
             e.preventDefault();
             this.penDown(e.clientX, e.clientY);
           }}
-          onMouseUp={e => {
+          onMouseUp={(e) => {
             e.preventDefault();
             this.penUp();
           }}
-          onMouseMove={e => {
+          onMouseMove={(e) => {
             e.preventDefault();
             this.penMove(e.clientX, e.clientY);
           }}
-          onTouchStart={e => {
+          onTouchStart={(e) => {
             e.preventDefault();
             this.penDown(
               e.changedTouches[0].clientX,
-              e.changedTouches[0].clientY,
+              e.changedTouches[0].clientY
             );
           }}
-          onTouchEnd={e => {
+          onTouchEnd={(e) => {
             e.preventDefault();
             this.penUp();
           }}
-          onTouchMove={e => {
+          onTouchMove={(e) => {
             e.preventDefault();
             this.penMove(
               e.changedTouches[0].clientX,
-              e.changedTouches[0].clientY,
+              e.changedTouches[0].clientY
             );
           }}
         />

@@ -43,15 +43,15 @@ export const ProfileEditor = (props: ProfileEditorProps) => {
           value={name}
           onChange={(_e, v) => setName(v)}
         />
-        <MdEditor fullWidth={true} value={text} onChange={v => setText(v)} />
+        <MdEditor fullWidth={true} value={text} onChange={(v) => setText(v)} />
         <RaisedButton
           onClick={() =>
             submit()
-              .then(data => {
+              .then((data) => {
                 props.onUpdate?.(data.data!.updateProfile);
                 setErrors([]);
               })
-              .catch(_e => {
+              .catch((_e) => {
                 setErrors(["エラーが発生しました"]);
               })
           }

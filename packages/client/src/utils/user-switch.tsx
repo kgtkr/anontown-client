@@ -9,12 +9,12 @@ export interface UserSwitchProps {
 }
 
 export function userSwitch<P extends UserSwitchProps>(
-  Children: React.ComponentType<P>,
+  Children: React.ComponentType<P>
 ) {
   return (props: Omit<P, keyof UserSwitchProps>): JSX.Element => {
     return (
       <UserContext.Consumer>
-        {val =>
+        {(val) =>
           val.value !== null ? (
             <Children
               {...(props as any)}

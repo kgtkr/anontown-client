@@ -67,7 +67,7 @@ export const MessagesPage = userSwitch((_props: MessagesPageProps) => {
         </div>
         <div>
           {msgs.data !== undefined
-            ? msgs.data.msgs.map(m => (
+            ? msgs.data.msgs.map((m) => (
                 <Paper key={m.id}>
                   <div>{dateFormat.format(m.date)}</div>
                   <Md text={m.text} />

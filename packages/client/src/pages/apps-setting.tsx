@@ -20,10 +20,10 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
                 tokens.data.tokens
                   .filter(
                     (x): x is G.TokenGeneralFragment =>
-                      x.__typename === "TokenGeneral",
+                      x.__typename === "TokenGeneral"
                   )
-                  .map(x => x.client.id),
-              ),
+                  .map((x) => x.client.id)
+              )
             )
           : [],
     },
@@ -46,7 +46,7 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
         ) : null}
         {tokens.loading || clients.loading ? <div>loading</div> : null}
         {clients.data !== undefined
-          ? clients.data.clients.map(c => (
+          ? clients.data.clients.map((c) => (
               <Paper key={c.id}>
                 {c.name}
                 <IconButton
@@ -55,7 +55,7 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
                     try {
                       await delToken({
                         variables: { client: c.id },
-                        update: cache => {
+                        update: (cache) => {
                           const cs = cache.readQuery<
                             G.FindClientsQuery,
                             G.FindClientsQueryVariables
@@ -72,7 +72,9 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
                               variables,
                               data: {
                                 __typename: "Query",
-                                clients: cs.clients.filter(x => x.id !== c.id),
+                                clients: cs.clients.filter(
+                                  (x) => x.id !== c.id
+                                ),
                               },
                             });
                           }

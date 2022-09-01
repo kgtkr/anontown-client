@@ -17,7 +17,7 @@ export function TextField(props: TextFieldProps) {
       type="text"
       style={props.style}
       value={props.value}
-      onChange={e => props.onChange(e.target.value)}
+      onChange={(e) => props.onChange(e.target.value)}
       placeholder={props.placeholder}
       onFocus={props.onFocus}
       onBlur={props.onBlur}

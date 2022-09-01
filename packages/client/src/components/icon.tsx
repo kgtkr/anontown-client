@@ -6,7 +6,7 @@ interface IconProps {
 
 export function Icon(
   props: IconProps &
-    React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>,
+    React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
 ) {
   return (
     <i

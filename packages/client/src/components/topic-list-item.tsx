@@ -21,11 +21,11 @@ export const TopicListItem = (props: TopicListItemProps) => {
 
   const newRes = pipe(
     O.fromNullable(user.value),
-    O.chain(userData => Sto.getTopicRead(props.topic.id)(userData.storage)),
-    O.map(topicData =>
-      Math.max(0, props.topic.resCount - Sto.topicReadCountLens.get(topicData)),
+    O.chain((userData) => Sto.getTopicRead(props.topic.id)(userData.storage)),
+    O.map((topicData) =>
+      Math.max(0, props.topic.resCount - Sto.topicReadCountLens.get(topicData))
     ),
-    O.toNullable,
+    O.toNullable
   );
 
   return (

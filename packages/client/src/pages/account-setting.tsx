@@ -17,7 +17,7 @@ export const AccountSettingPage = userSwitch(
     queryResultConvert(user);
 
     const [sn, setSn] = React.useState(
-      user.data !== undefined ? user.data.user.sn : "",
+      user.data !== undefined ? user.data.user.sn : ""
     );
     const [updateUserSubmit] = G.useUpdateUserMutation();
     const [createTokenMasterSubmit] = G.useCreateTokenMasterMutation();
@@ -83,5 +83,5 @@ export const AccountSettingPage = userSwitch(
         </Paper>
       </Page>
     );
-  },
+  }
 );
