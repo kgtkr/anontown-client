@@ -24,8 +24,7 @@ interface TopicWriteA {
   age: boolean;
 }
 
-export interface TopicWrite
-  extends Newtype<{ readonly TopicWrite: unique symbol }, TopicWriteA> {}
+export type TopicWrite = Newtype<{ readonly TopicWrite: unique symbol }, TopicWriteA>
 
 const isoTopicWrite = iso<TopicWrite>();
 
@@ -104,8 +103,7 @@ interface TopicReadA {
   count: number;
 }
 
-export interface TopicRead
-  extends Newtype<{ readonly TopicRead: unique symbol }, TopicReadA> {}
+export type TopicRead = Newtype<{ readonly TopicRead: unique symbol }, TopicReadA>
 
 const isoTopicRead = iso<TopicRead>();
 
@@ -137,8 +135,7 @@ interface StorageA {
   readonly ng: ReadonlyArray<N.NG>;
 }
 
-export interface Storage
-  extends Newtype<{ readonly Storage: unique symbol }, StorageA> {}
+export type Storage = Newtype<{ readonly Storage: unique symbol }, StorageA>
 
 const isoStorage = iso<Storage>();
 

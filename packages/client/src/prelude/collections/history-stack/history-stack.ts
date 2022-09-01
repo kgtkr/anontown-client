@@ -8,8 +8,7 @@ interface HistoryStackA<A> {
   readonly post: ReadonlyArray<A>;
 }
 
-export interface HistoryStack<A>
-  extends Newtype<{ readonly HistoryStack: unique symbol }, HistoryStackA<A>> {}
+export type HistoryStack<A> = Newtype<{ readonly HistoryStack: unique symbol }, HistoryStackA<A>>
 
 function isoHistoryStack<A>() {
   return iso<HistoryStack<A>>();

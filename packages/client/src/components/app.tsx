@@ -41,7 +41,7 @@ declare const gtag: any;
 
 const muiTheme = getMuiTheme(lightBaseTheme);
 
-interface AppProps extends RouteComponentProps<{}, {}, { modal: boolean }> {}
+type AppProps = RouteComponentProps<{}, {}, { modal: boolean }>;
 
 interface AppState {
   initUserData?: UserData | null;
@@ -73,7 +73,6 @@ export const App = withRouter(
       const path = prop.location.pathname;
       if (Env.ga !== null) {
         gtag("config", Env.ga.id, {
-          // eslint-disable-next-line @typescript-eslint/camelcase
           page_path: path,
         });
       }

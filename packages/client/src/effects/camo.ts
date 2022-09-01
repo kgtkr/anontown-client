@@ -9,5 +9,5 @@ export function getCamoUrl(url: string): string {
 
   const digest = CryptoJS.HmacSHA1(url, Env.camo.key);
   const urlEncode = encodeURIComponent(url);
-  return `${Env.camo.origin}/${digest}?url=${urlEncode}`;
+  return `${Env.camo.origin}/${digest.toString()}?url=${urlEncode}`;
 }
