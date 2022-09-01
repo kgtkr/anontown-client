@@ -25,5 +25,5 @@ ReactDOM.render(
       </ConnectedRouter>
     </Provider>
   </ApolloProvider>,
-  document.querySelector("#root"),
+  document.querySelector("#root")
 );

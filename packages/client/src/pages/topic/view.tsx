@@ -38,7 +38,7 @@ export const TopicPage = (_props: {}) => {
     reducer,
     State({ userData: user.value, topicId: match.params.id }),
     epic,
-    { apolloClient: apolloClient, updateUserData: ud => user.update(ud) },
+    { apolloClient: apolloClient, updateUserData: (ud) => user.update(ud) }
   );
 
   React.useEffect(() => {
@@ -57,7 +57,7 @@ export const TopicPage = (_props: {}) => {
 
   const reversedReses = React.useMemo(
     () => (state.reses !== null ? RA.reverse(state.reses) : null),
-    [state.reses],
+    [state.reses]
   );
 
   const handleUpdateRes = React.useCallback((res: G.ResFragment) => {
@@ -108,7 +108,7 @@ export const TopicPage = (_props: {}) => {
               <h1>NG</h1>
               <NG
                 userData={state.userData}
-                onChangeStorage={v => {
+                onChangeStorage={(v) => {
                   dispatch({ type: "UPDATE_NG", storage: v });
                 }}
               />
@@ -176,7 +176,7 @@ export const TopicPage = (_props: {}) => {
                           {
                             id: state.topicId,
                           },
-                          { state: { modal: true } },
+                          { state: { modal: true } }
                         )}
                       />
                     }
@@ -191,7 +191,7 @@ export const TopicPage = (_props: {}) => {
                             {
                               id: state.topicId,
                             },
-                            { state: { modal: true } },
+                            { state: { modal: true } }
                           )}
                         />
                       }
@@ -206,7 +206,7 @@ export const TopicPage = (_props: {}) => {
                             {
                               id: state.topicId,
                             },
-                            { state: { modal: true } },
+                            { state: { modal: true } }
                           )}
                         />
                       }
@@ -230,15 +230,15 @@ export const TopicPage = (_props: {}) => {
               </div>
             </Paper>
             <InfiniteScroll<G.ResFragment>
-              itemToKey={res => res.id}
-              renderItem={res => <Res res={res} update={handleUpdateRes} />}
+              itemToKey={(res) => res.id}
+              renderItem={(res) => <Res res={res} update={handleUpdateRes} />}
               className={style.reses}
               items={reversedReses}
               jumpItemKey={state.jumpResId}
               onResetJumpItemKey={() => {
                 dispatch({ type: "RESET_JUMP_RES" });
               }}
-              onChangeCurrentItem={res =>
+              onChangeCurrentItem={(res) =>
                 dispatch({ type: "CHANGE_CURRENT_RES", res })
               }
               onScrollTop={() => dispatch({ type: "SCROLL_TO_LAST" })}
@@ -264,7 +264,7 @@ export const TopicPage = (_props: {}) => {
                   topic={state.topic.id}
                   reply={null}
                   userData={state.userData}
-                  changeStorage={storage => {
+                  changeStorage={(storage) => {
                     dispatch({ type: "SUBMIT_RES", storage });
                   }}
                 />

@@ -13,7 +13,7 @@ export const storageJSON8 = t.strict({
     t.strict({
       date: t.string,
       count: t.number,
-    }),
+    })
   ),
   ng: t.array(ngJson),
 });
@@ -32,7 +32,7 @@ export async function convert7To8(val: StorageJSON7): Promise<StorageJSON8> {
           },
         },
       })
-    ).data.reses.map<[string, string]>(x => [x.id, x.date]),
+    ).data.reses.map<[string, string]>((x) => [x.id, x.date])
   );
   for (const topic of Object.keys(val.topicRead)) {
     const data = val.topicRead[topic];

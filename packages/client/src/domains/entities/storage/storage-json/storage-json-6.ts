@@ -10,7 +10,7 @@ export const storageJSON6 = t.strict({
     t.strict({
       res: t.string,
       count: t.number,
-    }),
+    })
   ),
 });
 
@@ -19,7 +19,7 @@ export type StorageJSON6 = t.TypeOf<typeof storageJSON6>;
 export function convert5To6(val: StorageJSON5): StorageJSON6 {
   return {
     ver: "6",
-    tagsFavo: val.boardFavo.map(x => x.split("/")),
+    tagsFavo: val.boardFavo.map((x) => x.split("/")),
     topicFavo: [],
     topicRead: val.topicRead,
   };

@@ -12,9 +12,9 @@
     "eslint-plugin-react": "^7.31.1"
   },
   "scripts": {
-    "lint": "eslint --ext .ts,.tsx packages/*/src",
-    "lint:fix": "eslint --ext .ts,.tsx --fix packages/*/src",
-    "format:check": "prettier --check packages/*/src/**/*.{ts,tsx}",
-    "format": "prettier --write packages/*/src/**/*.{ts,tsx}"
+    "lint": "eslint 'packages/*/src/**/*.{ts,tsx}'",
+    "lint:fix": "eslint --fix 'packages/*/src/**/*.{ts,tsx}'",
+    "format:check": "prettier --check 'packages/*/src/**/*.{ts,tsx}'",
+    "format": "prettier --write 'packages/*/src/**/*.{ts,tsx}'"
   }
 }

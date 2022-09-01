@@ -49,12 +49,12 @@ function isNodeNG(node: NGNode, res: G.ResFragment): boolean | null {
     case "and": {
       return node.children.length === 0
         ? null
-        : node.children.every(x => !!isNodeNG(x, res));
+        : node.children.every((x) => !!isNodeNG(x, res));
     }
     case "or": {
       return node.children.length === 0
         ? null
-        : node.children.some(x => !!isNodeNG(x, res));
+        : node.children.some((x) => !!isNodeNG(x, res));
     }
     case "profile": {
       return (
@@ -87,7 +87,7 @@ function isNodeNG(node: NGNode, res: G.ResFragment): boolean | null {
 
 function textMatcherTest(
   matcher: NGNodeTextMatcher,
-  text: string,
+  text: string
 ): boolean | null {
   if (matcher.source.length === 0) {
     return null;
@@ -96,7 +96,7 @@ function textMatcherTest(
     case "reg":
       try {
         return new RegExp(matcher.source, [matcher.i ? "i" : ""].join("")).test(
-          text,
+          text
         );
       } catch {
         return null;
@@ -124,7 +124,7 @@ export function toJSON(ng: NG): ngJson.NGJson {
 }
 
 function toJSONMatcher(
-  matcher: NGNodeTextMatcher,
+  matcher: NGNodeTextMatcher
 ): ngJson.NGNodeTextMatcherJson {
   switch (matcher.type) {
     case "reg":
@@ -141,12 +141,12 @@ function toJSONNode(node: NGNode): ngJson.NGNodeJson {
     case "and":
       return {
         type: "and",
-        children: node.children.map(x => toJSONNode(x)),
+        children: node.children.map((x) => toJSONNode(x)),
       };
     case "or":
       return {
         type: "or",
-        children: node.children.map(x => toJSONNode(x)),
+        children: node.children.map((x) => toJSONNode(x)),
       };
     case "profile":
       return node;
@@ -173,7 +173,7 @@ export function fromJSON(json: ngJson.NGJson): NG {
 }
 
 function fromJSONTextMatcher(
-  matcher: ngJson.NGNodeTextMatcherJson,
+  matcher: ngJson.NGNodeTextMatcherJson
 ): NGNodeTextMatcher {
   switch (matcher.type) {
     case "reg":
@@ -191,13 +191,13 @@ function fromJSONNode(node: ngJson.NGNodeJson): NGNode {
       return {
         id: uuid.v4(),
         type: "and",
-        children: node.children.map(x => fromJSONNode(x)),
+        children: node.children.map((x) => fromJSONNode(x)),
       };
     case "or":
       return {
         id: uuid.v4(),
         type: "or",
-        children: node.children.map(x => fromJSONNode(x)),
+        children: node.children.map((x) => fromJSONNode(x)),
       };
     case "profile":
       return { id: uuid.v4(), ...node };

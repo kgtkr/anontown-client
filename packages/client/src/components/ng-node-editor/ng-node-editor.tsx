@@ -73,7 +73,7 @@ export class NGNodesEditor extends React.Component<
             </>
           }
           autoGenerateNestedIndicator={false}
-          nestedItems={this.props.values.map(value => (
+          nestedItems={this.props.values.map((value) => (
             <NGNodeEditor
               key={value.id}
               value={value}
@@ -83,7 +83,7 @@ export class NGNodesEditor extends React.Component<
                 <IconButton
                   onClick={() =>
                     this.props.onChange(
-                      this.props.values.filter(x => x.id !== value.id),
+                      this.props.values.filter((x) => x.id !== value.id)
                     )
                   }
                 >
@@ -325,7 +325,7 @@ export class NGOrNodeEditor extends React.Component<
         rightIconButton={this.props.rightIconButton}
         primaryText="Or"
         values={this.props.value.children}
-        onChange={nodes => {
+        onChange={(nodes) => {
           this.props.onChange({
             ...this.props.value,
             children: nodes,
@@ -367,7 +367,7 @@ export class NGAndNodeEditor extends React.Component<
         select={this.props.select}
         values={this.props.value.children}
         primaryText="And"
-        onChange={node => {
+        onChange={(node) => {
           this.props.onChange({
             ...this.props.value,
             children: node,
@@ -420,7 +420,7 @@ export class NGNotNodeEditor extends React.Component<
               nestedLevel={this.props.nestedLevel + 1}
               key="node"
               value={this.props.value.child}
-              onChange={node => {
+              onChange={(node) => {
                 this.props.onChange({
                   ...this.props.value,
                   child: node,

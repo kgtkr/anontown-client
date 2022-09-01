@@ -11,15 +11,15 @@ function getKeyFromRes(x: G.ResFragment): ResKey {
 type ResKey = [number, string];
 const ordListItemKey: Ord<ResKey> = OrdT.getTupleOrd(
   OrdT.ordNumber,
-  OrdT.ordString,
+  OrdT.ordString
 );
 
 function mergeReses(
   xs: ReadonlyArray<G.ResFragment>,
-  ys: ReadonlyArray<G.ResFragment>,
+  ys: ReadonlyArray<G.ResFragment>
 ): ReadonlyArray<G.ResFragment> {
   return ArrayExtra.mergeAndUniqSortedArray(ordListItemKey)(getKeyFromRes, ys)(
-    xs,
+    xs
   );
 }
 
@@ -55,8 +55,8 @@ export function reducer(prevState: State, action: Action): State {
         jumpResId: pipe(
           [RA.last(action.afterReses), RA.head(action.beforeReses)],
           Monoid_.fold(O.getFirstMonoid()),
-          O.map(res => res.id),
-          O.toNullable,
+          O.map((res) => res.id),
+          O.toNullable
         ),
       };
     }

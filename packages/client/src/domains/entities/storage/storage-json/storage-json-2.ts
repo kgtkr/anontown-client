@@ -9,7 +9,7 @@ export const storageJSON2 = t.strict({
       topic: t.string,
       res: t.string,
       count: t.number,
-    }),
+    })
   ),
 });
 
@@ -19,7 +19,7 @@ export function convert1To2(val: StorageJSON1): StorageJSON2 {
   return {
     ver: "2",
     topicFav: val.topicFav,
-    topicRead: val.topicRead.map(x => {
+    topicRead: val.topicRead.map((x) => {
       return {
         topic: x.topic,
         res: x.res,

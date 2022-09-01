@@ -8,7 +8,7 @@ export interface NGMatcherEditorProps {
   floatingLabelText?: string;
 }
 export function NGMatcherEditor(
-  props: NGMatcherEditorProps,
+  props: NGMatcherEditorProps
 ): React.ReactElement<any> {
   return (
     <div>

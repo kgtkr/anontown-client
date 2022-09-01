@@ -6,7 +6,7 @@ export const ngNodeNotJson: t.Type<NGNodeNotJson> = t.recursion(
     t.strict({
       type: t.literal("not"),
       child: ngNodeJson,
-    }),
+    })
 );
 export interface NGNodeNotJson {
   readonly type: "not";
@@ -19,7 +19,7 @@ export const ngNodeAndJson: t.Type<NGNodeAndJson> = t.recursion(
     t.strict({
       type: t.literal("and"),
       children: t.array(ngNodeJson),
-    }),
+    })
 );
 
 export interface NGNodeAndJson {
@@ -33,7 +33,7 @@ export const ngNodeOrJson: t.Type<NGNodeOrJson> = t.recursion(
     t.strict({
       type: t.literal("or"),
       children: t.array(ngNodeJson),
-    }),
+    })
 );
 
 export interface NGNodeOrJson {
@@ -113,7 +113,7 @@ export const ngNodeJson: t.Type<NGNodeJson> = t.recursion("NGNodeJSON", () =>
     ngNodeTextJson,
     ngNodeNameJson,
     ngNodeVoteJson,
-  ]),
+  ])
 );
 
 export type NGNodeJson =

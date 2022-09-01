@@ -24,7 +24,10 @@ interface TopicWriteA {
   age: boolean;
 }
 
-export type TopicWrite = Newtype<{ readonly TopicWrite: unique symbol }, TopicWriteA>
+export type TopicWrite = Newtype<
+  { readonly TopicWrite: unique symbol },
+  TopicWriteA
+>;
 
 const isoTopicWrite = iso<TopicWrite>();
 
@@ -37,7 +40,7 @@ const initTopicWrite = isoTopicWrite.wrap({
 });
 
 export function getTopicWriteTextLens(
-  reply: string | null,
+  reply: string | null
 ): Lens<TopicWrite, string> {
   return isoTopicWrite.asLens().compose<string>(
     new Lens(
@@ -47,11 +50,11 @@ export function getTopicWriteTextLens(
         } else {
           return pipe(
             RR.lookup(reply, replyText),
-            O.getOrElse(() => ""),
+            O.getOrElse(() => "")
           );
         }
       },
-      text => topicWrite => {
+      (text) => (topicWrite) => {
         if (reply === null) {
           return {
             ...topicWrite,
@@ -63,69 +66,66 @@ export function getTopicWriteTextLens(
             replyText: RR.insertAt(reply, text)(topicWrite.replyText),
           };
         }
-      },
-    ),
+      }
+    )
   );
 }
 
-export const topicWriteNameLens: Lens<
-  TopicWrite,
-  string
-> = isoTopicWrite.asLens().compose<string>(
-  new Lens(
-    ({ name }) => name,
-    name => topicWrite => ({ ...topicWrite, name }),
-  ),
-);
+export const topicWriteNameLens: Lens<TopicWrite, string> = isoTopicWrite
+  .asLens()
+  .compose<string>(
+    new Lens(
+      ({ name }) => name,
+      (name) => (topicWrite) => ({ ...topicWrite, name })
+    )
+  );
 
-export const topicWriteProfileLens: Lens<
-  TopicWrite,
-  string | null
-> = isoTopicWrite.asLens().compose<string | null>(
-  new Lens(
-    ({ profile }) => profile,
-    profile => topicWrite => ({ ...topicWrite, profile }),
-  ),
-);
+export const topicWriteProfileLens: Lens<TopicWrite, string | null> =
+  isoTopicWrite.asLens().compose<string | null>(
+    new Lens(
+      ({ profile }) => profile,
+      (profile) => (topicWrite) => ({ ...topicWrite, profile })
+    )
+  );
 
-export const topicWriteAgeLens: Lens<
-  TopicWrite,
-  boolean
-> = isoTopicWrite.asLens().compose<boolean>(
-  new Lens(
-    ({ age }) => age,
-    age => topicWrite => ({ ...topicWrite, age }),
-  ),
-);
+export const topicWriteAgeLens: Lens<TopicWrite, boolean> = isoTopicWrite
+  .asLens()
+  .compose<boolean>(
+    new Lens(
+      ({ age }) => age,
+      (age) => (topicWrite) => ({ ...topicWrite, age })
+    )
+  );
 
 interface TopicReadA {
   date: string;
   count: number;
 }
 
-export type TopicRead = Newtype<{ readonly TopicRead: unique symbol }, TopicReadA>
+export type TopicRead = Newtype<
+  { readonly TopicRead: unique symbol },
+  TopicReadA
+>;
 
 const isoTopicRead = iso<TopicRead>();
 
-export const topicReadDateLens: Lens<
-  TopicRead,
-  string
-> = isoTopicRead.asLens().compose<string>(
-  new Lens(
-    ({ date }) => date,
-    date => topicRead => ({ ...topicRead, date }),
-  ),
-);
+export const topicReadDateLens: Lens<TopicRead, string> = isoTopicRead
+  .asLens()
+  .compose<string>(
+    new Lens(
+      ({ date }) => date,
+      (date) => (topicRead) => ({ ...topicRead, date })
+    )
+  );
 
-export const topicReadCountLens: Lens<
-  TopicRead,
-  number
-> = isoTopicRead.asLens().compose<number>(
-  new Lens(
-    ({ count }) => count,
-    count => topicRead => ({ ...topicRead, count }),
-  ),
-);
+export const topicReadCountLens: Lens<TopicRead, number> = isoTopicRead
+  .asLens()
+  .compose<number>(
+    new Lens(
+      ({ count }) => count,
+      (count) => (topicRead) => ({ ...topicRead, count })
+    )
+  );
 
 interface StorageA {
   readonly topicFavo: ReadonlyArray<string>;
@@ -135,12 +135,12 @@ interface StorageA {
   readonly ng: ReadonlyArray<N.NG>;
 }
 
-export type Storage = Newtype<{ readonly Storage: unique symbol }, StorageA>
+export type Storage = Newtype<{ readonly Storage: unique symbol }, StorageA>;
 
 const isoStorage = iso<Storage>();
 
 export function getTagsFavo(
-  storage: Storage,
+  storage: Storage
 ): ReadonlyArray<ReadonlyArray<string>> {
   const { tagsFavo } = isoStorage.unwrap(storage);
   return tagsFavo;
@@ -152,7 +152,7 @@ export function getTopicFavo(storage: Storage): ReadonlyArray<string> {
 }
 
 export function addNG(ng: N.NG) {
-  return isoStorage.modify(storage => ({
+  return isoStorage.modify((storage) => ({
     ...storage,
     ng: RA.cons(ng, storage.ng),
   }));
@@ -164,14 +164,14 @@ export function getNG(storage: Storage): ReadonlyArray<N.NG> {
 }
 
 export function removeNG(id: string) {
-  return isoStorage.modify(storage => ({
+  return isoStorage.modify((storage) => ({
     ...storage,
-    ng: storage.ng.filter(x => x.id !== id),
+    ng: storage.ng.filter((x) => x.id !== id),
   }));
 }
 
 export function updateNG(ng: N.NG) {
-  return isoStorage.modify(storage => ({
+  return isoStorage.modify((storage) => ({
     ...storage,
     ng: ReadonlyArrayExtra.update(ng)(storage.ng),
   }));
@@ -181,13 +181,13 @@ export function getTopicRead(id: string) {
   return (storage: Storage): Option<TopicRead> => {
     return pipe(
       RR.lookup(id, isoStorage.unwrap(storage).topicRead),
-      O.map(isoTopicRead.wrap),
+      O.map(isoTopicRead.wrap)
     );
   };
 }
 
 export function setTopicRead(id: string, value: TopicRead) {
-  return isoStorage.modify(storage => ({
+  return isoStorage.modify((storage) => ({
     ...storage,
     topicRead: RR.insertAt(id, isoTopicRead.unwrap(value))(storage.topicRead),
   }));
@@ -202,7 +202,7 @@ export function makeTopicRead(data: {
 
 export function modifyTopicRead(
   id: string,
-  f: (value: Option<TopicRead>) => TopicRead,
+  f: (value: Option<TopicRead>) => TopicRead
 ) {
   return (storage: Storage): Storage => {
     return setTopicRead(id, f(getTopicRead(id)(storage)))(storage);
@@ -214,24 +214,24 @@ export function getTopicWrite(id: string) {
     return pipe(
       RR.lookup(id, isoStorage.unwrap(storage).topicWrite),
       O.map(isoTopicWrite.wrap),
-      O.getOrElse(() => initTopicWrite),
+      O.getOrElse(() => initTopicWrite)
     );
   };
 }
 
 export function setTopicWrite(id: string, value: TopicWrite) {
-  return isoStorage.modify(storage => ({
+  return isoStorage.modify((storage) => ({
     ...storage,
     topicWrite: RR.insertAt(
       id,
-      isoTopicWrite.unwrap(value),
+      isoTopicWrite.unwrap(value)
     )(storage.topicWrite),
   }));
 }
 
 export function modifyTopicWrite(
   id: string,
-  f: (value: TopicWrite) => TopicWrite,
+  f: (value: TopicWrite) => TopicWrite
 ) {
   return (storage: Storage): Storage => {
     return setTopicWrite(id, f(getTopicWrite(id)(storage)))(storage);
@@ -240,24 +240,26 @@ export function modifyTopicWrite(
 
 export function isTopicFavo(id: string) {
   return (storage: Storage): boolean => {
-    return isoStorage.unwrap(storage).topicFavo.findIndex(x => x === id) !== -1;
+    return (
+      isoStorage.unwrap(storage).topicFavo.findIndex((x) => x === id) !== -1
+    );
   };
 }
 
 export function favoTopic(id: string) {
   return flow(
     unfavoTopic(id),
-    isoStorage.modify(storage => ({
+    isoStorage.modify((storage) => ({
       ...storage,
       topicFavo: RA.cons(id, storage.topicFavo),
-    })),
+    }))
   );
 }
 
 export function unfavoTopic(id: string) {
-  return isoStorage.modify(storage => ({
+  return isoStorage.modify((storage) => ({
     ...storage,
-    topicFavo: storage.topicFavo.filter(x => x !== id),
+    topicFavo: storage.topicFavo.filter((x) => x !== id),
   }));
 }
 
@@ -266,11 +268,11 @@ export function isTagsFavo(tags: ReadonlyArray<string>) {
     return (
       isoStorage
         .unwrap(storage)
-        .tagsFavo.findIndex(xs =>
+        .tagsFavo.findIndex((xs) =>
           RA.getEq(EqT.eqString).equals(
             RA.sort(OrdT.ordString)(xs),
-            RA.sort(OrdT.ordString)(tags),
-          ),
+            RA.sort(OrdT.ordString)(tags)
+          )
         ) !== -1
     );
   };
@@ -279,22 +281,22 @@ export function isTagsFavo(tags: ReadonlyArray<string>) {
 export function favoTags(tags: ReadonlyArray<string>) {
   return flow(
     unfavoTags(tags),
-    isoStorage.modify(storage => ({
+    isoStorage.modify((storage) => ({
       ...storage,
       tagsFavo: RA.cons(tags, storage.tagsFavo),
-    })),
+    }))
   );
 }
 
 export function unfavoTags(tags: ReadonlyArray<string>) {
-  return isoStorage.modify(storage => ({
+  return isoStorage.modify((storage) => ({
     ...storage,
     tagsFavo: storage.tagsFavo.filter(
-      xs =>
+      (xs) =>
         !RA.getEq(EqT.eqString).equals(
           RA.sort(OrdT.ordString)(xs),
-          RA.sort(OrdT.ordString)(tags),
-        ),
+          RA.sort(OrdT.ordString)(tags)
+        )
     ),
   }));
 }
@@ -305,20 +307,19 @@ export function toStorage(json: StorageJSONLatest): Storage {
     tagsFavo: json.tagsFavo,
     topicRead: json.topicRead,
     topicWrite: json.topicWrite,
-    ng: json.ng.map(x => N.fromJSON(x)),
+    ng: json.ng.map((x) => N.fromJSON(x)),
   });
 }
 
 export function toJSON(storage: Storage): StorageJSONLatest {
-  const { topicFavo, tagsFavo, topicRead, topicWrite, ng } = isoStorage.unwrap(
-    storage,
-  );
+  const { topicFavo, tagsFavo, topicRead, topicWrite, ng } =
+    isoStorage.unwrap(storage);
   return {
     ver: "9",
     topicFavo: RA.toArray(topicFavo), // TODO: clone消す
-    tagsFavo: tagsFavo.map(tags => RA.toArray(tags)), // TODO: clone消す
+    tagsFavo: tagsFavo.map((tags) => RA.toArray(tags)), // TODO: clone消す
     topicRead: topicRead,
     topicWrite: topicWrite,
-    ng: ng.map(x => N.toJSON(x)),
+    ng: ng.map((x) => N.toJSON(x)),
   };
 }
