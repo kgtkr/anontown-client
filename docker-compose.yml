@@ -28,6 +28,12 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgres:/var/lib/postgresql/data
+  camo:
+    image: arachnysdocker/go-camo:2.3.1
+    ports:
+      - "4000:8080"
+    environment:
+      - GOCAMO_HMAC=${CAMO_KEY}
 volumes:
   postgres:
   redis:
