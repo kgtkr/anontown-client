@@ -78,7 +78,7 @@ export const App = withRouter(
       }
     }
 
-    async componentWillMount() {
+    async UNSAFE_componentWillMount() {
       try {
         const tokenStr = localStorage.getItem("token");
         let token;
@@ -113,7 +113,7 @@ export const App = withRouter(
       }
     }
 
-    componentWillUpdate(nextProps: AppProps) {
+    UNSAFE_componentWillUpdate(nextProps: AppProps) {
       const { location } = this.props;
       if (
         nextProps.history.action !== "POP" &&

@@ -46,6 +46,8 @@ export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
   // TODO: getSnapshotBeforeUpdate使いたいけどhooksなさそう
   const fixedDataRef = React.useRef<null | { key: string; diff: number }>(null);
   (() => {
+    // TODO: 即時関数でhooksを使うとエラーになるので回避。即時関数なしで使うように修正したい
+    /* eslint-disable react-hooks/rules-of-hooks */
     // べき等にするために一回の描画で一回しか実行しないようにしたいのでフラグ
     const isProcessRef = React.useRef(false);
     React.useEffect(() => {
@@ -93,6 +95,7 @@ export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
         key: currentItemKey,
       };
     }
+    /* eslint-enable react-hooks/rules-of-hooks */
   })();
 
   React.useLayoutEffect(() => {
