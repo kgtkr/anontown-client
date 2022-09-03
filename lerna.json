@@ -1,6 +1,4 @@
 {
-  "packages": [
-    "packages/*"
-  ],
+  "$schema": "node_modules/@lerna-lite/cli/schemas/lerna-schema.json",
   "version": "2.0.0"
 }

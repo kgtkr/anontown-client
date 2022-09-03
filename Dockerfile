@@ -3,14 +3,13 @@ FROM node:16.17.0-slim
 WORKDIR /home
 
 COPY package.json package-lock.json ./
+COPY packages/bff/package.json ./packages/bff/
+COPY packages/client/package.json ./packages/client/
+COPY packages/common/package.json ./packages/common/
+
 RUN npm ci
 
 COPY lerna.json ./
-COPY packages/bff/package.json packages/bff/package-lock.json ./packages/bff/
-COPY packages/client/package.json packages/client/package-lock.json ./packages/client/
-COPY packages/common/package.json packages/common/package-lock.json ./packages/common/
-RUN npx lerna bootstrap --ci
-
 COPY packages ./packages
 
 COPY bin/ bin
