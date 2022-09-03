@@ -1,17 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
     "jsx": "react",
-    "sourceMap": true,
     "lib": [
-      "ESNext",
       "DOM"
     ],
     "rootDir": "./src",
-    "outDir": "./ts-dist",
-    "esModuleInterop": true
+    "outDir": "./ts-dist"
   },
   "include": [
     "./src/"
