@@ -2,7 +2,7 @@
   "name": "@anontown/client-root",
   "private": true,
   "devDependencies": {
-    "typescript": "^4.8.2",
+    "typescript": "^3.8.3",
     "prettier": "^2.7.1",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
