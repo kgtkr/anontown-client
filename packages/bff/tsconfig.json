@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2015",
     "module": "commonjs",
@@ -12,11 +12,6 @@
     "noEmitOnError": true,
   },
   "include": [
-    "src/**/*.ts"
-  ],
-  "references": [
-    {
-      "path": "../common"
-    },
+    "./src/"
   ]
 }

@@ -3,4 +3,3 @@
 /packages/*/lib/
 /packages/*/public-dist/
 /packages/*/node_modules/
-/packages/*/tsconfig.tsbuildinfo

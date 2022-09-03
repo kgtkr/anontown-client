@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
@@ -15,12 +15,6 @@
     "noEmitOnError": true,
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "references": [
-    {
-      "path": "../common"
-    },
+    "./src/"
   ]
 }
