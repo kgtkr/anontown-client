@@ -1,6 +1,6 @@
 {
 	"private": true,
-	"name": "@anontown/client",
+	"name": "@anontown-frontend/client",
 	"version": "2.0.0",
 	"description": "",
 	"main": "index.js",
@@ -63,7 +63,7 @@
 		"webpack-dev-server": "^3.10.3"
 	},
 	"dependencies": {
-		"@anontown/common": "^2.0.0",
+		"@anontown-frontend/common": "^2.0.0",
 		"@apollo/react-common": "^3.1.4",
 		"@apollo/react-components": "^3.1.4",
 		"@apollo/react-hooks": "^3.1.4",

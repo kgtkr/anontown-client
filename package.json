@@ -1,5 +1,5 @@
 {
-  "name": "@anontown/client-root",
+  "name": "@anontown-frontend/root",
   "private": true,
   "devDependencies": {
     "typescript": "^3.8.3",
@@ -17,8 +17,8 @@
     "lint:fix": "eslint --fix 'packages/*/src/**/*.{ts,tsx}'",
     "format:check": "prettier --check 'packages/*/src/**/*.{ts,tsx}'",
     "format": "prettier --write 'packages/*/src/**/*.{ts,tsx}'",
-    "dev": "lerna run --include-dependencies --parallel --stream --scope @anontown/client dev",
-    "dev-bff": "lerna run --include-dependencies build --scope @anontown/client && lerna run --include-dependencies --parallel --stream --scope @anontown/bff dev"
+    "dev": "lerna run --include-dependencies --parallel --stream --scope @anontown-frontend/client dev",
+    "dev-bff": "lerna run --include-dependencies build --scope @anontown-frontend/client && lerna run --include-dependencies --parallel --stream --scope @anontown-frontend/bff dev"
   },
   "workspaces": [
     "packages/common",
