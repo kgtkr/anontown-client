@@ -10,14 +10,12 @@ import { outputJsValueToHtml } from "@anontown/common/lib/output-js-value-to-htm
 
 const app = new Koa();
 
-const rootDir = "./node_modules/@anontown/client/public-dist";
-
 function addRoute<P extends string, Q extends object>(route: RouteData<P, Q>) {
   app.use(
     kr.get(route.matcher(), async (ctx, ..._pathData) => {
       // const parsedData = route.parsePathData(pathData);
       const template = await fse.readFile(
-        path.join(rootDir, ".index.ejs"),
+        path.join(env.staticRootDir, ".index.ejs"),
         "utf8"
       );
       ctx.body = lodash.template(template)({
@@ -45,12 +43,12 @@ app.use(async (ctx, next) => {
       const isImmutable = ctx.path.endsWith(".immutable.js");
 
       await send(ctx, ctx.path, {
-        root: path.resolve(rootDir),
+        root: path.resolve(env.staticRootDir),
         immutable: isImmutable,
         maxage: isImmutable ? 1000 * 60 * 60 * 24 * 30 : 0,
       });
       done = true;
-    } catch (err) {
+    } catch (err: any) {
       if (err.status !== 404) {
         throw err;
       }

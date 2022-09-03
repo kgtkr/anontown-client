@@ -9,14 +9,18 @@ COPY packages/common/package.json ./packages/common/
 
 RUN npm ci
 
-COPY lerna.json tsconfig.base.json ./
 COPY packages ./packages
+COPY lerna.json tsconfig.base.json ./
+RUN npx lerna run build
 
-COPY bin/ bin
+FROM node:16.17.0-alpine
 
-RUN npx lerna run codegen --scope @anontown/client --include-filtered-dependencies \
-  && npx lerna run build --scope @anontown/bff \
-  && npx lerna run build --scope @anontown/client
+WORKDIR /workdir
 
-CMD ./bin/start.sh
+ENV STATIC_ROOT_DIR=./static/
+
+COPY --from=build /workdir/packages/bff/dist/app.js ./
+COPY --from=build /workdir/packages/client/dist ./static
+
+CMD ["node", "app.js"]
 

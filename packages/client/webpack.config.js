@@ -24,7 +24,7 @@ module.exports = (env, argv) => {
     },
     output: {
       filename: "[name].[chunkhash].immutable.js",
-      path: __dirname + "/public-dist",
+      path: __dirname + "/dist",
       publicPath: "/",
     },
     resolve: {
@@ -143,7 +143,7 @@ module.exports = (env, argv) => {
     devServer: !enableBff
       ? {
           contentBase: path.join(__dirname, "public"),
-          port: process.env["PORT"] || 3001,
+          port: process.env["PORT"] || 3000,
           historyApiFallback: true,
         }
       : undefined,

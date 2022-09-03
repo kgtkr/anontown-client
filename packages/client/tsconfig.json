@@ -9,10 +9,9 @@
       "ESNext",
       "DOM"
     ],
-    "outDir": "./dist",
     "rootDir": "./src",
-    "esModuleInterop": true,
-    "noEmitOnError": true,
+    "outDir": "./ts-dist",
+    "esModuleInterop": true
   },
   "include": [
     "./src/"

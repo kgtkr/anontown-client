@@ -6,8 +6,7 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "build:watch": "tsc -w",
-    "clean": "rm -rf ./lib"
+    "dev": "tsc -w"
   },
   "repository": {
     "type": "git",

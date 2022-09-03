@@ -8,14 +8,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: |
-          npm ci
-      - run: |
-          npx lerna run codegen --scope @anontown/client --include-filtered-dependencies
-          npx lerna run build --scope @anontown/bff
-          npx lerna run build --scope @anontown/client
-          npm run format:check
-          npm run lint
+      - run: npm ci
+      - run: npm run build
+      - run: npx lerna run check
+      - run: npm run format:check
+      - run: npm run lint
   docker:
     runs-on: ubuntu-latest
     needs: check

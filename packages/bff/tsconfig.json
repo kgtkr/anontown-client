@@ -6,10 +6,9 @@
     "lib": [
       "ES2015"
     ],
-    "outDir": "./dist",
     "rootDir": "./src",
     "esModuleInterop": true,
-    "noEmitOnError": true,
+    "noEmit": true
   },
   "include": [
     "./src/"
