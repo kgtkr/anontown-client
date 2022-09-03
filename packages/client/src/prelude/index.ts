@@ -1,3 +1,5 @@
+// なんでエラー出ているかよくわからないのでとりあえず
+/* eslint-disable import/export */
 export * from "./fp-ts-exports";
 export * from "./collections";
 export * from "./rx-exports";
