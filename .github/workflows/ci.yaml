@@ -9,7 +9,7 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - run: npm run build
+      - run: npx lerna run build
       - run: npx lerna run check
       - run: npm run format:check
       - run: npm run lint
