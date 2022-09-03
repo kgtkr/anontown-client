@@ -48,7 +48,7 @@ app.use(async (ctx, next) => {
         maxage: isImmutable ? 1000 * 60 * 60 * 24 * 30 : 0,
       });
       done = true;
-    } catch (err: any) {
+    } catch (err) {
       if (err.status !== 404) {
         throw err;
       }
