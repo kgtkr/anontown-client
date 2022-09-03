@@ -9,7 +9,7 @@ COPY packages/common/package.json ./packages/common/
 
 RUN npm ci
 
-COPY lerna.json ./
+COPY lerna.json tsconfig.base.json ./
 COPY packages ./packages
 
 COPY bin/ bin
