@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { App } from "./components/app";
 import { configureStore, history } from "./domains";
 import { gqlClient } from "./effects";
+import "./global.scss";
 
 Modal.setAppElement("#root");
 

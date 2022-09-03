@@ -20,7 +20,7 @@ module.exports = (env, argv) => {
 
   return {
     entry: {
-      main: ["./src/main.tsx", "./src/global.scss"],
+      main: ["./src/main.tsx"],
     },
     output: {
       filename: "[name].[chunkhash].immutable.js",
@@ -29,9 +29,6 @@ module.exports = (env, argv) => {
     },
     resolve: {
       extensions: [".ts", ".tsx", ".js"],
-      alias: {
-        style: path.resolve(__dirname, "src/style"),
-      },
     },
     plugins: [
       new webpack.DefinePlugin({
