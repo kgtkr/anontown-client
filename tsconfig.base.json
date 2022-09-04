@@ -15,6 +15,7 @@
     "preserveWatchOutput": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "moduleResolution": "Node"
   }
 }
