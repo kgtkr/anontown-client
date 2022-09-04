@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as style from "./text-field.scss";
+import * as style from "./text-field.module.scss";
 
 interface TextFieldProps {
   value: string;

@@ -18,7 +18,7 @@ import { Modal, NG, Page, Res, ResWrite, TopicFavo } from "../../components";
 import { PopupMenu } from "../../components/popup-menu";
 import * as G from "../../generated/graphql";
 import { useUserContext } from "../../hooks";
-import * as style from "./style.scss";
+import * as style from "./style.module.scss";
 import { RA } from "../../prelude";
 import { Sto } from "../../domains/entities";
 import { InfiniteScroll } from "../../components/infinite-scroll";

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { mdParser, safeURL } from "../utils";
 import { camo } from "../effects";
 
-import * as style from "./md.scss";
+import * as style from "./md.module.scss";
 import { Modal } from "./modal";
 import { Env } from "../env";
 

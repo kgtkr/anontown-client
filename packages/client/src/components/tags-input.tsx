@@ -2,7 +2,7 @@ import { AutoComplete, MenuItem } from "material-ui";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { Snack } from "./snack";
-import * as style from "./tags-input.scss";
+import * as style from "./tags-input.module.scss";
 import { RA } from "../prelude";
 
 export interface TagsInputProps {

@@ -1,7 +1,7 @@
 import { routes } from "@anontown-frontend/common/lib/route";
 import * as React from "react";
 import { Link } from "react-router-dom";
-import * as style from "./tags-link.scss";
+import * as style from "./tags-link.module.scss";
 
 export interface TagsLinkProps {
   tags: ReadonlyArray<string>;

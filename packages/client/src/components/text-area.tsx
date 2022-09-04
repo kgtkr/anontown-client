@@ -1,6 +1,6 @@
 import * as React from "react";
 import TextareaAutosize from "react-autosize-textarea";
-import * as style from "./text-area.scss";
+import * as style from "./text-area.module.scss";
 
 interface TextAreaProps {
   value: string;

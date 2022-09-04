@@ -34,7 +34,7 @@ import {
   gqlClient,
 } from "../effects";
 import { User } from "../utils";
-import * as style from "./app.scss";
+import * as style from "./app.module.scss";
 import { PopupMenu } from "./popup-menu";
 
 declare const gtag: any;

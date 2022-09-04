@@ -1,6 +1,6 @@
 import { FontIcon, IconButton } from "material-ui";
 import * as React from "react";
-import * as style from "./page.scss";
+import * as style from "./page.module.scss";
 
 export interface PageProps {
   sidebar?: React.ReactNode;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as style from "./select.scss";
+import * as style from "./select.module.scss";
 
 interface SelectProps {
   value: string;
