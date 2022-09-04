@@ -23,7 +23,7 @@ import {
 } from "react-router-dom";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import { UserData } from "../domains/entities";
-import { BUILD_DATE, Env } from "../env";
+import { Env } from "../env";
 import * as G from "../generated/graphql";
 import { UserContextType } from "../hooks";
 import * as pages from "../pages";
@@ -33,7 +33,7 @@ import {
   getServerStatus,
   gqlClient,
 } from "../effects";
-import { dateFormat, User } from "../utils";
+import { User } from "../utils";
 import * as style from "./app.scss";
 import { PopupMenu } from "./popup-menu";
 
@@ -146,10 +146,6 @@ export const App = withRouter(
                       <Toolbar className={style.header}>
                         <ToolbarGroup firstChild={true} className={style.big}>
                           <ToolbarTitle text="Anontown" />
-                          <ToolbarTitle
-                            text={`build:${dateFormat.format(BUILD_DATE)}`}
-                            style={{ fontSize: "0.5rem" }}
-                          />
                         </ToolbarGroup>
                         <ToolbarGroup>
                           <IconButton

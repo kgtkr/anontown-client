@@ -32,8 +32,6 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new webpack.DefinePlugin({
-        __BUILD_DATE__: JSON.stringify(Date.now()),
-        __MODE__: JSON.stringify(argv.mode),
         __ENABLE_BFF__: JSON.stringify(enableBff),
         ...(!enableBff ? { __RAW_ENV__: JSON.stringify(process.env) } : {}),
       }),
