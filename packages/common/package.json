@@ -2,8 +2,9 @@
   "name": "@anontown-frontend/common",
   "version": "2.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "module": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w"

@@ -30,7 +30,7 @@ export default defineConfig(({ command }) => {
       },
     },
     optimizeDeps: {
-      include: ["@anontown-frontend/common"],
+      include: [],
       exclude: [],
       disabled: false,
     },
