@@ -10,17 +10,19 @@ export default defineConfig(({ command }) => {
     plugins: [
       react(),
       VitePWA(),
-      ViteFaviconsPlugin({
-        logo: "icon.svg",
-        inject: true,
-        favicons: {
-          appName: "Anontown",
-          appDescription: "高機能匿名掲示板Anontown",
-          background: "#006400",
-          theme_color: "#00ff00",
-          icons: {},
-        },
-      }),
+      command === "build"
+        ? ViteFaviconsPlugin({
+            logo: "icon.svg",
+            inject: true,
+            favicons: {
+              appName: "Anontown",
+              appDescription: "高機能匿名掲示板Anontown",
+              background: "#006400",
+              theme_color: "#00ff00",
+              icons: {},
+            },
+          })
+        : null,
       command === "serve"
         ? (() => {
             const appEnv = loadEnv(process.env);
