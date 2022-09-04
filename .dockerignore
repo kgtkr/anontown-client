@@ -1,4 +1,3 @@
 /node_modules/
 /packages/*/dist/
-/packages/*/lib/
 /packages/*/node_modules/

@@ -2,11 +2,11 @@ import Koa from "koa";
 import { env } from "./env";
 import send = require("koa-send");
 import * as path from "path";
-import { RouteData, routeArray } from "@anontown-frontend/common/lib/route";
+import { RouteData, routeArray } from "@anontown-frontend/common/dist/route";
 import kr = require("koa-route");
 import * as fse from "fs-extra";
 import * as lodash from "lodash";
-import { outputJsValueToHtml } from "@anontown-frontend/common/lib/output-js-value-to-html";
+import { outputJsValueToHtml } from "@anontown-frontend/common/dist/output-js-value-to-html";
 
 const app = new Koa();
 

@@ -1,4 +1,4 @@
-import { routes } from "@anontown-frontend/common/lib/route";
+import { routes } from "@anontown-frontend/common/dist/route";
 import { Paper, RaisedButton, TextField } from "material-ui";
 import * as React from "react";
 import { Helmet } from "react-helmet";

@@ -14,5 +14,7 @@
     "forceConsistentCasingInFileNames": true,
     "preserveWatchOutput": true,
     "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
   }
 }

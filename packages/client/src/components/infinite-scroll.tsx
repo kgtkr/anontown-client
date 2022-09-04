@@ -2,7 +2,6 @@ import { Scroll, ScrollRef } from "./scroll";
 import * as React from "react";
 import { RA, pipe, O, EqT } from "../prelude";
 import { useInterval } from "react-use";
-import { Do } from "fp-ts-contrib/lib/Do";
 
 export interface InfiniteScrollProps<T> {
   itemToKey: (item: T) => string;
@@ -183,16 +182,13 @@ export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
       if (currentItemKeyRef.current !== null) {
         if (
           pipe(
-            Do(O.option)
-              .bindL("topShowKey", () =>
-                pipe(RA.head(items), O.map(props.itemToKey))
-              )
-              .bindL("topItemKey", () =>
-                pipe(RA.head(props.items), O.map(props.itemToKey))
-              )
-              .return(
-                ({ topShowKey, topItemKey }) => topShowKey === topItemKey
-              ),
+            O.bindTo("topShowKey")(
+              pipe(RA.head(items), O.map(props.itemToKey))
+            ),
+            O.bind("topItemKey", () =>
+              pipe(RA.head(props.items), O.map(props.itemToKey))
+            ),
+            O.map(({ topShowKey, topItemKey }) => topShowKey === topItemKey),
             O.getOrElse(() => false)
           )
         ) {
@@ -201,17 +197,16 @@ export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
 
         if (
           pipe(
-            Do(O.option)
-              .bindL("bottomShowKey", () =>
-                pipe(RA.last(items), O.map(props.itemToKey))
-              )
-              .bindL("bottomItemKey", () =>
-                pipe(RA.last(props.items), O.map(props.itemToKey))
-              )
-              .return(
-                ({ bottomShowKey, bottomItemKey }) =>
-                  bottomShowKey === bottomItemKey
-              ),
+            O.bindTo("bottomShowKey")(
+              pipe(RA.last(items), O.map(props.itemToKey))
+            ),
+            O.bind("bottomItemKey", () =>
+              pipe(RA.last(props.items), O.map(props.itemToKey))
+            ),
+            O.map(
+              ({ bottomShowKey, bottomItemKey }) =>
+                bottomShowKey === bottomItemKey
+            ),
             O.getOrElse(() => false)
           )
         ) {

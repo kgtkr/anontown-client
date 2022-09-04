@@ -1,2 +1,2 @@
 export * as Sto from "./storage";
-export { Storage } from "./storage";
+export type { Storage } from "./storage";

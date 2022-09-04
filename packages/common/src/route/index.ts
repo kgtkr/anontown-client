@@ -1,6 +1,6 @@
 import * as routes from "./routes";
 import { RouteData } from "./route-data";
-export { RouteData, RouteDataToParams } from "./route-data";
+export type { RouteData, RouteDataToParams } from "./route-data";
 export { routes };
 export const routeArray: Array<RouteData<string, {}>> = [
   routes.home,

@@ -1,4 +1,4 @@
-import { routes } from "@anontown-frontend/common/lib/route";
+import { routes } from "@anontown-frontend/common/dist/route";
 import {
   Checkbox,
   FontIcon,

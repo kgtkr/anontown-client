@@ -1,4 +1,4 @@
-import { routes } from "@anontown-frontend/common/lib/route";
+import { routes } from "@anontown-frontend/common/dist/route";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import * as style from "./tags-link.module.scss";

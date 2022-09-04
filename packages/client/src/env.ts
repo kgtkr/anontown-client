@@ -1,4 +1,4 @@
-import * as env from "@anontown-frontend/common/lib/env";
+import * as env from "@anontown-frontend/common/dist/env";
 
 declare const __ENV__: env.Env | undefined;
 declare const __RAW_ENV__: Record<string, string | undefined> | undefined;
