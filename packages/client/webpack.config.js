@@ -32,7 +32,6 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new webpack.DefinePlugin({
-        __ENABLE_BFF__: JSON.stringify(enableBff),
         ...(!enableBff ? { __RAW_ENV__: JSON.stringify(process.env) } : {}),
       }),
       new OfflinePlugin({
