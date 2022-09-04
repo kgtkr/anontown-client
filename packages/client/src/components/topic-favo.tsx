@@ -1,4 +1,4 @@
-import { routes } from "@anontown-frontend/common/dist/route";
+import * as routes from "@anontown-frontend/routes";
 import { FontIcon, IconButton, Paper } from "material-ui";
 import * as React from "react";
 import { Link } from "react-router-dom";

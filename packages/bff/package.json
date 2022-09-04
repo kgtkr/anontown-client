@@ -13,7 +13,7 @@
   "author": "kgtkr",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@anontown-frontend/common": "^2.0.0",
+    "@anontown-frontend/app-env": "^2.0.0",
     "koa": "^2.13.4",
     "koa-router": "^11.0.1",
     "koa-static": "^5.0.0"

@@ -3,7 +3,7 @@ import koaStatic from "koa-static";
 import * as path from "path";
 import { env } from "./env";
 import * as fs from "fs/promises";
-import { htmlInject } from "@anontown-frontend/common/dist/env";
+import { htmlInject } from "@anontown-frontend/app-env";
 function main() {
   const app = new Koa();
   const appConfig = AppConfig();

@@ -52,7 +52,8 @@
 		"vite-plugin-favicon": "^1.0.8"
 	},
 	"dependencies": {
-		"@anontown-frontend/common": "^2.0.0",
+		"@anontown-frontend/app-env": "^2.0.0",
+		"@anontown-frontend/routes": "^2.0.0",
 		"@apollo/react-common": "^3.1.4",
 		"@apollo/react-components": "^3.1.4",
 		"@apollo/react-hooks": "^3.1.4",

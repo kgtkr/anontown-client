@@ -3,7 +3,7 @@ import * as path from "path";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 import { ViteFaviconsPlugin } from "vite-plugin-favicon";
-import { loadEnv, htmlInject } from "@anontown-frontend/common/dist/env";
+import { loadEnv, htmlInject } from "@anontown-frontend/app-env";
 
 export default defineConfig(({ command }) => {
   return {

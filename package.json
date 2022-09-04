@@ -21,7 +21,8 @@
     "dev-bff": "lerna run --include-dependencies build --scope @anontown-frontend/client && lerna run --include-dependencies --parallel --stream --scope @anontown-frontend/bff dev"
   },
   "workspaces": [
-    "packages/common",
+    "packages/app-env",
+    "packages/routes",
     "packages/client",
     "packages/bff"
   ]
