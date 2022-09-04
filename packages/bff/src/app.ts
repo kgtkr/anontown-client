@@ -1,57 +1,37 @@
 import Koa from "koa";
-import { env } from "./env";
-import send = require("koa-send");
+import koaStatic from "koa-static";
 import * as path from "path";
-import { RouteData, routeArray } from "@anontown-frontend/common/dist/route";
-import kr = require("koa-route");
-import * as fse from "fs-extra";
-import * as lodash from "lodash";
-import { outputJsValueToHtml } from "@anontown-frontend/common/dist/output-js-value-to-html";
+import { env } from "./env";
+import * as fs from "fs/promises";
+import { htmlInject } from "@anontown-frontend/app-env";
+function main() {
+  const app = new Koa();
+  const appConfig = AppConfig();
 
-const app = new Koa();
-
-function addRoute<P extends string, Q extends object>(route: RouteData<P, Q>) {
   app.use(
-    kr.get(route.matcher(), async (ctx, ..._pathData) => {
-      // const parsedData = route.parsePathData(pathData);
-      const template = await fse.readFile(
-        path.join(env.staticRootDir, ".index.ejs"),
-        "utf8"
-      );
-      ctx.body = lodash.template(template)({
-        escapedEnvJson: outputJsValueToHtml(env.jsEnv),
-      });
+    koaStatic(appConfig.staticRootDir, {
+      setHeaders(res, path) {
+        if (path.startsWith("/assets/")) {
+          res.setHeader(
+            "cache-control",
+            `public, max-age=${60 * 60 * 24 * 30}, immutable`
+          );
+        }
+      },
+      index: false,
     })
   );
+
+  app.use(async (ctx) => {
+    const body = await fs.readFile(
+      path.join(env.staticRootDir, ".index.html"),
+      "utf8"
+    );
+
+    ctx.body = htmlInject(env.jsEnv, body);
+  });
+
+  app.listen(env.port);
 }
 
-for (const r of routeArray) {
-  addRoute(r);
-}
-
-app.use(async (ctx, next) => {
-  let done = false;
-
-  if (ctx.method === "HEAD" || ctx.method === "GET") {
-    try {
-      const isImmutable = ctx.path.endsWith(".immutable.js");
-
-      await send(ctx, ctx.path, {
-        root: path.resolve(env.staticRootDir),
-        immutable: isImmutable,
-        maxage: isImmutable ? 1000 * 60 * 60 * 24 * 30 : 0,
-      });
-      done = true;
-    } catch (err) {
-      if (err.status !== 404) {
-        throw err;
-      }
-    }
-  }
-
-  if (!done) {
-    await next();
-  }
-});
-
-app.listen(env.port);
+main();

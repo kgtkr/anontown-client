@@ -1,4 +1,4 @@
-import { Env as JSEnv, loadEnv } from "@anontown-frontend/common/dist/env";
+import { Env as JSEnv, loadEnv } from "@anontown-frontend/app-env";
 
 export interface Env {
   jsEnv: JSEnv;

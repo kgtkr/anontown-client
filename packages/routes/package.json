@@ -1,5 +1,5 @@
 {
-  "name": "@anontown-frontend/common",
+  "name": "@anontown-frontend/routes",
   "version": "2.0.0",
   "description": "",
   "module": "dist/index.js",

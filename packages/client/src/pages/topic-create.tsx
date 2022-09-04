@@ -1,4 +1,4 @@
-import { routes } from "@anontown-frontend/common/dist/route";
+import * as routes from "@anontown-frontend/routes";
 import { Mutation } from "@apollo/react-components";
 import {
   MenuItem,

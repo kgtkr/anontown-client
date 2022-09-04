@@ -5,7 +5,8 @@ WORKDIR /home
 COPY package.json package-lock.json ./
 COPY packages/bff/package.json ./packages/bff/
 COPY packages/client/package.json ./packages/client/
-COPY packages/common/package.json ./packages/common/
+COPY packages/app-env/package.json ./packages/app-env/
+COPY packages/routes/package.json ./packages/routes/
 
 RUN npm ci
 

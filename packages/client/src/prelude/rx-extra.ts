@@ -1,6 +1,6 @@
 import * as zen from "zen-observable-ts";
 import { IO } from "./fp-ts-exports";
-import { Task } from "fp-ts/lib/Task";
+import { Task } from "fp-ts/Task";
 import { rx, rxOps } from "./rx-exports";
 
 export function fromZen<A>(zen$: zen.Observable<A>): rx.Observable<A> {

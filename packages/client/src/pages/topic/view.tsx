@@ -1,4 +1,4 @@
-import { routes } from "@anontown-frontend/common/dist/route";
+import * as routes from "@anontown-frontend/routes";
 import { useApolloClient } from "@apollo/react-hooks";
 import {
   FontIcon,

@@ -1,7 +1,7 @@
 import * as qs from "query-string";
 import { LocationDescriptorObject } from "history";
-import * as RA from "fp-ts/lib/ReadonlyRecord";
-import { ReadonlyRecord } from "fp-ts/lib/ReadonlyRecord";
+import * as RA from "fp-ts/ReadonlyRecord";
+import { ReadonlyRecord } from "fp-ts/ReadonlyRecord";
 
 export type PathDataElementConst = { type: "const"; value: string };
 export type PathDataElementVariable<T extends string> = {

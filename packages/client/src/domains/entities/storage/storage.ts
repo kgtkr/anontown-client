@@ -2,7 +2,7 @@ import * as N from "../ng";
 import { StorageJSONLatest } from "./storage-json";
 export * from "./storage-json";
 import { Newtype, iso } from "newtype-ts";
-import { Option } from "fp-ts/lib/Option";
+import { Option } from "fp-ts/Option";
 import {
   pipe,
   O,

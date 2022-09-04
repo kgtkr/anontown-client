@@ -55,3 +55,10 @@ export function loadEnv(env: Record<string, string | undefined>): Env {
     ga: env["GA"] ? { id: env["GA"] } : null,
   };
 }
+
+export function htmlInject(appEnv: Env, html: string): string {
+  return html.replace(
+    new RegExp(`__APP_ENV__`, "g"),
+    JSON.stringify(appEnv).replace(/</g, "\\u003c")
+  );
+}
