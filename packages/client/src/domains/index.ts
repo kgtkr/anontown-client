@@ -11,9 +11,7 @@ import { RootState } from "./state";
 
 import { routerMiddleware } from "connected-react-router";
 import { createBrowserHistory } from "history";
-import { logger } from "redux-logger";
 import { createEpicMiddleware } from "redux-observable";
-import { Mode } from "../env";
 
 export const history = createBrowserHistory();
 
@@ -30,9 +28,6 @@ export function configureStore(): Store<RootState, RootAction> & {
 
   middlewares.push(epicMiddleware);
   middlewares.push(routerMiddleware(history));
-  if (Mode === "development") {
-    middlewares.push(logger);
-  }
 
   const store = createStore<RootState, RootAction, unknown, unknown>(
     createRootReducer(history),
