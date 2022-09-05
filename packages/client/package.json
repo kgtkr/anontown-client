@@ -109,16 +109,5 @@
 		"use-react-router": "^1.0.7",
 		"uuid": "^3.3.2",
 		"zen-observable-ts": "^0.8.18"
-	},
-	"overrides": {
-		"@apollo/react-common": {
-			"graphql": "^15.0.0"
-		},
-		"@apollo/react-hooks": {
-			"graphql": "^15.0.0"
-		},
-		"@apollo/react-components": {
-			"graphql": "^15.0.0"
-		}
 	}
 }
