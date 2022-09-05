@@ -98,8 +98,5 @@
 		"use-react-router": "^1.0.7",
 		"uuid": "^3.3.2",
 		"zen-observable-ts": "^1.2.5"
-	},
-	"overrides": {
-		"sharp": "0.30.7"
 	}
 }
