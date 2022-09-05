@@ -1,4 +1,4 @@
-import { MutationUpdaterFn } from "apollo-client";
+import { MutationUpdaterFn } from "@apollo/client";
 import { RaisedButton, TextField } from "material-ui";
 import * as React from "react";
 import * as G from "../generated/graphql";

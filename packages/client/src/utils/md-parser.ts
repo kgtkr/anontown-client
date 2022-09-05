@@ -1,6 +1,6 @@
 import breaks from "remark-breaks";
 import markdown from "remark-parse";
-import unified from "unified";
+import * as unified from "unified";
 
 export function parse(text: string): Root {
   return unified().use(markdown).use(breaks).parse(text);

@@ -1,4 +1,4 @@
-import { ApolloProvider } from "@apollo/react-common";
+import { ApolloProvider } from "@apollo/client";
 import { ConnectedRouter } from "connected-react-router";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
