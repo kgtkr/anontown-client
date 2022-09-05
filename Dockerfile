@@ -1,6 +1,6 @@
 FROM node:16.17.0-slim as build
 
-WORKDIR /home
+WORKDIR /workdir
 
 COPY package.json package-lock.json ./
 COPY packages/bff/package.json ./packages/bff/
