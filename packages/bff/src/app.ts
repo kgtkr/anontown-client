@@ -6,10 +6,9 @@ import * as fs from "fs/promises";
 import { htmlInject } from "@anontown-frontend/app-env";
 function main() {
   const app = new Koa();
-  const appConfig = AppConfig();
 
   app.use(
-    koaStatic(appConfig.staticRootDir, {
+    koaStatic(env.staticRootDir, {
       setHeaders(res, path) {
         if (path.startsWith("/assets/")) {
           res.setHeader(
