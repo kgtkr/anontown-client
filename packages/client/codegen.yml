@@ -18,6 +18,5 @@ config:
   nonOptionalTypename: true
   scalars:
     DateTime: string
-  withHooks: true
-  withHOC: false
+  withComponent: true
   enumsAsTypes: true

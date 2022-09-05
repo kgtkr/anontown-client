@@ -11,6 +11,7 @@ import {
   from,
 } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
+import generatedIntrospection from "../generated/introspection-result";
 
 export function createHeaders(id: string, key: string): {} {
   return {
@@ -69,6 +70,6 @@ const splitLink = split(
 export const gqlClient = new ApolloClient({
   link: splitLink,
   cache: new InMemoryCache({
-    possibleTypes, // TODO: codegen
+    possibleTypes: generatedIntrospection.possibleTypes,
   }),
 });

@@ -4,7 +4,7 @@ import { QueryResult } from "@apollo/client";
 export function queryResultConvert<TData, TVar>(
   res: QueryResult<TData, TVar>
 ): QueryResult<TData, TVar> {
-  if (res.data !== undefined) {
+  if (res.data) {
     if (Object.keys(res.data).length === 0) {
       res.data = undefined;
     }
