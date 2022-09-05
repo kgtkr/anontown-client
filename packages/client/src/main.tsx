@@ -1,6 +1,5 @@
 import { ApolloProvider } from "@apollo/react-common";
 import { ConnectedRouter } from "connected-react-router";
-import "core-js";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Modal from "react-modal";
