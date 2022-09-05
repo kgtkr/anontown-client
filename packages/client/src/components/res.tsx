@@ -73,7 +73,7 @@ export const Res = React.memo((props: ResProps) => {
                 },
               })
                 .then(({ data }) => {
-                  if (props.update !== undefined && data !== undefined) {
+                  if (props.update !== undefined && data) {
                     props.update(data.voteRes);
                   }
                 })
@@ -99,7 +99,7 @@ export const Res = React.memo((props: ResProps) => {
                 },
               })
                 .then(({ data }) => {
-                  if (props.update !== undefined && data !== undefined) {
+                  if (props.update !== undefined && data) {
                     props.update(data.voteRes);
                   }
                 })

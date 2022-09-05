@@ -61,7 +61,7 @@ export const ResWrite = (props: ResWriteProps) => {
   const submit = () => {
     mutation()
       .then((x) => {
-        if (x.data !== undefined) {
+        if (x.data) {
           props.onSubmit?.(x.data.createRes);
         }
         setErrors([]);

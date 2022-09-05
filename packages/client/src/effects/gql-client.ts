@@ -1,21 +1,27 @@
-import {
-  InMemoryCache,
-  IntrospectionFragmentMatcher,
-} from "apollo-cache-inmemory";
-import { ApolloClient } from "apollo-client";
-import { ApolloLink, Operation, split } from "apollo-link";
-import { onError } from "apollo-link-error";
-import { HttpLink } from "apollo-link-http";
-import { WebSocketLink } from "apollo-link-ws";
-import { getMainDefinition } from "apollo-utilities";
-import * as zen from "zen-observable-ts";
 import { Env } from "../env";
-import introspectionResult from "../generated/introspection-result";
 import { getAuth } from "../utils";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
+import {
+  split,
+  HttpLink,
+  ApolloClient,
+  InMemoryCache,
+  ApolloLink,
+  from,
+} from "@apollo/client";
+import { getMainDefinition } from "@apollo/client/utilities";
+import generatedIntrospection from "../generated/introspection-result";
 
 export function createHeaders(id: string, key: string): {} {
   return {
     "X-Token": `${id},${key}`,
+  };
+}
+
+export function createConnectionParams(id: string, key: string) {
+  return {
+    token: `${id},${key}`,
   };
 }
 
@@ -24,83 +30,46 @@ const httpLink = new HttpLink({
   credentials: "same-origin",
 });
 
-const wsLink = new WebSocketLink({
-  uri: Env.socket.origin + "/",
-  options: {
-    reconnect: true,
-    lazy: true,
+const authMiddleware = new ApolloLink((operation, forward) => {
+  const auth = getAuth();
+  const additionalHeaders =
+    auth !== null ? createHeaders(auth.id, auth.key) : {};
+
+  operation.setContext(({ headers = {} }) => ({
+    headers: {
+      ...headers,
+      ...additionalHeaders,
+    },
+  }));
+
+  return forward(operation);
+});
+
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: Env.socket.origin + "/",
     connectionParams: () => {
       const auth = getAuth();
-      return auth !== null ? createHeaders(auth.id, auth.key) : {};
+      return auth !== null ? createConnectionParams(auth.id, auth.key) : {};
     },
-  },
-});
-
-const request = (opt: Operation) => {
-  const auth = getAuth();
-  if (auth !== null) {
-    opt.setContext({
-      headers: createHeaders(auth.id, auth.key),
-    });
-  }
-};
-
-const requestLink = new ApolloLink(
-  (operation, forward) =>
-    new zen.Observable((observer) => {
-      let handle: zen.ZenObservable.Subscription | undefined;
-      Promise.resolve(request(operation))
-        .then(() => {
-          handle = forward(operation).subscribe({
-            next: observer.next.bind(observer),
-            error: observer.error.bind(observer),
-            complete: observer.complete.bind(observer),
-          });
-        })
-        .catch(observer.error.bind(observer));
-
-      return () => {
-        if (handle) {
-          handle.unsubscribe();
-        }
-      };
-    })
+  })
 );
 
-const fragmentMatcher = new IntrospectionFragmentMatcher({
-  introspectionQueryResultData: introspectionResult,
-});
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  from([authMiddleware, httpLink])
+);
 
 export const gqlClient = new ApolloClient({
-  link: ApolloLink.from([
-    onError(({ graphQLErrors, networkError }) => {
-      if (graphQLErrors) {
-        graphQLErrors.map(({ message, locations, path }) =>
-          console.log(
-            `[GraphQL error]: Message: ${message}, Location: ${String(
-              locations
-            )}, Path: ${String(path)}`
-          )
-        );
-      }
-      if (networkError) {
-        console.log("[Network error]", networkError);
-      }
-    }),
-    requestLink,
-    split(
-      ({ query }) => {
-        const definition = getMainDefinition(query);
-        return (
-          definition.kind === "OperationDefinition" &&
-          definition.operation === "subscription"
-        );
-      },
-      wsLink,
-      httpLink
-    ),
-  ]),
+  link: splitLink,
   cache: new InMemoryCache({
-    fragmentMatcher,
+    possibleTypes: generatedIntrospection.possibleTypes,
   }),
 });

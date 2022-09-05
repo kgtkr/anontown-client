@@ -42,7 +42,7 @@ export const AuthPage = userSwitch((_props: AuthPageProps) => {
                   const data = await submit({
                     variables: { client: client.id },
                   });
-                  if (data.data !== undefined) {
+                  if (data.data) {
                     window.location.href =
                       client.url +
                       "?" +

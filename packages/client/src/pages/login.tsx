@@ -56,7 +56,7 @@ export const LoginPage = (_props: LoginPageProps) => {
                         },
                       },
                     });
-                    if (token.data !== undefined) {
+                    if (token.data) {
                       userContext.update(
                         await createUserData(
                           token.data.createTokenMaster as G.TokenMasterFragment

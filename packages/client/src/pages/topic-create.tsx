@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { Mutation } from "@apollo/react-components";
+import { Mutation } from "@apollo/client/react/components";
 import {
   MenuItem,
   Paper,

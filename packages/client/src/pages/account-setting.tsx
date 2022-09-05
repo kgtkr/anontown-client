@@ -63,7 +63,7 @@ export const AccountSettingPage = userSwitch(
                           auth: { id: user.data.user.id, pass: newPass },
                         },
                       });
-                      if (token.data !== undefined) {
+                      if (token.data) {
                         props.updateUserData({
                           ...props.userData,
                           token: token.data
