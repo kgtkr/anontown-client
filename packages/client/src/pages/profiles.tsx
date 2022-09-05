@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Page } from "../components";
 import * as G from "../generated/graphql";
-import { queryResultConvert, userSwitch, UserSwitchProps } from "../utils";
+import { userSwitch, UserSwitchProps } from "../utils";
 
 type ProfilesPageProps = UserSwitchProps;
 
@@ -17,7 +17,6 @@ export const ProfilesPage = userSwitch((_props: ProfilesPageProps) => {
       },
     },
   });
-  queryResultConvert(profiles);
 
   return (
     <Page>

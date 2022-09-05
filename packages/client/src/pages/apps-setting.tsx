@@ -3,14 +3,13 @@ import * as React from "react";
 import { useTitle } from "react-use";
 import { Errors, Page, Snack } from "../components";
 import * as G from "../generated/graphql";
-import { queryResultConvert, userSwitch, UserSwitchProps } from "../utils";
+import { userSwitch, UserSwitchProps } from "../utils";
 
 type AppsSettingPageProps = UserSwitchProps;
 
 export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
   const [snackMsg, setSnackMsg] = React.useState<string | null>(null);
   const tokens = G.useFindTokensQuery({ variables: {} });
-  queryResultConvert(tokens);
   const variables: G.FindClientsQueryVariables = {
     query: {
       id:
@@ -32,7 +31,6 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
     skip: tokens.data === undefined,
     variables,
   });
-  queryResultConvert(clients);
   const [delToken] = G.useDelTokenClientMutation();
 
   useTitle("連携アプリ管理");

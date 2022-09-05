@@ -4,12 +4,7 @@ import { Helmet } from "react-helmet";
 import useRouter from "use-react-router";
 import { Page, TopicEditor } from "../components";
 import * as G from "../generated/graphql";
-import {
-  queryResultConvert,
-  userSwitch,
-  UserSwitchProps,
-  withModal,
-} from "../utils";
+import { userSwitch, UserSwitchProps, withModal } from "../utils";
 
 type TopicEditBaseProps = UserSwitchProps & {
   zDepth?: number;
@@ -24,7 +19,6 @@ const TopicEditBase = userSwitch((props: TopicEditBaseProps) => {
       },
     },
   });
-  queryResultConvert(topics);
   const topic = topics.data !== undefined ? topics.data.topics[0] : null;
 
   return (

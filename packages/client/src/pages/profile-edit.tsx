@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import useRouter from "use-react-router";
 import { Page, ProfileEditor } from "../components";
 import * as G from "../generated/graphql";
-import { queryResultConvert, userSwitch, UserSwitchProps } from "../utils";
+import { userSwitch, UserSwitchProps } from "../utils";
 import { pipe, O, RA } from "../prelude";
 type ProfileEditPageProps = UserSwitchProps;
 
@@ -16,7 +16,6 @@ export const ProfileEditPage = userSwitch((props: ProfileEditPageProps) => {
       },
     },
   });
-  queryResultConvert(profiles);
 
   const profile = pipe(
     O.fromNullable(profiles.data),

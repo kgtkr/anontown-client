@@ -5,7 +5,7 @@ import { useTitle } from "react-use";
 import useRouter from "use-react-router";
 import { Errors, Page, Snack } from "../components";
 import * as G from "../generated/graphql";
-import { queryResultConvert, userSwitch, UserSwitchProps } from "../utils";
+import { userSwitch, UserSwitchProps } from "../utils";
 
 type AuthPageProps = UserSwitchProps;
 
@@ -17,7 +17,6 @@ export const AuthPage = userSwitch((_props: AuthPageProps) => {
     skip: query.id === undefined,
     variables: { query: { id: query.id !== undefined ? [query.id] : [] } },
   });
-  queryResultConvert(clients);
   const [submit] = G.useCreateTokenGeneralMutation();
 
   useTitle("アプリ認証");

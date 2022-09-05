@@ -5,12 +5,7 @@ import { Helmet } from "react-helmet";
 import useRouter from "use-react-router";
 import { Page, TopicFork } from "../components";
 import * as G from "../generated/graphql";
-import {
-  queryResultConvert,
-  userSwitch,
-  UserSwitchProps,
-  withModal,
-} from "../utils";
+import { userSwitch, UserSwitchProps, withModal } from "../utils";
 
 type TopicForkBaseProps = UserSwitchProps & {
   zDepth?: number;
@@ -25,7 +20,6 @@ const TopicForkBase = userSwitch((props: TopicForkBaseProps) => {
       },
     },
   });
-  queryResultConvert(topics);
   const topic = topics.data !== undefined ? topics.data.topics[0] : null;
 
   return (

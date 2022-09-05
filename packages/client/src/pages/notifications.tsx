@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 import { RouteComponentProps } from "react-router-dom";
 import { Page, Res } from "../components";
 import * as G from "../generated/graphql";
-import { queryResultConvert, userSwitch, UserSwitchProps } from "../utils";
+import { userSwitch, UserSwitchProps } from "../utils";
 import { RA, O } from "../prelude";
 
 type NotificationsPageProps = RouteComponentProps<{}> & UserSwitchProps;
@@ -23,7 +23,6 @@ export const NotificationsPage = userSwitch(
         },
       },
     });
-    queryResultConvert(reses);
 
     return (
       <Page>

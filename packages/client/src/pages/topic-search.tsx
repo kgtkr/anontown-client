@@ -14,7 +14,6 @@ import { Page, TagsInput, TopicListItem } from "../components";
 import * as G from "../generated/graphql";
 import { useUserContext } from "../hooks";
 import { Card } from "../styled/card";
-import { queryResultConvert } from "../utils";
 import { Sto } from "../domains/entities";
 import { useDebouncedCallback } from "use-debounce";
 import { useOnChnageUrlSearch } from "../hooks/use-on-change-url-search";
@@ -127,7 +126,6 @@ export const TopicSearchPage = (_props: {}) => {
       limit,
     },
   });
-  queryResultConvert(topics);
 
   return (
     <Page>

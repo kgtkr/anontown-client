@@ -3,12 +3,7 @@ import * as React from "react";
 import { Helmet } from "react-helmet";
 import { Md, Page } from "../components";
 import * as G from "../generated/graphql";
-import {
-  dateFormat,
-  queryResultConvert,
-  userSwitch,
-  UserSwitchProps,
-} from "../utils";
+import { dateFormat, userSwitch, UserSwitchProps } from "../utils";
 import { RA, O } from "../prelude";
 
 type MessagesPageProps = UserSwitchProps;
@@ -25,7 +20,6 @@ export const MessagesPage = userSwitch((_props: MessagesPageProps) => {
       },
     },
   });
-  queryResultConvert(msgs);
 
   return (
     <Page>

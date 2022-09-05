@@ -3,7 +3,7 @@ import * as React from "react";
 import { Helmet } from "react-helmet";
 import { Errors, Page, Snack } from "../components";
 import * as G from "../generated/graphql";
-import { queryResultConvert, userSwitch, UserSwitchProps } from "../utils";
+import { userSwitch, UserSwitchProps } from "../utils";
 
 type AccountSettingPageProps = UserSwitchProps;
 
@@ -14,7 +14,6 @@ export const AccountSettingPage = userSwitch(
     const [oldPass, setOldPass] = React.useState("");
 
     const user = G.useFindUserQuery();
-    queryResultConvert(user);
 
     const [sn, setSn] = React.useState(
       user.data !== undefined ? user.data.user.sn : ""
