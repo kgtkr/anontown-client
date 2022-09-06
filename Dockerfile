@@ -1,4 +1,4 @@
-FROM node:16.17.0-slim as build
+FROM --platform=$BUILDPLATFORM node:16.17.0-slim as build
 
 WORKDIR /workdir
 
