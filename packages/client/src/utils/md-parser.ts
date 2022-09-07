@@ -6,7 +6,9 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import remarkBreaks from "remark-breaks";
+// eslint-disable-next-line import/no-unresolved
 import * as Mdast from "mdast";
+// eslint-disable-next-line import/no-unresolved
 import * as Hast from "hast";
 import haskell from "highlight.js/lib/languages/haskell";
 import scala from "highlight.js/lib/languages/scala";
