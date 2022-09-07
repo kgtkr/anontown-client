@@ -67,7 +67,6 @@
 		"graphql-ws": "^5.10.1",
 		"hast": "^1.0.0",
 		"highlight.js": "^11.6.0",
-		"history": "^4.10.1",
 		"io-ts": "^2.2.18",
 		"katex": "^0.16.2",
 		"material-ui": "^0.20.2",
