@@ -171,7 +171,6 @@ export const TopicPage = (_props: {}) => {
                   }
                 >
                   <MenuItem
-                    primaryText="詳細データ"
                     containerElement={
                       <Link
                         to={routes.topicData.to(
@@ -182,11 +181,12 @@ export const TopicPage = (_props: {}) => {
                         )}
                       />
                     }
-                  />
+                  >
+                    詳細データ
+                  </MenuItem>
                   {state.topic.__typename === "TopicNormal" &&
                   state.userData !== null ? (
                     <MenuItem
-                      primaryText="トピック編集"
                       containerElement={
                         <Link
                           to={routes.topicEdit.to(
@@ -197,11 +197,12 @@ export const TopicPage = (_props: {}) => {
                           )}
                         />
                       }
-                    />
+                    >
+                      トピック編集
+                    </MenuItem>
                   ) : null}
                   {state.topic.__typename === "TopicNormal" ? (
                     <MenuItem
-                      primaryText="派生トピック"
                       containerElement={
                         <Link
                           to={routes.topicFork.to(
@@ -212,22 +213,27 @@ export const TopicPage = (_props: {}) => {
                           )}
                         />
                       }
-                    />
+                    >
+                      派生トピック
+                    </MenuItem>
                   ) : null}
                   <MenuItem
-                    primaryText="自動スクロール"
                     onClick={() =>
                       dispatch({ type: "CLICK_OPEN_AUTO_SCROLL_MODAL" })
                     }
-                  />
+                  >
+                    自動スクロール
+                  </MenuItem>
                   <MenuItem
-                    primaryText="ジャンプ"
                     onClick={() => dispatch({ type: "CLICK_OPEN_JUMP_MODAL" })}
-                  />
+                  >
+                    ジャンプ
+                  </MenuItem>
                   <MenuItem
-                    primaryText="NG"
                     onClick={() => dispatch({ type: "CLICK_OPEN_NG_MODAL" })}
-                  />
+                  >
+                    NG
+                  </MenuItem>
                 </PopupMenu>
               </div>
             </Paper>

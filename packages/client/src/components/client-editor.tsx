@@ -19,12 +19,12 @@ export function ClientEditor(props: ClientEditorProps) {
     <form>
       {data.error && <Errors errors={["更新に失敗"]} />}
       <TextField
-        floatingLabelText="名前"
+        placeholder="名前"
         value={name}
         onChange={(_e, v) => setName(v)}
       />
       <TextField
-        floatingLabelText="url"
+        placeholder="url"
         value={url}
         onChange={(_e, v) => setUrl(v)}
       />

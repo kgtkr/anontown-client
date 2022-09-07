@@ -9,9 +9,11 @@ import { configureStore } from "./domains";
 import { gqlClient } from "./effects";
 import "./main.scss";
 import { HelmetProvider } from "react-helmet-async";
+import { createTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
 Modal.setAppElement("#root");
 
+const theme = createTheme({});
 const store = configureStore();
 
 ReactDOM.render(
@@ -19,7 +21,9 @@ ReactDOM.render(
     <Provider store={store}>
       <HelmetProvider>
         <BrowserRouter>
-          <App />
+          <MuiThemeProvider theme={theme}>
+            <App />
+          </MuiThemeProvider>
         </BrowserRouter>
       </HelmetProvider>
     </Provider>

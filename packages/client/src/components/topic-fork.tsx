@@ -32,7 +32,7 @@ export const TopicFork = (props: TopicForkProps) => {
               <form>
                 {error && <Errors errors={["作成に失敗"]} />}
                 <TextField
-                  floatingLabelText="タイトル"
+                  placeholder="タイトル"
                   value={title}
                   onChange={(_e, v) => setTitle(v)}
                 />

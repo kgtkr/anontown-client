@@ -33,7 +33,7 @@ export class NGHashNodeEditor extends React.Component<
         >
           {this.props.select}
           <TextField
-            floatingLabelText="HASH"
+            placeholder="HASH"
             value={this.props.value.hash}
             onChange={(_e, v) => {
               this.props.onChange({

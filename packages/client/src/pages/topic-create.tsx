@@ -97,17 +97,17 @@ export const TopicCreatePage = userSwitch(
                       {error && <Errors errors={["エラーが発生しました"]} />}
                       <div>
                         <SelectField
-                          floatingLabelText="種類"
+                          placeholder="種類"
                           value={this.state.type}
                           onChange={(_e, _i, v) => this.setState({ type: v })}
                         >
-                          <MenuItem value="TopicOne" primaryText="単発" />
-                          <MenuItem value="TopicNormal" primaryText="通常" />
+                          <MenuItem value="TopicOne">単発</MenuItem>
+                          <MenuItem value="TopicNormal">通常</MenuItem>
                         </SelectField>
                       </div>
                       <div>
                         <TextField
-                          floatingLabelText="タイトル"
+                          placeholder="タイトル"
                           value={this.state.title}
                           onChange={(_e, v) => this.setState({ title: v })}
                         />

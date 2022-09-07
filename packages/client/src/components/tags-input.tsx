@@ -64,14 +64,13 @@ export class TagsInput extends React.Component<TagsInputProps, TagsInputState> {
             return (
               <AutoComplete
                 fullWidth={this.props.fullWidth}
-                floatingLabelText="タグ"
+                placeholder="タグ"
                 dataSource={data.topicTags.map((t) => ({
                   text: t.name,
                   value: (
-                    <MenuItem
-                      primaryText={t.name}
-                      secondaryText={t.count.toString()}
-                    />
+                    <MenuItem secondaryText={t.count.toString()}>
+                      {t.name}
+                    </MenuItem>
                   ),
                 }))}
                 open={this.state.open}

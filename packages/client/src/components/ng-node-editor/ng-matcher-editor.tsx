@@ -5,7 +5,7 @@ import { ng } from "../../domains/entities";
 export interface NGMatcherEditorProps {
   matcher: ng.NGNodeTextMatcher;
   onChange: (text: ng.NGNodeTextMatcher) => void;
-  floatingLabelText?: string;
+  placeholder?: string;
 }
 export function NGMatcherEditor(
   props: NGMatcherEditorProps
@@ -41,7 +41,7 @@ export function NGMatcherEditor(
       />
       <TextField
         multiLine={true}
-        floatingLabelText={props.floatingLabelText}
+        placeholder={props.placeholder}
         value={props.matcher.source}
         onChange={(_e, v) => {
           props.onChange({

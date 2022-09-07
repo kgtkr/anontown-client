@@ -133,23 +133,26 @@ export class MdEditor extends React.Component<MdEditorProps, MdEditorState> {
               position="top left"
             >
               <MenuItem
-                primaryText="プレビュー"
                 onClick={() =>
                   this.setState({ showPreview: !this.state.showPreview })
                 }
-              />
+              >
+                プレビュー
+              </MenuItem>
               <MenuItem
-                primaryText="画像"
                 onClick={() =>
                   this.setState({ slowImage: !this.state.slowImage })
                 }
-              />
+              >
+                画像
+              </MenuItem>
               <MenuItem
-                primaryText="お絵かき"
                 onClick={() =>
                   this.setState({ slowOekaki: !this.state.slowOekaki })
                 }
-              />
+              >
+                お絵かき
+              </MenuItem>
             </PopupMenu>
           </div>
           <div

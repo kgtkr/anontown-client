@@ -12,12 +12,12 @@ export function NGEditor(props: NGEditorProps) {
   return (
     <div>
       <TextField
-        floatingLabelText="名前"
+        placeholder="名前"
         value={props.ng.name}
         onChange={(_e, v) => props.onUpdate({ ...props.ng, name: v })}
       />
       <TextField
-        floatingLabelText="トピック"
+        placeholder="トピック"
         value={props.ng.topic || ""}
         onChange={(_e, v) => props.onUpdate({ ...props.ng, topic: v || null })}
       />

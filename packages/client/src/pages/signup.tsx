@@ -43,14 +43,14 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
                   <Errors errors={this.state.errors} />
                   <div>
                     <TextField
-                      floatingLabelText="ID"
+                      placeholder="ID"
                       value={this.state.sn}
                       onChange={(_e, v) => this.setState({ sn: v })}
                     />
                   </div>
                   <div>
                     <TextField
-                      floatingLabelText="パスワード"
+                      placeholder="パスワード"
                       value={this.state.pass}
                       onChange={(_e, v) => this.setState({ pass: v })}
                       type="password"

@@ -30,14 +30,14 @@ export const LoginPage = (_props: LoginPageProps) => {
           <form>
             <div>
               <TextField
-                floatingLabelText="ID"
+                placeholder="ID"
                 value={sn}
                 onChange={(_e, v) => setSn(v)}
               />
             </div>
             <div>
               <TextField
-                floatingLabelText="パスワード"
+                placeholder="パスワード"
                 value={pass}
                 onChange={(_e, v) => setPass(v)}
                 type="password"

@@ -33,13 +33,13 @@ export const ProfileEditor = (props: ProfileEditorProps) => {
         <Errors errors={errors} />
         <TextField
           fullWidth={true}
-          floatingLabelText="ID"
+          placeholder="ID"
           value={sn}
           onChange={(_e, v) => setSn(v)}
         />
         <TextField
           fullWidth={true}
-          floatingLabelText="名前"
+          placeholder="名前"
           value={name}
           onChange={(_e, v) => setName(v)}
         />

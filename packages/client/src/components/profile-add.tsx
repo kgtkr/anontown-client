@@ -25,13 +25,13 @@ export function ProfileAdd(props: ProfileAddProps) {
         {error && <Errors errors={["エラーが発生しました"]} />}
         <TextField
           fullWidth={true}
-          floatingLabelText="ID"
+          placeholder="ID"
           value={sn}
           onChange={(_e, v) => setSn(v)}
         />
         <TextField
           fullWidth={true}
-          floatingLabelText="名前"
+          placeholder="名前"
           value={name}
           onChange={(_e, v) => setName(v)}
         />

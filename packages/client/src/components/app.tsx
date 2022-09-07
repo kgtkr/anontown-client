@@ -146,35 +146,40 @@ export function App(): JSX.Element {
                         {user.value !== null ? (
                           <>
                             <MenuItem
-                              primaryText="プロフ管理"
                               containerElement={
                                 <Link to={routes.profiles.to({})} />
                               }
-                            />
+                            >
+                              プロフ管理
+                            </MenuItem>
                             <MenuItem
-                              primaryText="お知らせ"
                               containerElement={
                                 <Link to={routes.messages.to({})} />
                               }
-                            />
+                            >
+                              お知らせ
+                            </MenuItem>
                             <MenuItem
-                              primaryText="設定"
                               containerElement={
                                 <Link to={routes.settings.to({})} />
                               }
-                            />
+                            >
+                              設定
+                            </MenuItem>
                             <MenuItem
-                              primaryText="ログアウト"
                               onClick={() => {
                                 user.update(null);
                               }}
-                            />
+                            >
+                              ログアウト
+                            </MenuItem>
                           </>
                         ) : (
                           <MenuItem
-                            primaryText="ログイン"
                             containerElement={<Link to={routes.login.to({})} />}
-                          />
+                          >
+                            ログイン
+                          </MenuItem>
                         )}
                       </PopupMenu>
                     </ToolbarGroup>

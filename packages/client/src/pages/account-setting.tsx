@@ -33,17 +33,17 @@ export const AccountSettingPage = userSwitch(
           {user.data !== undefined ? (
             <form>
               <TextField
-                floatingLabelText="ID"
+                placeholder="ID"
                 value={sn}
                 onChange={(_e, v) => setSn(v)}
               />
               <TextField
-                floatingLabelText="新しいパスワード"
+                placeholder="新しいパスワード"
                 value={newPass}
                 onChange={(_e, v) => setNewPass(v)}
               />
               <TextField
-                floatingLabelText="現在のパスワード"
+                placeholder="現在のパスワード"
                 value={oldPass}
                 onChange={(_e, v) => setOldPass(v)}
               />

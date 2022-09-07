@@ -34,7 +34,7 @@ export class NGNameNodeEditor extends React.Component<
         >
           {this.props.select}
           <NGMatcherEditor
-            floatingLabelText="名前"
+            placeholder="名前"
             matcher={this.props.value.matcher}
             onChange={(v) => {
               this.props.onChange({

@@ -33,7 +33,7 @@ export class NGProfileNodeEditor extends React.Component<
         >
           {this.props.select}
           <TextField
-            floatingLabelText="ID"
+            placeholder="ID"
             value={this.props.value.profile}
             onChange={(_e, v) => {
               this.props.onChange({

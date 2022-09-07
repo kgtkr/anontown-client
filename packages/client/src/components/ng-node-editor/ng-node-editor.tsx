@@ -196,18 +196,18 @@ export class NGNodeEditor extends React.Component<
   render(): React.ReactNode {
     const select = (
       <SelectField
-        floatingLabelText="タイプ"
+        placeholder="タイプ"
         value={this.props.value.type}
         onChange={this.handleChangeType}
       >
-        <MenuItem value={"not"} primaryText="not" />
-        <MenuItem value={"and"} primaryText="and" />
-        <MenuItem value={"or"} primaryText="or" />
-        <MenuItem value={"profile"} primaryText="profile" />
-        <MenuItem value={"hash"} primaryText="hash" />
-        <MenuItem value={"text"} primaryText="text" />
-        <MenuItem value={"name"} primaryText="name" />
-        <MenuItem value={"vote"} primaryText="vote" />
+        <MenuItem value={"not"}>not</MenuItem>
+        <MenuItem value={"and"}>and</MenuItem>
+        <MenuItem value={"or"}>or</MenuItem>
+        <MenuItem value={"profile"}>profile</MenuItem>
+        <MenuItem value={"hash"}>hash</MenuItem>
+        <MenuItem value={"text"}>text</MenuItem>
+        <MenuItem value={"name"}>name</MenuItem>
+        <MenuItem value={"vote"}>vote</MenuItem>
       </SelectField>
     );
     return this.props.value.type === "not" ? (

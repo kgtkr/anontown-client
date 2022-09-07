@@ -33,7 +33,7 @@ export class NGVoteNodeEditor extends React.Component<
         >
           {this.props.select}
           <TextField
-            floatingLabelText="しきい値"
+            placeholder="しきい値"
             type="number"
             value={this.props.value.value.toString()}
             onChange={(_e, v) => {

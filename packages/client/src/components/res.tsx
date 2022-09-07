@@ -215,17 +215,13 @@ export const Res = React.memo((props: ResProps) => {
                       return (
                         <>
                           {error && <Snack msg={"削除に失敗しました"} />}
-                          <MenuItem
-                            primaryText="削除"
-                            onClick={() => submit()}
-                          />
+                          <MenuItem onClick={() => submit()}>削除</MenuItem>
                         </>
                       );
                     }}
                   </G.DelResComponent>
                 ) : null}
                 <MenuItem
-                  primaryText="NG HASH"
                   onClick={() => {
                     if (user.value !== null) {
                       user.update({
@@ -247,11 +243,12 @@ export const Res = React.memo((props: ResProps) => {
                       });
                     }
                   }}
-                />
+                >
+                  NG HASH
+                </MenuItem>
                 {props.res.__typename === "ResNormal" &&
                 props.res.profile !== null ? (
                   <MenuItem
-                    primaryText="NG Profile"
                     onClick={() => {
                       if (
                         user.value !== null &&
@@ -277,7 +274,9 @@ export const Res = React.memo((props: ResProps) => {
                         });
                       }
                     }}
-                  />
+                  >
+                    NG Profile
+                  </MenuItem>
                 ) : null}
               </PopupMenu>
             ) : null}

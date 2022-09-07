@@ -50,7 +50,7 @@ export class TopicEditor extends React.Component<
               {error && <Errors errors={["エラーが発生しました"]} />}
               <TextField
                 fullWidth={true}
-                floatingLabelText="タイトル"
+                placeholder="タイトル"
                 value={this.state.title}
                 onChange={(_e, v) => this.setState({ title: v })}
               />

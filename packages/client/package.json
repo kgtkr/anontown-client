@@ -56,6 +56,7 @@
 		"@anontown-frontend/app-env": "^2.0.0",
 		"@anontown-frontend/routes": "^2.0.0",
 		"@kgtkr/utils": "^1.0.3",
+		"@material-ui/core": "^4.12.4",
 		"chroma-js": "^2.0.4",
 		"classnames": "^2.2.6",
 		"crypto-js": "^3.1.9-1",

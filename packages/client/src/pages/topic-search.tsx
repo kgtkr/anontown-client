@@ -164,7 +164,7 @@ export const TopicSearchPage = (_props: {}) => {
           />
           <TextField
             fullWidth={true}
-            floatingLabelText="タイトル"
+            placeholder="タイトル"
             value={state.input.title}
             onChange={(_e, v) => {
               dispatch({ type: "UPDATE_INPUT_TITLE", title: v });

@@ -27,12 +27,12 @@ export const ClientAdd = (props: ClientAddProps) => {
     <form>
       {error && <Errors errors={["作成に失敗"]} />}
       <TextField
-        floatingLabelText="名前"
+        placeholder="名前"
         value={name}
         onChange={(_e, v) => setName(v)}
       />
       <TextField
-        floatingLabelText="url"
+        placeholder="url"
         value={url}
         onChange={(_e, v) => setUrl(v)}
       />
