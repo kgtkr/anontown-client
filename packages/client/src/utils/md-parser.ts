@@ -1,124 +1,40 @@
-import breaks from "remark-breaks";
-import markdown from "remark-parse";
-import * as unified from "unified";
+import { unified, Processor } from "unified";
+import remarkRehype from "remark-rehype";
+import remarkParse from "remark-parse";
+import emoji from "remark-emoji";
+import rehypeHighlight from "rehype-highlight";
+import rehypeKatex from "rehype-katex";
+import remarkMath from "remark-math";
+import remarkBreaks from "remark-breaks";
+import * as Mdast from "mdast";
+import * as Hast from "hast";
+import haskell from "highlight.js/lib/languages/haskell";
+import scala from "highlight.js/lib/languages/scala";
+import ocaml from "highlight.js/lib/languages/ocaml";
+import remarkGfm from "remark-gfm";
 
-export function parse(text: string): Root {
-  return unified().use(markdown).use(breaks).parse(text);
+function markdownProcessor(): Processor<
+  Mdast.Root,
+  Mdast.Root,
+  Mdast.Root,
+  void
+> {
+  return unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkBreaks)
+    .use(emoji)
+    .use(remarkMath);
 }
 
-export type MdNode =
-  | Paragraph
-  | Blockquote
-  | Heading
-  | Code
-  | InlineCode
-  | List
-  | ListItem
-  | Table
-  | TableRow
-  | TableCell
-  | ThematicBreak
-  | Break
-  | Emphasis
-  | Strong
-  | Delete
-  | Link
-  | Image
-  | Text;
-
-interface ParentBase {
-  children: Array<MdNode>;
-}
-
-interface TextBase {
-  value: string;
-}
-
-export interface Root extends ParentBase {
-  type: "root";
-}
-
-export interface Paragraph extends ParentBase {
-  type: "paragraph";
-}
-
-export interface Blockquote extends ParentBase {
-  type: "blockquote";
-}
-
-export interface Heading extends ParentBase {
-  type: "heading";
-  depth: 1 | 2 | 3 | 4 | 5 | 6;
-}
-
-export interface Code extends TextBase {
-  type: "code";
-  lang: string | null;
-}
-
-export interface InlineCode extends TextBase {
-  type: "inlineCode";
-}
-
-export interface List extends ParentBase {
-  type: "list";
-  ordered: boolean;
-  start: number | null;
-  loose: boolean;
-}
-
-export interface ListItem extends ParentBase {
-  type: "listItem";
-  loose: boolean;
-  checked: boolean | null;
-}
-
-export interface Table extends ParentBase {
-  type: "table";
-  align: Array<"left" | "right" | "center" | null>;
-}
-
-export interface TableRow extends ParentBase {
-  type: "tableRow";
-}
-
-export interface TableCell extends ParentBase {
-  type: "tableCell";
-}
-
-export interface ThematicBreak {
-  type: "thematicBreak";
-}
-
-export interface Break {
-  type: "break";
-}
-
-export interface Emphasis extends ParentBase {
-  type: "emphasis";
-}
-
-export interface Strong extends ParentBase {
-  type: "strong";
-}
-
-export interface Delete extends ParentBase {
-  type: "delete";
-}
-
-export interface Link extends ParentBase {
-  type: "link";
-  title: string | null;
-  url: string;
-}
-
-export interface Image {
-  type: "image";
-  title: string | null;
-  alt: string | null;
-  url: string;
-}
-
-export interface Text extends TextBase {
-  type: "text";
+export function rehypeProcessor(): Processor<
+  Mdast.Root,
+  Hast.Root,
+  Hast.Root,
+  void
+> {
+  return markdownProcessor()
+    .use(remarkRehype)
+    .use(rehypeHighlight, { languages: { haskell, scala, ocaml } })
+    .use(rehypeKatex);
 }

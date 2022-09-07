@@ -8,6 +8,7 @@ import { camo } from "../effects";
 import * as style from "./md.module.scss";
 import { Modal } from "./modal";
 import { Env } from "../env";
+import rehypeReact from "rehype-react";
 
 type URLType =
   | { type: "normal"; url: string }
@@ -19,18 +20,26 @@ export interface MdProps {
   text: string;
 }
 
-export function Md(props: MdProps) {
-  const node = React.useMemo(() => mdParser.parse(props.text), [props.text]);
-  return React.createElement(
-    "div",
-    {
-      style: {
-        padding: "2px",
-      },
-      className: style.md,
+function reactProcessor() {
+  return mdParser.rehypeProcessor().use(rehypeReact, {
+    createElement: React.createElement,
+    components: {
+      a: MdLink as any,
+      img: MdImg as any,
     },
-    // eslint-disable-next-line react/jsx-key
-    ...node.children.map((c) => <MdNode node={c} />)
+  });
+}
+
+export function Md(props: MdProps): JSX.Element {
+  const node = React.useMemo(
+    () => reactProcessor().processSync(props.text).result,
+    [props.text]
+  );
+
+  return (
+    <div style={{ padding: "2px" }} className={style.md}>
+      {node}
+    </div>
   );
 }
 
@@ -104,205 +113,34 @@ function urlEnum(url: string): URLType {
   return { type: "normal", url };
 }
 
-function MdLink(props: { node: mdParser.Link }) {
-  const link = urlEnum(props.node.url);
+function MdLink({
+  href,
+  children,
+  title,
+}: {
+  href: string;
+  children: JSX.Element;
+  title?: string;
+}) {
+  const link = urlEnum(href);
   switch (link.type) {
     case "normal":
-      return React.createElement(
-        "a",
-        {
-          href: safeURL(props.node.url),
-          target: "_blank",
-          title: props.node.title || undefined,
-          rel: "noopener noreferrer",
-        },
-        // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map((c) => <MdNode node={c} />)
+      return (
+        <a
+          href={safeURL(href)}
+          target="_blank"
+          title={title}
+          rel="noopener noreferrer"
+        >
+          {children}
+        </a>
       );
     case "image":
-      return (
-        <MdImg
-          url={safeURL(props.node.url)}
-          title={props.node.title || undefined}
-        />
-      );
+      return <MdImg url={safeURL(href)} title={title} />;
     case "youtube":
-      return (
-        <MdYouTube
-          videoID={link.videoID}
-          title={props.node.title || undefined}
-        />
-      );
+      return <MdYouTube videoID={link.videoID} title={title} />;
     case "router":
-      return React.createElement(
-        Link,
-        {
-          to: link.path,
-        },
-        // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map((c) => <MdNode node={c} />)
-      );
-  }
-}
-
-function MdHeading(props: { node: mdParser.Heading }) {
-  return React.createElement(
-    `h${props.node.depth}`,
-    {},
-    // eslint-disable-next-line react/jsx-key
-    ...props.node.children.map((c) => <MdNode node={c} />)
-  );
-}
-
-function MdTable(props: { node: mdParser.Table }) {
-  const head = props.node.children[0];
-
-  return (
-    <table>
-      <thead>
-        {React.createElement(
-          "tr",
-          {},
-          ...(head.type === "tableRow"
-            ? head.children.map((cell, index) =>
-                React.createElement(
-                  "th",
-                  {
-                    style: {
-                      textAlign: props.node.align[index],
-                    },
-                  },
-                  ...(cell.type === "tableCell"
-                    ? // eslint-disable-next-line react/jsx-key
-                      cell.children.map((c) => <MdNode node={c} />)
-                    : [])
-                )
-              )
-            : [])
-        )}
-      </thead>
-      {React.createElement(
-        "tbody",
-        {},
-        ...props.node.children
-          .filter((_, i) => i !== 0)
-          .map((row) =>
-            row.type === "tableRow"
-              ? React.createElement(
-                  "tr",
-                  {},
-                  ...row.children.map((cell, index) =>
-                    cell.type === "tableCell"
-                      ? React.createElement(
-                          "td",
-                          {
-                            style: {
-                              textAlign: props.node.align[index],
-                            },
-                          },
-                          // eslint-disable-next-line react/jsx-key
-                          ...cell.children.map((c) => <MdNode node={c} />)
-                        )
-                      : []
-                  )
-                )
-              : []
-          )
-      )}
-    </table>
-  );
-}
-
-function MdNode(props: { node: mdParser.MdNode }): JSX.Element {
-  switch (props.node.type) {
-    case "paragraph":
-      return React.createElement(
-        "p",
-        {},
-        // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map((c) => <MdNode node={c} />)
-      );
-    case "blockquote":
-      return React.createElement(
-        "blockquote",
-        {},
-        // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map((c) => <MdNode node={c} />)
-      );
-    case "heading":
-      return <MdHeading node={props.node} />;
-    case "code":
-      return (
-        <pre>
-          <code>{props.node.value}</code>
-        </pre>
-      );
-    case "inlineCode":
-      return <code>{props.node.value}</code>;
-    case "list":
-      if (props.node.ordered) {
-        return React.createElement(
-          "ol",
-          {},
-          // eslint-disable-next-line react/jsx-key
-          ...props.node.children.map((c) => <MdNode node={c} />)
-        );
-      } else {
-        return React.createElement(
-          "ul",
-          {},
-          // eslint-disable-next-line react/jsx-key
-          ...props.node.children.map((c) => <MdNode node={c} />)
-        );
-      }
-    case "listItem":
-      return React.createElement(
-        "li",
-        {},
-        // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map((c) => <MdNode node={c} />)
-      );
-    case "table":
-      return <MdTable node={props.node} />;
-    case "thematicBreak":
-      return <hr />;
-    case "break":
-      return <br />;
-    case "emphasis":
-      return React.createElement(
-        "em",
-        {},
-        // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map((c) => <MdNode node={c} />)
-      );
-    case "strong":
-      return React.createElement(
-        "strong",
-        {},
-        // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map((c) => <MdNode node={c} />)
-      );
-    case "delete":
-      return React.createElement(
-        "del",
-        {},
-        // eslint-disable-next-line react/jsx-key
-        ...props.node.children.map((c) => <MdNode node={c} />)
-      );
-    case "link":
-      return <MdLink node={props.node} />;
-    case "image":
-      return (
-        <MdImg
-          url={camo.getCamoUrl(props.node.url)}
-          title={props.node.title || undefined}
-          alt={props.node.alt || undefined}
-        />
-      );
-    case "text":
-      return <>{props.node.value}</>;
-    default:
-      return <></>;
+      return <Link to={link.path}>{children}</Link>;
   }
 }
 
