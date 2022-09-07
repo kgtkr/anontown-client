@@ -1,5 +1,4 @@
 import * as React from "react";
-import TextareaAutosize from "react-autosize-textarea";
 import * as style from "./text-area.module.scss";
 
 interface TextAreaProps {
@@ -18,7 +17,7 @@ interface TextAreaProps {
 
 export function TextArea(props: TextAreaProps) {
   return (
-    <TextareaAutosize
+    <textarea
       className={style.textarea}
       style={props.style}
       value={props.value}
@@ -27,8 +26,10 @@ export function TextArea(props: TextAreaProps) {
       onKeyDown={props.onKeyDown}
       onKeyUp={props.onKeyUp}
       onKeyPress={props.onKeyPress}
-      rows={props.rows}
-      maxRows={props.rowsMax}
+      rows={Math.max(
+        props.rows ?? 1,
+        Math.min(props.value.split("\n").length, props.rowsMax ?? Infinity)
+      )}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
     />

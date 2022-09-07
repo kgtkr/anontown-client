@@ -76,7 +76,6 @@
 		"newtype-ts": "^0.3.4",
 		"query-string": "^6.4.0",
 		"react": "^16.8.4",
-		"react-autosize-textarea": "^6.0.0",
 		"react-color": "^2.17.0",
 		"react-dom": "^16.8.4",
 		"react-google-recaptcha": "^1.0.5",
