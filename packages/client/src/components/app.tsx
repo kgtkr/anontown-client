@@ -36,12 +36,17 @@ import {
 import { User } from "../utils";
 import * as style from "./app.module.scss";
 import { PopupMenu } from "./popup-menu";
+import * as H from "history";
 
 declare const gtag: any;
 
 const muiTheme = getMuiTheme(lightBaseTheme);
 
-type AppProps = RouteComponentProps<{}, {}, { modal: boolean }>;
+type AppProps = RouteComponentProps<
+  {},
+  {},
+  { background?: H.Location } | undefined
+>;
 
 interface AppState {
   initUserData?: UserData | null;
@@ -50,8 +55,6 @@ interface AppState {
 
 export const App = withRouter(
   class extends React.Component<AppProps, AppState> {
-    previousLocation = this.props.location;
-
     constructor(props: AppProps) {
       super(props);
       this.state = {
@@ -113,27 +116,12 @@ export const App = withRouter(
       }
     }
 
-    UNSAFE_componentWillUpdate(nextProps: AppProps) {
-      const { location } = this.props;
-      if (
-        nextProps.history.action !== "POP" &&
-        (!location.state || !location.state.modal)
-      ) {
-        this.previousLocation = this.props.location;
-      }
-    }
-
     logout(user: UserContextType) {
       user.update(null);
     }
 
     render() {
       const { location } = this.props;
-      const isModal = !!(
-        location.state &&
-        location.state.modal &&
-        this.previousLocation !== location
-      );
 
       return (
         <MuiThemeProvider muiTheme={muiTheme}>
@@ -222,7 +210,7 @@ export const App = withRouter(
                       </Toolbar>
                       <div className={style.main}>
                         <Switch
-                          location={isModal ? this.previousLocation : location}
+                          location={location.state?.background ?? location}
                         >
                           <Route
                             exact={true}
@@ -341,43 +329,43 @@ export const App = withRouter(
                           />
                           <Route component={pages.NotFoundPage} />
                         </Switch>
-                        {isModal ? (
+                        {location.state?.background ? (
                           <Route
                             path={routes.res.matcher()}
                             component={pages.ResModal}
                           />
                         ) : null}
-                        {isModal ? (
+                        {location.state?.background ? (
                           <Route
                             path={routes.resReply.matcher()}
                             component={pages.ResReplyModal}
                           />
                         ) : null}
-                        {isModal ? (
+                        {location.state?.background ? (
                           <Route
                             path={routes.profile.matcher()}
                             component={pages.ProfileModal}
                           />
                         ) : null}
-                        {isModal ? (
+                        {location.state?.background ? (
                           <Route
                             path={routes.topicData.matcher()}
                             component={pages.TopicDataModal}
                           />
                         ) : null}
-                        {isModal ? (
+                        {location.state?.background ? (
                           <Route
                             path={routes.topicFork.matcher()}
                             component={pages.TopicForkModal}
                           />
                         ) : null}
-                        {isModal ? (
+                        {location.state?.background ? (
                           <Route
                             path={routes.topicEdit.matcher()}
                             component={pages.TopicEditModal}
                           />
                         ) : null}
-                        {isModal ? (
+                        {location.state?.background ? (
                           <Route
                             path={routes.hash.matcher()}
                             component={pages.ResHashModal}

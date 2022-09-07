@@ -22,6 +22,7 @@ import { PopupMenu } from "./popup-menu";
 import { ResWrite } from "./res-write";
 import { Snack } from "./snack";
 import { isNullish } from "@kgtkr/utils";
+import { useBackground } from "../hooks/useBackground";
 
 interface ResProps {
   res: G.ResFragment;
@@ -33,6 +34,7 @@ export const Res = React.memo((props: ResProps) => {
   const [snackMsg, setSnackMsg] = React.useState<string | null>(null);
   const [disableNG, setDisableNG] = React.useState(false);
   const user = useUserContext();
+  const background = useBackground();
 
   const smallIcon = {
     width: 18,
@@ -155,7 +157,7 @@ export const Res = React.memo((props: ResProps) => {
                   { id: props.res.profile.id },
                   {
                     state: {
-                      modal: true,
+                      background,
                     },
                   }
                 )}
@@ -167,7 +169,7 @@ export const Res = React.memo((props: ResProps) => {
             <Link
               to={routes.res.to(
                 { id: props.res.id, topic: props.res.topic.id },
-                { state: { modal: true } }
+                { state: { background } }
               )}
             >
               {dateFormat.format(props.res.date)}
@@ -178,7 +180,7 @@ export const Res = React.memo((props: ResProps) => {
                 { hash: props.res.hash, topic: props.res.topic.id },
                 {
                   state: {
-                    modal: true,
+                    background,
                   },
                 }
               )}
@@ -289,7 +291,7 @@ export const Res = React.memo((props: ResProps) => {
                     <Link
                       to={routes.res.to(
                         { id: props.res.reply.id, topic: props.res.topic.id },
-                        { state: { modal: true } }
+                        { state: { background } }
                       )}
                     />
                   }
@@ -306,7 +308,7 @@ export const Res = React.memo((props: ResProps) => {
                       <Link
                         to={routes.resReply.to(
                           { id: props.res.id, topic: props.res.topic.id },
-                          { state: { modal: true } }
+                          { state: { background } }
                         )}
                       />
                     }

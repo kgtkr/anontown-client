@@ -26,6 +26,7 @@ import { useReducerWithObservable } from "../../hooks/use-reducer-with-observabl
 import { reducer } from "./reducer";
 import { State } from "./state";
 import { epic } from "./epic";
+import { useBackground } from "../../hooks/useBackground";
 
 // TODO:NGのtransparent
 
@@ -33,6 +34,7 @@ export const TopicPage = (_props: {}) => {
   const { match } = useRouter<{ id: string }>();
   const user = useUserContext();
   const apolloClient = useApolloClient();
+  const background = useBackground();
 
   const [state, dispatch] = useReducerWithObservable(
     reducer,
@@ -176,7 +178,7 @@ export const TopicPage = (_props: {}) => {
                           {
                             id: state.topicId,
                           },
-                          { state: { modal: true } }
+                          { state: { background } }
                         )}
                       />
                     }
@@ -191,7 +193,7 @@ export const TopicPage = (_props: {}) => {
                             {
                               id: state.topicId,
                             },
-                            { state: { modal: true } }
+                            { state: { background } }
                           )}
                         />
                       }
@@ -206,7 +208,7 @@ export const TopicPage = (_props: {}) => {
                             {
                               id: state.topicId,
                             },
-                            { state: { modal: true } }
+                            { state: { background } }
                           )}
                         />
                       }

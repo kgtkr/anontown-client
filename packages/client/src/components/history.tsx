@@ -4,6 +4,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { useToggle } from "react-use";
 import * as G from "../generated/graphql";
+import { useBackground } from "../hooks/useBackground";
 import { dateFormat } from "../utils";
 import { Md } from "./md";
 import { TagsLink } from "./tags-link";
@@ -14,6 +15,7 @@ interface HistoryProps {
 
 export function History(props: HistoryProps) {
   const [detail, toggleDetail] = useToggle(false);
+  const background = useBackground();
 
   return (
     <div>
@@ -34,7 +36,7 @@ export function History(props: HistoryProps) {
             },
             {
               state: {
-                modal: true,
+                background,
               },
             }
           )}
