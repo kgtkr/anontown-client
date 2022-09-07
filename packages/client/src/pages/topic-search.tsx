@@ -7,7 +7,7 @@ import {
   TextField,
 } from "material-ui";
 import * as React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import useRouter from "use-react-router";
 import { Page, TagsInput, TopicListItem } from "../components";

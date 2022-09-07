@@ -2,7 +2,7 @@ import * as routes from "@anontown-frontend/routes";
 import { Paper, RaisedButton, TextField } from "material-ui";
 import * as React from "react";
 import Recaptcha from "react-google-recaptcha";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { Link, Redirect } from "react-router-dom";
 import { Errors, Page } from "../components";
 import { Env } from "../env";

@@ -1,6 +1,6 @@
 import { Paper, RaisedButton } from "material-ui";
 import * as React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { Md, Page } from "../components";
 import * as G from "../generated/graphql";
 import { dateFormat, userSwitch, UserSwitchProps } from "../utils";

@@ -8,7 +8,7 @@ import {
   TextField,
 } from "material-ui";
 import * as React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Errors, MdEditor, Modal, Page, TagsInput } from "../components";
 import * as G from "../generated/graphql";

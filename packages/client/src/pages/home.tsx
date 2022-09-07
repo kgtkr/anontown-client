@@ -1,7 +1,7 @@
 import * as routes from "@anontown-frontend/routes";
 import { Tab, Tabs } from "material-ui";
 import * as React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { Page } from "../components";
 import { TagFavo, TopicFavo } from "../components";

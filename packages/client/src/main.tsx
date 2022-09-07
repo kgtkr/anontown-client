@@ -8,6 +8,7 @@ import { App } from "./components/app";
 import { configureStore } from "./domains";
 import { gqlClient } from "./effects";
 import "./main.scss";
+import { HelmetProvider } from "react-helmet-async";
 
 Modal.setAppElement("#root");
 
@@ -16,9 +17,11 @@ const store = configureStore();
 ReactDOM.render(
   <ApolloProvider client={gqlClient}>
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <HelmetProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </HelmetProvider>
     </Provider>
   </ApolloProvider>,
   document.querySelector("#root")

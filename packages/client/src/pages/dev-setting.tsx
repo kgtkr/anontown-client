@@ -1,6 +1,6 @@
 import { Paper } from "material-ui";
 import * as React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { RouteComponentProps } from "react-router-dom";
 import { ClientAdd, ClientEditor, Errors, Page } from "../components";
 import * as G from "../generated/graphql";

@@ -1,6 +1,6 @@
 import { RaisedButton } from "material-ui";
 import * as React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { RouteComponentProps } from "react-router-dom";
 import { Page, Res } from "../components";
 import * as G from "../generated/graphql";

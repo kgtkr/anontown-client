@@ -1,6 +1,6 @@
 import { Paper } from "material-ui";
 import * as React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { Page } from "../components";
 
 export const NotFoundPage = (_props: {}) => {

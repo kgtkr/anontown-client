@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { Page, ProfileAdd } from "../components";
 import { userSwitch, UserSwitchProps } from "../utils";
 
