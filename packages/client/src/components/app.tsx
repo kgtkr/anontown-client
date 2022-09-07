@@ -14,18 +14,11 @@ import {
   MuiThemeProvider,
 } from "material-ui/styles";
 import * as React from "react";
-import {
-  Link,
-  Route,
-  RouteComponentProps,
-  Switch,
-  withRouter,
-} from "react-router-dom";
+import { Link, Route, Switch } from "react-router-dom";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import { UserData } from "../domains/entities";
 import { Env } from "../env";
 import * as G from "../generated/graphql";
-import { UserContextType } from "../hooks";
 import * as pages from "../pages";
 import {
   createHeaders,
@@ -37,51 +30,39 @@ import { User } from "../utils";
 import * as style from "./app.module.scss";
 import { PopupMenu } from "./popup-menu";
 import * as H from "history";
+import useRouter from "use-react-router";
 
 declare const gtag: any;
 
 const muiTheme = getMuiTheme(lightBaseTheme);
 
-type AppProps = RouteComponentProps<
-  {},
-  {},
-  { background?: H.Location } | undefined
->;
+export function App(): JSX.Element {
+  const { location } = useRouter<
+    {},
+    {},
+    { background: H.Location } | undefined
+  >();
+  const [initUserData, setInitUserData] = React.useState<
+    UserData | undefined | null
+  >(undefined);
+  const [serverStatus, setServerStatus] = React.useState(true);
 
-interface AppState {
-  initUserData?: UserData | null;
-  serverStatus: boolean;
-}
-
-export const App = withRouter(
-  class extends React.Component<AppProps, AppState> {
-    constructor(props: AppProps) {
-      super(props);
-      this.state = {
-        serverStatus: true,
-      };
-      this.changeLocation(this.props);
-      getServerStatus().then((x) => {
-        this.setState({ serverStatus: x });
+  React.useEffect(() => {
+    if (Env.ga !== null) {
+      gtag("config", Env.ga.id, {
+        page_path: location.pathname,
       });
     }
+  }, [location.pathname]);
 
-    componentDidUpdate(prevProps: AppProps) {
-      if (this.props.location !== prevProps.location) {
-        this.changeLocation(this.props);
-      }
-    }
+  React.useEffect(() => {
+    void getServerStatus().then((serverStatus) => {
+      setServerStatus(serverStatus);
+    });
+  }, []);
 
-    changeLocation(prop: AppProps) {
-      const path = prop.location.pathname;
-      if (Env.ga !== null) {
-        gtag("config", Env.ga.id, {
-          page_path: path,
-        });
-      }
-    }
-
-    async UNSAFE_componentWillMount() {
+  React.useEffect(() => {
+    void (async () => {
       try {
         const tokenStr = localStorage.getItem("token");
         let token;
@@ -106,295 +87,281 @@ export const App = withRouter(
         if (res.data.token.__typename === "TokenGeneral") {
           throw Error();
         }
-        this.setState({
-          initUserData: await createUserData(
+        setInitUserData(
+          await createUserData(
             res.data.token as G.TokenMasterFragment // TODO: ここのキャストおかしい
-          ),
-        });
+          )
+        );
       } catch {
-        this.setState({ initUserData: null });
+        setInitUserData(null);
       }
-    }
+    })();
+  }, []);
 
-    logout(user: UserContextType) {
-      user.update(null);
-    }
-
-    render() {
-      const { location } = this.props;
-
-      return (
-        <MuiThemeProvider muiTheme={muiTheme}>
-          {this.state.serverStatus ? (
-            this.state.initUserData !== undefined ? (
-              <User initUserData={this.state.initUserData}>
-                {(user) => {
-                  return (
-                    <div className={style.container}>
-                      <Toolbar className={style.header}>
-                        <ToolbarGroup firstChild={true} className={style.big}>
-                          <ToolbarTitle text="Anontown" />
-                        </ToolbarGroup>
-                        <ToolbarGroup>
-                          <IconButton
-                            containerElement={<Link to={routes.home.to({})} />}
-                          >
-                            <FontIcon className="material-icons">home</FontIcon>
-                          </IconButton>
-                          <IconButton
-                            containerElement={
-                              <Link to={routes.topicSearch.to({})} />
-                            }
-                          >
+  return (
+    <MuiThemeProvider muiTheme={muiTheme}>
+      {serverStatus ? (
+        initUserData !== undefined ? (
+          <User initUserData={initUserData}>
+            {(user) => {
+              return (
+                <div className={style.container}>
+                  <Toolbar className={style.header}>
+                    <ToolbarGroup firstChild={true} className={style.big}>
+                      <ToolbarTitle text="Anontown" />
+                    </ToolbarGroup>
+                    <ToolbarGroup>
+                      <IconButton
+                        containerElement={<Link to={routes.home.to({})} />}
+                      >
+                        <FontIcon className="material-icons">home</FontIcon>
+                      </IconButton>
+                      <IconButton
+                        containerElement={
+                          <Link to={routes.topicSearch.to({})} />
+                        }
+                      >
+                        <FontIcon className="material-icons">search</FontIcon>
+                      </IconButton>
+                      {user.value !== null ? (
+                        <IconButton
+                          containerElement={
+                            <Link to={routes.notifications.to({})} />
+                          }
+                        >
+                          <FontIcon className="material-icons">
+                            notifications
+                          </FontIcon>
+                        </IconButton>
+                      ) : null}
+                      <PopupMenu
+                        trigger={
+                          <IconButton touch={true}>
                             <FontIcon className="material-icons">
-                              search
+                              people
                             </FontIcon>
                           </IconButton>
-                          {user.value !== null ? (
-                            <IconButton
+                        }
+                      >
+                        {user.value !== null ? (
+                          <>
+                            <MenuItem
+                              primaryText="プロフ管理"
                               containerElement={
-                                <Link to={routes.notifications.to({})} />
+                                <Link to={routes.profiles.to({})} />
                               }
-                            >
-                              <FontIcon className="material-icons">
-                                notifications
-                              </FontIcon>
-                            </IconButton>
-                          ) : null}
-                          <PopupMenu
-                            trigger={
-                              <IconButton touch={true}>
-                                <FontIcon className="material-icons">
-                                  people
-                                </FontIcon>
-                              </IconButton>
-                            }
-                          >
-                            {user.value !== null ? (
-                              <>
-                                <MenuItem
-                                  primaryText="プロフ管理"
-                                  containerElement={
-                                    <Link to={routes.profiles.to({})} />
-                                  }
-                                />
-                                <MenuItem
-                                  primaryText="お知らせ"
-                                  containerElement={
-                                    <Link to={routes.messages.to({})} />
-                                  }
-                                />
-                                <MenuItem
-                                  primaryText="設定"
-                                  containerElement={
-                                    <Link to={routes.settings.to({})} />
-                                  }
-                                />
-                                <MenuItem
-                                  primaryText="ログアウト"
-                                  onClick={() => {
-                                    this.logout(user);
-                                  }}
-                                />
-                              </>
-                            ) : (
-                              <MenuItem
-                                primaryText="ログイン"
-                                containerElement={
-                                  <Link to={routes.login.to({})} />
-                                }
-                              />
-                            )}
-                          </PopupMenu>
-                        </ToolbarGroup>
-                      </Toolbar>
-                      <div className={style.main}>
-                        <Switch
-                          location={location.state?.background ?? location}
-                        >
-                          <Route
-                            exact={true}
-                            path={routes.home.matcher()}
-                            component={pages.HomePage}
+                            />
+                            <MenuItem
+                              primaryText="お知らせ"
+                              containerElement={
+                                <Link to={routes.messages.to({})} />
+                              }
+                            />
+                            <MenuItem
+                              primaryText="設定"
+                              containerElement={
+                                <Link to={routes.settings.to({})} />
+                              }
+                            />
+                            <MenuItem
+                              primaryText="ログアウト"
+                              onClick={() => {
+                                user.update(null);
+                              }}
+                            />
+                          </>
+                        ) : (
+                          <MenuItem
+                            primaryText="ログイン"
+                            containerElement={<Link to={routes.login.to({})} />}
                           />
-                          <Route
-                            exact={true}
-                            path={routes.res.matcher()}
-                            component={pages.ResPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.resReply.matcher()}
-                            component={pages.ResReplyPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.hash.matcher()}
-                            component={pages.ResHashPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.topicSearch.matcher()}
-                            component={pages.TopicSearchPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.topicCreate.matcher()}
-                            component={pages.TopicCreatePage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.topic.matcher()}
-                            component={pages.TopicPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.topicData.matcher()}
-                            component={pages.TopicDataPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.topicFork.matcher()}
-                            component={pages.TopicForkPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.topicEdit.matcher()}
-                            component={pages.TopicEditPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.profiles.matcher()}
-                            component={pages.ProfilesPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.profileEdit.matcher()}
-                            component={pages.ProfileEditPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.profileCreate.matcher()}
-                            component={pages.ProfileCreatePage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.notifications.matcher()}
-                            component={pages.NotificationsPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.messages.matcher()}
-                            component={pages.MessagesPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.signup.matcher()}
-                            component={pages.SignupPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.login.matcher()}
-                            component={pages.LoginPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.auth.matcher()}
-                            component={pages.AuthPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.settings.matcher()}
-                            component={pages.SettingsPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.accountSetting.matcher()}
-                            component={pages.AccountSettingPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.appsSetting.matcher()}
-                            component={pages.AppsSettingPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.devSetting.matcher()}
-                            component={pages.DevSettingPage}
-                          />
-                          <Route
-                            exact={true}
-                            path={routes.profile.matcher()}
-                            component={pages.ProfilePage}
-                          />
-                          <Route component={pages.NotFoundPage} />
-                        </Switch>
-                        {location.state?.background ? (
-                          <Route
-                            path={routes.res.matcher()}
-                            component={pages.ResModal}
-                          />
-                        ) : null}
-                        {location.state?.background ? (
-                          <Route
-                            path={routes.resReply.matcher()}
-                            component={pages.ResReplyModal}
-                          />
-                        ) : null}
-                        {location.state?.background ? (
-                          <Route
-                            path={routes.profile.matcher()}
-                            component={pages.ProfileModal}
-                          />
-                        ) : null}
-                        {location.state?.background ? (
-                          <Route
-                            path={routes.topicData.matcher()}
-                            component={pages.TopicDataModal}
-                          />
-                        ) : null}
-                        {location.state?.background ? (
-                          <Route
-                            path={routes.topicFork.matcher()}
-                            component={pages.TopicForkModal}
-                          />
-                        ) : null}
-                        {location.state?.background ? (
-                          <Route
-                            path={routes.topicEdit.matcher()}
-                            component={pages.TopicEditModal}
-                          />
-                        ) : null}
-                        {location.state?.background ? (
-                          <Route
-                            path={routes.hash.matcher()}
-                            component={pages.ResHashModal}
-                          />
-                        ) : null}
-                      </div>
-                    </div>
-                  );
-                }}
-              </User>
-            ) : (
-              <></>
-            )
-          ) : (
-            <div>
-              <p>
-                サーバーに障害が発生しているかメンテナンス中です。最新情報は
-                <a href="https://twitter.com/anontown_bbs">Twitter</a>
-                をご覧ください。
-              </p>
-              <TwitterTimelineEmbed
-                sourceType="profile"
-                screenName="anontown_bbs"
-                options={{ height: "60vh" }}
-              />
-            </div>
-          )}
-        </MuiThemeProvider>
-      );
-    }
-  }
-);
+                        )}
+                      </PopupMenu>
+                    </ToolbarGroup>
+                  </Toolbar>
+                  <div className={style.main}>
+                    <Switch location={location.state?.background ?? location}>
+                      <Route
+                        exact={true}
+                        path={routes.home.matcher()}
+                        component={pages.HomePage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.res.matcher()}
+                        component={pages.ResPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.resReply.matcher()}
+                        component={pages.ResReplyPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.hash.matcher()}
+                        component={pages.ResHashPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.topicSearch.matcher()}
+                        component={pages.TopicSearchPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.topicCreate.matcher()}
+                        component={pages.TopicCreatePage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.topic.matcher()}
+                        component={pages.TopicPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.topicData.matcher()}
+                        component={pages.TopicDataPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.topicFork.matcher()}
+                        component={pages.TopicForkPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.topicEdit.matcher()}
+                        component={pages.TopicEditPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.profiles.matcher()}
+                        component={pages.ProfilesPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.profileEdit.matcher()}
+                        component={pages.ProfileEditPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.profileCreate.matcher()}
+                        component={pages.ProfileCreatePage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.notifications.matcher()}
+                        component={pages.NotificationsPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.messages.matcher()}
+                        component={pages.MessagesPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.signup.matcher()}
+                        component={pages.SignupPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.login.matcher()}
+                        component={pages.LoginPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.auth.matcher()}
+                        component={pages.AuthPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.settings.matcher()}
+                        component={pages.SettingsPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.accountSetting.matcher()}
+                        component={pages.AccountSettingPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.appsSetting.matcher()}
+                        component={pages.AppsSettingPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.devSetting.matcher()}
+                        component={pages.DevSettingPage}
+                      />
+                      <Route
+                        exact={true}
+                        path={routes.profile.matcher()}
+                        component={pages.ProfilePage}
+                      />
+                      <Route component={pages.NotFoundPage} />
+                    </Switch>
+                    {location.state?.background ? (
+                      <Route
+                        path={routes.res.matcher()}
+                        component={pages.ResModal}
+                      />
+                    ) : null}
+                    {location.state?.background ? (
+                      <Route
+                        path={routes.resReply.matcher()}
+                        component={pages.ResReplyModal}
+                      />
+                    ) : null}
+                    {location.state?.background ? (
+                      <Route
+                        path={routes.profile.matcher()}
+                        component={pages.ProfileModal}
+                      />
+                    ) : null}
+                    {location.state?.background ? (
+                      <Route
+                        path={routes.topicData.matcher()}
+                        component={pages.TopicDataModal}
+                      />
+                    ) : null}
+                    {location.state?.background ? (
+                      <Route
+                        path={routes.topicFork.matcher()}
+                        component={pages.TopicForkModal}
+                      />
+                    ) : null}
+                    {location.state?.background ? (
+                      <Route
+                        path={routes.topicEdit.matcher()}
+                        component={pages.TopicEditModal}
+                      />
+                    ) : null}
+                    {location.state?.background ? (
+                      <Route
+                        path={routes.hash.matcher()}
+                        component={pages.ResHashModal}
+                      />
+                    ) : null}
+                  </div>
+                </div>
+              );
+            }}
+          </User>
+        ) : (
+          <></>
+        )
+      ) : (
+        <div>
+          <p>
+            サーバーに障害が発生しているかメンテナンス中です。最新情報は
+            <a href="https://twitter.com/anontown_bbs">Twitter</a>
+            をご覧ください。
+          </p>
+          <TwitterTimelineEmbed
+            sourceType="profile"
+            screenName="anontown_bbs"
+            options={{ height: "60vh" }}
+          />
+        </div>
+      )}
+    </MuiThemeProvider>
+  );
+}
