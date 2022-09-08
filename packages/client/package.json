@@ -11,7 +11,7 @@
 		"build": "graphql-codegen && vite build && mv dist/index.html dist/.index.html",
 		"codegen:watch": "graphql-codegen -w",
 		"check": "tsc",
-		"generate-icons": "pwa-asset-generator icon.svg ./icons --manifest manifest.json --index index.html --favicon --type png"
+		"generate-icons": "pwa-asset-generator public/icon.svg ./public --manifest manifest.json --index index.html --favicon --type png --path-override ."
 	},
 	"author": "",
 	"license": "ISC",

@@ -10,7 +10,7 @@ export default defineConfig(({ command }) => {
     plugins: [
       react(),
       VitePWA({
-        includeAssets: ["icon.svg", "icons/*.png"],
+        includeAssets: ["icon.svg"],
         manifest,
       }),
       command === "serve"
