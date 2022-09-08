@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { FontIcon, IconButton } from "material-ui";
+import { Icon, IconButton } from "@material-ui/core";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { useToggle } from "react-use";
@@ -21,11 +21,7 @@ export function History(props: HistoryProps) {
     <div>
       <div>
         <IconButton onClick={() => toggleDetail()}>
-          {detail ? (
-            <FontIcon className="material-icons">arrow_drop_up</FontIcon>
-          ) : (
-            <FontIcon className="material-icons">arrow_drop_down</FontIcon>
-          )}
+          {detail ? <Icon>arrow_drop_up</Icon> : <Icon>arrow_drop_down</Icon>}
         </IconButton>
         {dateFormat.format(props.history.date)}
         <Link

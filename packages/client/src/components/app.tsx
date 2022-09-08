@@ -149,23 +149,27 @@ export function App(): JSX.Element {
                             <MenuItem
                               to={routes.profiles.to({})}
                               component={Link}
+                              onClick={() => setAnchorEl(null)}
                             >
                               プロフ管理
                             </MenuItem>
                             <MenuItem
                               to={routes.messages.to({})}
                               component={Link}
+                              onClick={() => setAnchorEl(null)}
                             >
                               お知らせ
                             </MenuItem>
                             <MenuItem
                               to={routes.settings.to({})}
                               component={Link}
+                              onClick={() => setAnchorEl(null)}
                             >
                               設定
                             </MenuItem>
                             <MenuItem
                               onClick={() => {
+                                setAnchorEl(null);
                                 user.update(null);
                               }}
                             >
@@ -173,7 +177,11 @@ export function App(): JSX.Element {
                             </MenuItem>
                           </>
                         ) : (
-                          <MenuItem to={routes.login.to({})} component={Link}>
+                          <MenuItem
+                            onClick={() => setAnchorEl(null)}
+                            to={routes.login.to({})}
+                            component={Link}
+                          >
                             ログイン
                           </MenuItem>
                         )}

@@ -1,4 +1,4 @@
-import { FontIcon } from "material-ui";
+import { Icon } from "@material-ui/core";
 import * as React from "react";
 
 export interface ErrorsProps {
@@ -10,7 +10,7 @@ export const Errors = (props: ErrorsProps) => (
     {props.errors
       ? props.errors.map((e, i) => (
           <div key={i.toString()}>
-            <FontIcon className="material-icons">error</FontIcon> {e}
+            <Icon>error</Icon> {e}
           </div>
         ))
       : null}

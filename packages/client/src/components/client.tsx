@@ -1,4 +1,4 @@
-import { FontIcon, IconButton } from "material-ui";
+import { Icon, IconButton } from "@material-ui/core";
 import * as React from "react";
 import { useToggle } from "react-use";
 import * as G from "../generated/graphql";
@@ -22,7 +22,7 @@ export function Client(props: ClientProps) {
       {props.client.self ? (
         <div>
           <IconButton type="button" onClick={() => toggleEdit()}>
-            <FontIcon className="material-icons">edit</FontIcon>
+            <Icon>edit</Icon>
           </IconButton>
           {edit && props.userData !== null ? (
             <ClientEditor

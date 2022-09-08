@@ -1,4 +1,4 @@
-import { RaisedButton, TextField } from "material-ui";
+import { Button, TextField } from "@material-ui/core";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";
@@ -21,14 +21,14 @@ export function ClientEditor(props: ClientEditorProps) {
       <TextField
         placeholder="名前"
         value={name}
-        onChange={(_e, v) => setName(v)}
+        onChange={(evt) => setName(evt.target.value)}
       />
       <TextField
         placeholder="url"
         value={url}
-        onChange={(_e, v) => setUrl(v)}
+        onChange={(evt) => setUrl(evt.target.value)}
       />
-      <RaisedButton
+      <Button
         onClick={async () => {
           const result = await submit({
             variables: {
@@ -41,8 +41,10 @@ export function ClientEditor(props: ClientEditorProps) {
             props.onUpdate?.(result.data.updateClient);
           }
         }}
-        label="OK"
-      />
+        variant="contained"
+      >
+        OK
+      </Button>
     </form>
   );
 }
