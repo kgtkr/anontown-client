@@ -145,7 +145,7 @@ function MdLink({
 }
 
 interface MdImgProps {
-  url: string;
+  url?: string;
   title?: string;
   alt?: string;
 }
@@ -157,7 +157,7 @@ function MdImg(props: MdImgProps) {
     <>
       <img
         className={style.preview}
-        src={camo.getCamoUrl(props.url)}
+        src={props.url !== undefined ? camo.getCamoUrl(props.url) : undefined}
         title={props.title}
         alt={props.alt}
         onClick={() => setDialog(true)}
@@ -168,7 +168,7 @@ function MdImg(props: MdImgProps) {
             width: "50vw",
             height: "auto",
           }}
-          src={camo.getCamoUrl(props.url)}
+          src={props.url !== undefined ? camo.getCamoUrl(props.url) : undefined}
           title={props.title}
           alt={props.alt}
           onClick={() => setDialog(true)}
