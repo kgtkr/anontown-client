@@ -30,15 +30,8 @@ export default defineConfig(({ command }) => {
       commonjsOptions: {
         include: [],
       },
-      rollupOptions: {
-        input: {
-          main: path.resolve(__dirname, "index.html"),
-        },
-      },
     },
     optimizeDeps: {
-      include: [],
-      exclude: [],
       disabled: false,
     },
   };
