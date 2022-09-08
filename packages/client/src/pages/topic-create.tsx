@@ -97,7 +97,7 @@ export const TopicCreatePage = userSwitch(
                       {error && <Errors errors={["エラーが発生しました"]} />}
                       <div>
                         <SelectField
-                          placeholder="種類"
+                          floatingLabelText="種類"
                           value={this.state.type}
                           onChange={(_e, _i, v) => this.setState({ type: v })}
                         >

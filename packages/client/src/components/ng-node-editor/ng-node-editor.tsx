@@ -196,7 +196,7 @@ export class NGNodeEditor extends React.Component<
   render(): React.ReactNode {
     const select = (
       <SelectField
-        placeholder="タイプ"
+        floatingLabelText="タイプ"
         value={this.props.value.type}
         onChange={this.handleChangeType}
       >
