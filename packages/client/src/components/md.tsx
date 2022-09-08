@@ -136,7 +136,7 @@ function MdLink({
         </a>
       );
     case "image":
-      return <MdImg url={safeURL(href)} title={title} />;
+      return <MdImg src={safeURL(href)} title={title} />;
     case "youtube":
       return <MdYouTube videoID={link.videoID} title={title} />;
     case "router":
@@ -145,7 +145,7 @@ function MdLink({
 }
 
 interface MdImgProps {
-  url?: string;
+  src?: string;
   title?: string;
   alt?: string;
 }
@@ -157,7 +157,7 @@ function MdImg(props: MdImgProps) {
     <>
       <img
         className={style.preview}
-        src={props.url !== undefined ? camo.getCamoUrl(props.url) : undefined}
+        src={props.src !== undefined ? camo.getCamoUrl(props.src) : undefined}
         title={props.title}
         alt={props.alt}
         onClick={() => setDialog(true)}
@@ -168,7 +168,7 @@ function MdImg(props: MdImgProps) {
             width: "50vw",
             height: "auto",
           }}
-          src={props.url !== undefined ? camo.getCamoUrl(props.url) : undefined}
+          src={props.src !== undefined ? camo.getCamoUrl(props.src) : undefined}
           title={props.title}
           alt={props.alt}
           onClick={() => setDialog(true)}
