@@ -12,6 +12,7 @@ export default defineConfig(({ command }) => {
       VitePWA({
         includeAssets: ["icon.svg"],
         manifest,
+        filename: "vite-pwa-sw.js",
       }),
       command === "serve"
         ? (() => {
