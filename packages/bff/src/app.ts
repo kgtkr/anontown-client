@@ -31,6 +31,7 @@ function main() {
   });
 
   app.listen(env.port);
+  console.log(`server started on port ${env.port}`);
 }
 
 main();
