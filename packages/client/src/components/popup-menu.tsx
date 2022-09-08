@@ -7,6 +7,9 @@ export interface PopupMenuProps {
   position?: Position | Array<Position>;
 }
 
+/**
+ * @deprecated
+ */
 export function PopupMenu(props: PopupMenuProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   return (

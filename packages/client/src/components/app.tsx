@@ -1,13 +1,14 @@
 import * as routes from "@anontown-frontend/routes";
 import * as t from "io-ts";
 import {
-  FontIcon,
+  Icon,
   IconButton,
   MenuItem,
   Toolbar,
-  ToolbarGroup,
-  ToolbarTitle,
-} from "material-ui";
+  AppBar,
+  Typography,
+  Menu,
+} from "@material-ui/core";
 import {
   getMuiTheme,
   lightBaseTheme,
@@ -28,7 +29,6 @@ import {
 } from "../effects";
 import { User } from "../utils";
 import * as style from "./app.module.scss";
-import { PopupMenu } from "./popup-menu";
 import * as H from "history";
 import useRouter from "use-react-router";
 
@@ -42,6 +42,8 @@ export function App(): JSX.Element {
     {},
     { background: H.Location } | undefined
   >();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
   const [initUserData, setInitUserData] = React.useState<
     UserData | undefined | null
   >(undefined);
@@ -106,63 +108,59 @@ export function App(): JSX.Element {
             {(user) => {
               return (
                 <div className={style.container}>
-                  <Toolbar className={style.header}>
-                    <ToolbarGroup firstChild={true} className={style.big}>
-                      <ToolbarTitle text="Anontown" />
-                    </ToolbarGroup>
-                    <ToolbarGroup>
-                      <IconButton
-                        containerElement={<Link to={routes.home.to({})} />}
+                  <AppBar position="static">
+                    <Toolbar>
+                      <Typography
+                        style={{
+                          flexGrow: 1,
+                        }}
                       >
-                        <FontIcon className="material-icons">home</FontIcon>
+                        Anontown
+                      </Typography>
+                      <IconButton to={routes.home.to({})} component={Link}>
+                        <Icon>home</Icon>
                       </IconButton>
                       <IconButton
-                        containerElement={
-                          <Link to={routes.topicSearch.to({})} />
-                        }
+                        component={Link}
+                        to={routes.topicSearch.to({})}
                       >
-                        <FontIcon className="material-icons">search</FontIcon>
+                        <Icon>search</Icon>
                       </IconButton>
                       {user.value !== null ? (
                         <IconButton
-                          containerElement={
-                            <Link to={routes.notifications.to({})} />
-                          }
+                          to={routes.notifications.to({})}
+                          component={Link}
                         >
-                          <FontIcon className="material-icons">
-                            notifications
-                          </FontIcon>
+                          <Icon>notifications</Icon>
                         </IconButton>
                       ) : null}
-                      <PopupMenu
-                        trigger={
-                          <IconButton touch={true}>
-                            <FontIcon className="material-icons">
-                              people
-                            </FontIcon>
-                          </IconButton>
-                        }
+                      <IconButton
+                        onClick={(evt) => setAnchorEl(evt.currentTarget)}
+                      >
+                        <Icon>people</Icon>
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={() => setAnchorEl(null)}
                       >
                         {user.value !== null ? (
                           <>
                             <MenuItem
-                              containerElement={
-                                <Link to={routes.profiles.to({})} />
-                              }
+                              to={routes.profiles.to({})}
+                              component={Link}
                             >
                               プロフ管理
                             </MenuItem>
                             <MenuItem
-                              containerElement={
-                                <Link to={routes.messages.to({})} />
-                              }
+                              to={routes.messages.to({})}
+                              component={Link}
                             >
                               お知らせ
                             </MenuItem>
                             <MenuItem
-                              containerElement={
-                                <Link to={routes.settings.to({})} />
-                              }
+                              to={routes.settings.to({})}
+                              component={Link}
                             >
                               設定
                             </MenuItem>
@@ -175,15 +173,13 @@ export function App(): JSX.Element {
                             </MenuItem>
                           </>
                         ) : (
-                          <MenuItem
-                            containerElement={<Link to={routes.login.to({})} />}
-                          >
+                          <MenuItem to={routes.login.to({})} component={Link}>
                             ログイン
                           </MenuItem>
                         )}
-                      </PopupMenu>
-                    </ToolbarGroup>
-                  </Toolbar>
+                      </Menu>
+                    </Toolbar>
+                  </AppBar>
                   <div className={style.main}>
                     <Switch location={location.state?.background ?? location}>
                       <Route

@@ -5,17 +5,10 @@
   background-color:#eee;
 }
 
-.header{
-}
-
 .main{
   flex: 1;
   overflow-y: hidden;
   height: calc(100% - 56px);
-}
-
-.big {
-  padding-left: 1em !important;
 }
 
 @media screen and (max-width: 767px) {
