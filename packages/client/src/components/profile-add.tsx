@@ -1,4 +1,4 @@
-import { RaisedButton, TextField } from "material-ui";
+import { Button, TextField } from "@material-ui/core";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";
@@ -27,16 +27,16 @@ export function ProfileAdd(props: ProfileAddProps) {
           fullWidth={true}
           placeholder="ID"
           value={sn}
-          onChange={(_e, v) => setSn(v)}
+          onChange={(evt) => setSn(evt.target.value)}
         />
         <TextField
           fullWidth={true}
           placeholder="名前"
           value={name}
-          onChange={(_e, v) => setName(v)}
+          onChange={(evt) => setName(evt.target.value)}
         />
         <MdEditor fullWidth={true} value={text} onChange={(v) => setText(v)} />
-        <RaisedButton
+        <Button
           onClick={async () => {
             const result = await submit({
               variables: { name, text, sn },
@@ -45,8 +45,10 @@ export function ProfileAdd(props: ProfileAddProps) {
               props.onAdd?.(result.data.createProfile);
             }
           }}
-          label="OK"
-        />
+          variant="contained"
+        >
+          OK
+        </Button>
       </form>
     </Card>
   );

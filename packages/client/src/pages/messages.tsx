@@ -1,4 +1,4 @@
-import { Paper, RaisedButton } from "material-ui";
+import { Paper, Button } from "@material-ui/core";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Md, Page } from "../components";
@@ -26,8 +26,7 @@ export const MessagesPage = userSwitch((_props: MessagesPageProps) => {
       <Helmet title="お知らせ" />
       <div>
         <div>
-          <RaisedButton
-            label="最新"
+          <Button
             onClick={async () => {
               if (msgs.data === undefined) {
                 return;
@@ -57,7 +56,10 @@ export const MessagesPage = userSwitch((_props: MessagesPageProps) => {
                 });
               }
             }}
-          />
+            variant="contained"
+          >
+            最新
+          </Button>
         </div>
         <div>
           {msgs.data !== undefined
@@ -70,8 +72,7 @@ export const MessagesPage = userSwitch((_props: MessagesPageProps) => {
             : null}
         </div>
         <div>
-          <RaisedButton
-            label="前"
+          <Button
             onClick={async () => {
               if (msgs.data === undefined) {
                 return;
@@ -102,7 +103,10 @@ export const MessagesPage = userSwitch((_props: MessagesPageProps) => {
                 });
               }
             }}
-          />
+            variant="contained"
+          >
+            前
+          </Button>
         </div>
       </div>
     </Page>

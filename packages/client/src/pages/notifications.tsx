@@ -1,4 +1,4 @@
-import { RaisedButton } from "material-ui";
+import { Button } from "@material-ui/core";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { RouteComponentProps } from "react-router-dom";
@@ -29,8 +29,7 @@ export const NotificationsPage = userSwitch(
         <Helmet title="通知" />
         <div>
           <div>
-            <RaisedButton
-              label="最新"
+            <Button
               onClick={async () => {
                 if (reses.data === undefined) {
                   return;
@@ -61,7 +60,10 @@ export const NotificationsPage = userSwitch(
                   });
                 }
               }}
-            />
+              variant="contained"
+            >
+              最新
+            </Button>
           </div>
           <div>
             {reses.data !== undefined
@@ -69,8 +71,7 @@ export const NotificationsPage = userSwitch(
               : null}
           </div>
           <div>
-            <RaisedButton
-              label="前"
+            <Button
               onClick={async () => {
                 if (reses.data === undefined) {
                   return;
@@ -101,7 +102,10 @@ export const NotificationsPage = userSwitch(
                   });
                 }
               }}
-            />
+              variant="contained"
+            >
+              前
+            </Button>
           </div>
         </div>
       </Page>

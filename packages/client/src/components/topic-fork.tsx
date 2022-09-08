@@ -1,4 +1,4 @@
-import { RaisedButton, TextField } from "material-ui";
+import { Button, TextField } from "@material-ui/core";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { useUserContext } from "../hooks";
@@ -34,9 +34,11 @@ export const TopicFork = (props: TopicForkProps) => {
                 <TextField
                   placeholder="タイトル"
                   value={title}
-                  onChange={(_e, v) => setTitle(v)}
+                  onChange={(evt) => setTitle(evt.target.value)}
                 />
-                <RaisedButton onClick={() => submit()} label="新規作成" />
+                <Button onClick={() => submit()} variant="contained">
+                  新規作成
+                </Button>
               </form>
             );
           }}

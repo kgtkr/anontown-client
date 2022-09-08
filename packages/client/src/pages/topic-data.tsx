@@ -1,4 +1,4 @@
-import { Paper } from "material-ui";
+import { Paper } from "@material-ui/core";
 import * as React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Page, Snack, TopicData } from "../components";
@@ -19,7 +19,7 @@ const TopicDataBase = withRouter(
 
     render() {
       return (
-        <Paper zDepth={this.props.zDepth}>
+        <Paper elevation={this.props.zDepth}>
           <G.FindTopicsComponent
             variables={{ query: { id: [this.props.match.params.id] } }}
           >
@@ -32,7 +32,7 @@ const TopicDataBase = withRouter(
               }
 
               return (
-                <Paper zDepth={this.props.zDepth}>
+                <Paper elevation={this.props.zDepth}>
                   <TopicData topic={data.topics[0]} />
                 </Paper>
               );

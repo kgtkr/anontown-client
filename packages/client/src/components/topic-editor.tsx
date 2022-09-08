@@ -1,4 +1,4 @@
-import { RaisedButton, TextField } from "material-ui";
+import { Button, TextField } from "@material-ui/core";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";
@@ -52,7 +52,7 @@ export class TopicEditor extends React.Component<
                 fullWidth={true}
                 placeholder="タイトル"
                 value={this.state.title}
-                onChange={(_e, v) => this.setState({ title: v })}
+                onChange={(evt) => this.setState({ title: evt.target.value })}
               />
               <TagsInput
                 value={this.state.tags}
@@ -64,7 +64,9 @@ export class TopicEditor extends React.Component<
                 value={this.state.text}
                 onChange={(v) => this.setState({ text: v })}
               />
-              <RaisedButton onClick={() => submit()} label="OK" />
+              <Button onClick={() => submit()} variant="contained">
+                OK
+              </Button>
             </form>
           );
         }}

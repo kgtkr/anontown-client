@@ -1,12 +1,7 @@
 import * as routes from "@anontown-frontend/routes";
 import { Mutation } from "@apollo/client/react/components";
-import {
-  MenuItem,
-  Paper,
-  RaisedButton,
-  SelectField,
-  TextField,
-} from "material-ui";
+import { MenuItem, SelectField } from "material-ui";
+import { Paper, Button, TextField } from "@material-ui/core";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -82,17 +77,21 @@ export const TopicCreatePage = userSwitch(
                         ニュース・ネタ・実況などは単発トピックで建てて下さい。
                         <br />
                         本当に建てますか？
-                        <RaisedButton
-                          label={"はい"}
+                        <Button
                           onClick={() => {
                             this.setState({ openDialog: false });
                             submit();
                           }}
-                        />
-                        <RaisedButton
-                          label={"いいえ"}
+                          variant="contained"
+                        >
+                          はい
+                        </Button>
+                        <Button
                           onClick={() => this.setState({ openDialog: false })}
-                        />
+                          variant="contained"
+                        >
+                          いいえ
+                        </Button>
                       </Modal>
                       {error && <Errors errors={["エラーが発生しました"]} />}
                       <div>
@@ -109,7 +108,9 @@ export const TopicCreatePage = userSwitch(
                         <TextField
                           placeholder="タイトル"
                           value={this.state.title}
-                          onChange={(_e, v) => this.setState({ title: v })}
+                          onChange={(evt) =>
+                            this.setState({ title: evt.target.value })
+                          }
                         />
                       </div>
                       <div>
@@ -123,7 +124,7 @@ export const TopicCreatePage = userSwitch(
                         onChange={(v) => this.setState({ text: v })}
                       />
                       <div>
-                        <RaisedButton
+                        <Button
                           onClick={() => {
                             if (this.state.type === "TopicNormal") {
                               this.setState({ openDialog: true });
@@ -131,8 +132,9 @@ export const TopicCreatePage = userSwitch(
                               submit();
                             }
                           }}
-                          label="トピック作成"
-                        />
+                        >
+                          トピック作成
+                        </Button>
                       </div>
                     </form>
                   );

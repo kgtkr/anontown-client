@@ -1,11 +1,11 @@
 import * as routes from "@anontown-frontend/routes";
 import {
   Checkbox,
-  FontIcon,
+  Icon,
   IconButton,
-  RaisedButton,
+  Button,
   TextField,
-} from "material-ui";
+} from "@material-ui/core";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -147,9 +147,9 @@ export const TopicSearchPage = (_props: {}) => {
             }}
           >
             {Sto.isTagsFavo(state.query.tags)(user.value.storage) ? (
-              <FontIcon className="material-icons">star</FontIcon>
+              <Icon>star</Icon>
             ) : (
-              <FontIcon className="material-icons">star_border</FontIcon>
+              <Icon>star_border</Icon>
             )}
           </IconButton>
         ) : null}
@@ -166,16 +166,16 @@ export const TopicSearchPage = (_props: {}) => {
             fullWidth={true}
             placeholder="タイトル"
             value={state.input.title}
-            onChange={(_e, v) => {
-              dispatch({ type: "UPDATE_INPUT_TITLE", title: v });
+            onChange={(evt) => {
+              dispatch({ type: "UPDATE_INPUT_TITLE", title: evt.target.value });
               onInput();
             }}
           />
+          過去ログも
           <Checkbox
-            label="過去ログも"
             checked={state.input.dead}
-            onCheck={(_e, v) => {
-              dispatch({ type: "UPDATE_INPUT_DEAD", dead: v });
+            onChange={(evt) => {
+              dispatch({ type: "UPDATE_INPUT_DEAD", dead: evt.target.checked });
               onInput();
             }}
           />
@@ -183,14 +183,12 @@ export const TopicSearchPage = (_props: {}) => {
       </Card>
       <div>
         {user.value !== null ? (
-          <IconButton
-            containerElement={<Link to={routes.topicCreate.to({})} />}
-          >
-            <FontIcon className="material-icons">edit</FontIcon>
+          <IconButton component={Link} to={routes.topicCreate.to({})}>
+            <Icon>edit</Icon>
           </IconButton>
         ) : null}
         <IconButton onClick={() => topics.refetch()}>
-          <FontIcon className="material-icons">refresh</FontIcon>
+          <Icon>refresh</Icon>
         </IconButton>
       </div>
       <div>
@@ -201,7 +199,7 @@ export const TopicSearchPage = (_props: {}) => {
           : null}
       </div>
       <div>
-        <RaisedButton
+        <Button
           onClick={() => {
             topics.fetchMore({
               variables: {
@@ -218,8 +216,10 @@ export const TopicSearchPage = (_props: {}) => {
               },
             });
           }}
-          label="もっと"
-        />
+          variant="contained"
+        >
+          もっと
+        </Button>
       </div>
     </Page>
   );

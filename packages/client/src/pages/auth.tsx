@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { RaisedButton } from "material-ui";
+import { Button } from "@material-ui/core";
 import * as React from "react";
 import { useTitle } from "react-use";
 import useRouter from "use-react-router";
@@ -32,9 +32,8 @@ export const AuthPage = userSwitch((_props: AuthPageProps) => {
       {clients.data !== undefined ? (
         <div>
           認証しますか？
-          <RaisedButton
+          <Button
             type="button"
-            label="OK"
             onClick={async () => {
               if (clients.data !== undefined) {
                 const client = clients.data.clients[0];
@@ -56,7 +55,10 @@ export const AuthPage = userSwitch((_props: AuthPageProps) => {
                 }
               }
             }}
-          />
+            variant="contained"
+          >
+            OK
+          </Button>
         </div>
       ) : null}
     </Page>

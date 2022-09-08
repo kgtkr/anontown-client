@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { Paper, RaisedButton, TextField } from "material-ui";
+import { Paper, Button, TextField } from "@material-ui/core";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, Redirect } from "react-router-dom";
@@ -32,20 +32,19 @@ export const LoginPage = (_props: LoginPageProps) => {
               <TextField
                 placeholder="ID"
                 value={sn}
-                onChange={(_e, v) => setSn(v)}
+                onChange={(evt) => setSn(evt.target.value)}
               />
             </div>
             <div>
               <TextField
                 placeholder="パスワード"
                 value={pass}
-                onChange={(_e, v) => setPass(v)}
+                onChange={(evt) => setPass(evt.target.value)}
                 type="password"
               />
             </div>
             <div>
-              <RaisedButton
-                label="ログイン"
+              <Button
                 onClick={async () => {
                   try {
                     const token = await submit({
@@ -67,7 +66,10 @@ export const LoginPage = (_props: LoginPageProps) => {
                     setErrors(["ログインに失敗しました。"]);
                   }
                 }}
-              />
+                variant="contained"
+              >
+                ログイン
+              </Button>
             </div>
             <Link to={routes.signup.to({})}>登録</Link>
           </form>

@@ -1,4 +1,4 @@
-import { Paper, RaisedButton, TextField } from "material-ui";
+import { Paper, Button, TextField } from "@material-ui/core";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Errors, Page, Snack } from "../components";
@@ -35,19 +35,19 @@ export const AccountSettingPage = userSwitch(
               <TextField
                 placeholder="ID"
                 value={sn}
-                onChange={(_e, v) => setSn(v)}
+                onChange={(evt) => setSn(evt.target.value)}
               />
               <TextField
                 placeholder="新しいパスワード"
                 value={newPass}
-                onChange={(_e, v) => setNewPass(v)}
+                onChange={(evt) => setNewPass(evt.target.value)}
               />
               <TextField
                 placeholder="現在のパスワード"
                 value={oldPass}
-                onChange={(_e, v) => setOldPass(v)}
+                onChange={(evt) => setOldPass(evt.target.value)}
               />
-              <RaisedButton
+              <Button
                 onClick={async () => {
                   if (user.data !== undefined) {
                     try {
@@ -75,8 +75,10 @@ export const AccountSettingPage = userSwitch(
                     }
                   }
                 }}
-                label="OK"
-              />
+                variant="contained"
+              >
+                OK
+              </Button>
             </form>
           ) : null}
         </Paper>

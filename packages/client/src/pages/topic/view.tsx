@@ -1,14 +1,7 @@
 import * as routes from "@anontown-frontend/routes";
 import { useApolloClient } from "@apollo/client";
-import {
-  FontIcon,
-  IconButton,
-  MenuItem,
-  Paper,
-  RaisedButton,
-  Slider,
-  Toggle,
-} from "material-ui";
+import { MenuItem, Toggle, Slider } from "material-ui";
+import { Icon, Paper, IconButton, Button } from "@material-ui/core";
 import moment from "moment";
 import * as React from "react";
 import { Link } from "react-router-dom";
@@ -131,23 +124,23 @@ export const TopicPage = (_props: {}) => {
             />
             <div>{moment(new Date(state.jumpValue)).format("YYYY-MM-DD")}</div>
             <div>
-              <RaisedButton
+              <Button
                 onClick={() => {
                   dispatch({ type: "CLICK_JUMP" });
                 }}
               >
                 ジャンプ
-              </RaisedButton>
+              </Button>
             </div>
           </Modal>
           <div className={style.main}>
             <Paper className={style.header}>
               <div className={style.subject}>
                 {state.topic.__typename === "TopicFork" ? (
-                  <FontIcon className="material-icons">call_split</FontIcon>
+                  <Icon>call_split</Icon>
                 ) : null}
                 {state.topic.__typename === "TopicOne" ? (
-                  <FontIcon className="material-icons">looks_one</FontIcon>
+                  <Icon>looks_one</Icon>
                 ) : null}
                 {state.topic.title}
               </div>
@@ -158,15 +151,13 @@ export const TopicPage = (_props: {}) => {
                       dispatch({ type: "TOGGLE_FAVO" });
                     }}
                   >
-                    <FontIcon className="material-icons">
-                      {isFavo ? "star" : "star_border"}
-                    </FontIcon>
+                    <Icon>{isFavo ? "star" : "star_border"}</Icon>
                   </IconButton>
                 ) : null}
                 <PopupMenu
                   trigger={
-                    <IconButton touch={true}>
-                      <FontIcon className="material-icons">more_vert</FontIcon>
+                    <IconButton>
+                      <Icon>more_vert</Icon>
                     </IconButton>
                   }
                 >

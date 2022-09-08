@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { Paper, RaisedButton, TextField } from "material-ui";
+import { Paper, Button, TextField } from "@material-ui/core";
 import * as React from "react";
 import Recaptcha from "react-google-recaptcha";
 import { Helmet } from "react-helmet-async";
@@ -45,14 +45,18 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
                     <TextField
                       placeholder="ID"
                       value={this.state.sn}
-                      onChange={(_e, v) => this.setState({ sn: v })}
+                      onChange={(evt) =>
+                        this.setState({ sn: evt.target.value })
+                      }
                     />
                   </div>
                   <div>
                     <TextField
                       placeholder="パスワード"
                       value={this.state.pass}
-                      onChange={(_e, v) => this.setState({ pass: v })}
+                      onChange={(evt) =>
+                        this.setState({ pass: evt.target.value })
+                      }
                       type="password"
                     />
                   </div>
@@ -96,10 +100,9 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
                   >
                     {(create) => (
                       <div>
-                        <RaisedButton
-                          label="利用規約に同意して登録"
-                          onClick={() => create()}
-                        />
+                        <Button onClick={() => create()} variant="contained">
+                          利用規約に同意して登録
+                        </Button>
                       </div>
                     )}
                   </G.CreateUserComponent>
