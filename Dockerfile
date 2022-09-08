@@ -5,7 +5,8 @@ WORKDIR /workdir
 COPY packages ./packages
 COPY package.json package-lock.json lerna.json tsconfig.base.json ./
 RUN npm ci
-RUN npx lerna run build
+# viteのバグ回避のため2回ビルド
+RUN npx lerna run build && npx lerna run build
 
 FROM node:16.17.0-alpine
 
