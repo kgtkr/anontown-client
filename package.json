@@ -26,9 +26,6 @@
     "packages/client",
     "packages/bff"
   ],
-  "dependencies": {
-    "@apollo/client": "^3.6.9"
-  },
   "overrides": {
     "@types/react": "^16.8.8"
   }
