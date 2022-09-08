@@ -37,6 +37,9 @@ export function rehypeProcessor(): Processor<
 > {
   return markdownProcessor()
     .use(remarkRehype)
-    .use(rehypeHighlight, { languages: { haskell, scala, ocaml } })
+    .use(rehypeHighlight, {
+      languages: { haskell, scala, ocaml },
+      ignoreMissing: true,
+    })
     .use(rehypeKatex);
 }
