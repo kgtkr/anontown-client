@@ -1,5 +1,5 @@
 import * as React from "react";
-import useRouter from "use-react-router";
+import { useHistory } from "react-router";
 import { Modal } from "../components";
 
 export const withModal = <P extends {}>(
@@ -7,7 +7,7 @@ export const withModal = <P extends {}>(
   title: string
 ) => {
   return (props: P): JSX.Element => {
-    const { history } = useRouter();
+    const history = useHistory();
     const goBack = React.useMemo(
       () => () => {
         history.goBack();

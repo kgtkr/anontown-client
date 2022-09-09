@@ -5,7 +5,7 @@ import {
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
-} from "@material-ui/core";
+} from "@mui/material";
 import * as React from "react";
 import { ng, Storage, UserData, Sto } from "../domains/entities";
 import { Modal } from "./modal";

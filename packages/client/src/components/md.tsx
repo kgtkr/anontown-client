@@ -1,4 +1,4 @@
-import { Icon, IconButton } from "@material-ui/core";
+import { Icon, IconButton } from "@mui/material";
 import * as React from "react";
 import { Rnd } from "react-rnd";
 import { Link } from "react-router-dom";

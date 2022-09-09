@@ -8,13 +8,12 @@ import {
   Slider,
   MenuItem,
   Menu,
-} from "@material-ui/core";
-import { ToggleButton } from "@material-ui/lab";
+  ToggleButton,
+} from "@mui/material";
 import moment from "moment";
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useTitle } from "react-use";
-import useRouter from "use-react-router";
 import { Modal, NG, Page, Res, ResWrite, TopicFavo } from "../../components";
 import * as G from "../../generated/graphql";
 import { useUserContext } from "../../hooks";
@@ -31,7 +30,7 @@ import { useBackground } from "../../hooks/useBackground";
 // TODO:NGのtransparent
 
 export const TopicPage = (_props: {}) => {
-  const { match } = useRouter<{ id: string }>();
+  const params = useParams<{ id: string }>();
   const user = useUserContext();
   const apolloClient = useApolloClient();
   const background = useBackground();
@@ -39,7 +38,7 @@ export const TopicPage = (_props: {}) => {
 
   const [state, dispatch] = useReducerWithObservable(
     reducer,
-    State({ userData: user.value, topicId: match.params.id }),
+    State({ userData: user.value, topicId: params.id }),
     epic,
     { apolloClient: apolloClient, updateUserData: (ud) => user.update(ud) }
   );
@@ -49,8 +48,8 @@ export const TopicPage = (_props: {}) => {
   }, [user.value]);
 
   React.useEffect(() => {
-    dispatch({ type: "INIT", topicId: match.params.id, now: new Date() });
-  }, [match.params.id]);
+    dispatch({ type: "INIT", topicId: params.id, now: new Date() });
+  }, [params.id]);
 
   const isFavo =
     state.userData !== null &&
@@ -96,6 +95,7 @@ export const TopicPage = (_props: {}) => {
                   value: !state.isAutoScroll,
                 })
               }
+              value="check"
             >
               自動スクロール
             </ToggleButton>

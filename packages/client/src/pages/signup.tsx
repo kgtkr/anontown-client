@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { Paper, Button, TextField } from "@material-ui/core";
+import { Paper, Button, TextField } from "@mui/material";
 import * as React from "react";
 import Recaptcha from "react-google-recaptcha";
 import { Helmet } from "react-helmet-async";

@@ -1,4 +1,4 @@
-import { Icon, Menu, IconButton, MenuItem } from "@material-ui/core";
+import { Icon, Menu, IconButton, MenuItem } from "@mui/material";
 import * as React from "react";
 import { imgur } from "../effects";
 import { Errors } from "./errors";

@@ -1,4 +1,4 @@
-import { Snackbar } from "@material-ui/core";
+import { Snackbar } from "@mui/material";
 import * as React from "react";
 
 export function Snack(props: { msg: string | null; onHide?: () => void }) {

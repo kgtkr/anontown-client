@@ -1,12 +1,8 @@
-import useRouter from "use-react-router";
 import * as H from "history";
+import { useLocation } from "react-router";
 
 export function useBackground(): H.Location {
-  const { location } = useRouter<
-    {},
-    {},
-    { background: H.Location } | undefined
-  >();
+  const location = useLocation<{ background: H.Location } | undefined>();
 
   return location.state?.background ?? location;
 }

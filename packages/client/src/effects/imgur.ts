@@ -14,6 +14,6 @@ export function upload(data: FormData): Promise<string> {
       body: data,
       crossDomain: true,
     })
-    .pipe(rxOps.map((r) => r.response.data.link))
+    .pipe(rxOps.map((r) => (r.response as any).data.link))
     .toPromise();
 }

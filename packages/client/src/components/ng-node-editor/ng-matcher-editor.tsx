@@ -1,4 +1,4 @@
-import { Checkbox, TextField } from "@material-ui/core";
+import { Checkbox, TextField } from "@mui/material";
 import * as React from "react";
 import { ng } from "../../domains/entities";
 

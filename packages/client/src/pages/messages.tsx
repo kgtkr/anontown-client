@@ -1,4 +1,4 @@
-import { Paper, Button } from "@material-ui/core";
+import { Paper, Button } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Md, Page } from "../components";

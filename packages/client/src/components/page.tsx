@@ -1,10 +1,11 @@
-import { Icon, IconButton } from "@material-ui/core";
+import { Icon, IconButton } from "@mui/material";
 import * as React from "react";
 import * as style from "./page.module.scss";
 
 export interface PageProps {
   sidebar?: React.ReactNode;
   disableScroll?: boolean;
+  children?: React.ReactNode;
 }
 
 interface PageState {

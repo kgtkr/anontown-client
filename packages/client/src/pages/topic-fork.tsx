@@ -1,8 +1,8 @@
 import * as routes from "@anontown-frontend/routes";
-import { Paper } from "@material-ui/core";
+import { Paper } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
-import useRouter from "use-react-router";
+import { useHistory, useParams } from "react-router";
 import { Page, TopicFork } from "../components";
 import * as G from "../generated/graphql";
 import { userSwitch, UserSwitchProps, withModal } from "../utils";
@@ -12,11 +12,12 @@ type TopicForkBaseProps = UserSwitchProps & {
 };
 
 const TopicForkBase = userSwitch((props: TopicForkBaseProps) => {
-  const { match, history } = useRouter<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const history = useHistory();
   const topics = G.useFindTopicsQuery({
     variables: {
       query: {
-        id: [match.params.id],
+        id: [params.id],
       },
     },
   });

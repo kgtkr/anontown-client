@@ -1,7 +1,7 @@
 import * as routes from "@anontown-frontend/routes";
 import { Mutation } from "@apollo/client/react/components";
-import { MenuItem, Select } from "@material-ui/core";
-import { Paper, Button, TextField } from "@material-ui/core";
+import { MenuItem, Select } from "@mui/material";
+import { Paper, Button, TextField } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { RouteComponentProps, withRouter } from "react-router-dom";

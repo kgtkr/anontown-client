@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { Tab, Tabs } from "@material-ui/core";
+import { Tab, Tabs } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";

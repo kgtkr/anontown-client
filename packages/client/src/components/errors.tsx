@@ -1,4 +1,4 @@
-import { Icon } from "@material-ui/core";
+import { Icon } from "@mui/material";
 import * as React from "react";
 
 export interface ErrorsProps {

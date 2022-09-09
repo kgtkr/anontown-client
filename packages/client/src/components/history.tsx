@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { Icon, IconButton } from "@material-ui/core";
+import { Icon, IconButton } from "@mui/material";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { useToggle } from "react-use";

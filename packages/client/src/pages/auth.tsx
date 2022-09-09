@@ -1,8 +1,8 @@
 import * as routes from "@anontown-frontend/routes";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import * as React from "react";
+import { useLocation } from "react-router";
 import { useTitle } from "react-use";
-import useRouter from "use-react-router";
 import { Errors, Page, Snack } from "../components";
 import * as G from "../generated/graphql";
 import { userSwitch, UserSwitchProps } from "../utils";
@@ -10,7 +10,7 @@ import { userSwitch, UserSwitchProps } from "../utils";
 type AuthPageProps = UserSwitchProps;
 
 export const AuthPage = userSwitch((_props: AuthPageProps) => {
-  const { location } = useRouter();
+  const location = useLocation();
   const [snackMsg, setSnackMsg] = React.useState<string | null>(null);
   const query = routes.auth.parseQuery(location.search);
   const clients = G.useFindClientsQuery({

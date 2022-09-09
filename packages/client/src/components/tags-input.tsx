@@ -1,8 +1,7 @@
-import { Chip, TextField } from "@material-ui/core";
+import { Chip, TextField, Autocomplete } from "@mui/material";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { Snack } from "./snack";
-import { Autocomplete } from "@material-ui/lab";
 
 export interface TagsInputProps {
   value: ReadonlyArray<string>;

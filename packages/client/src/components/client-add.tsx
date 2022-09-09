@@ -1,5 +1,5 @@
 import { MutationUpdaterFn } from "@apollo/client";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField } from "@mui/material";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";

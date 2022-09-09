@@ -1,4 +1,4 @@
-import { Checkbox, Icon, IconButton, Slider } from "@material-ui/core";
+import { Checkbox, Icon, IconButton, Slider } from "@mui/material";
 import * as React from "react";
 import { RGBColor } from "react-color";
 import { toColorString } from "../utils";

@@ -1,7 +1,7 @@
-import { Paper } from "@material-ui/core";
+import { Paper } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
-import useRouter from "use-react-router";
+import { useParams } from "react-router";
 import { Page, TopicEditor } from "../components";
 import * as G from "../generated/graphql";
 import { userSwitch, UserSwitchProps, withModal } from "../utils";
@@ -11,11 +11,11 @@ type TopicEditBaseProps = UserSwitchProps & {
 };
 
 const TopicEditBase = userSwitch((props: TopicEditBaseProps) => {
-  const { match } = useRouter<{ id: string }>();
+  const params = useParams<{ id: string }>();
   const topics = G.useFindTopicsQuery({
     variables: {
       query: {
-        id: [match.params.id],
+        id: [params.id],
       },
     },
   });

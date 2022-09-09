@@ -1,4 +1,4 @@
-import { Icon, IconButton, Paper } from "@material-ui/core";
+import { Icon, IconButton, Paper } from "@mui/material";
 import * as React from "react";
 import { useTitle } from "react-use";
 import { Errors, Page, Snack } from "../components";

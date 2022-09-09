@@ -1,15 +1,8 @@
 import * as routes from "@anontown-frontend/routes";
-import {
-  Checkbox,
-  Icon,
-  IconButton,
-  Button,
-  TextField,
-} from "@material-ui/core";
+import { Checkbox, Icon, IconButton, Button, TextField } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
-import useRouter from "use-react-router";
+import { Link, useHistory } from "react-router-dom";
 import { Page, TagsInput, TopicListItem } from "../components";
 import * as G from "../generated/graphql";
 import { useUserContext } from "../hooks";
@@ -37,7 +30,7 @@ type Action =
   | { type: "COMPLETE_INPUT" };
 
 export const TopicSearchPage = (_props: {}) => {
-  const { history } = useRouter();
+  const history = useHistory();
 
   const init = useOnChnageUrlSearch(
     (query) => routes.topicSearch.parseQuery(query),
@@ -97,7 +90,7 @@ export const TopicSearchPage = (_props: {}) => {
     }
   );
 
-  const [onInput] = useDebouncedCallback(() => {
+  const onInput = useDebouncedCallback(() => {
     dispatch({ type: "COMPLETE_INPUT" });
     history.push(
       routes.topicSearch.to(

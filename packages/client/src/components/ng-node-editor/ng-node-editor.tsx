@@ -7,7 +7,7 @@ import {
   List,
   ListItemText,
   Select,
-} from "@material-ui/core";
+} from "@mui/material";
 import * as React from "react";
 import { ng } from "../../domains/entities";
 import { Modal } from "../modal";

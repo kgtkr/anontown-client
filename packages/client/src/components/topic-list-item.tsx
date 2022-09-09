@@ -6,7 +6,7 @@ import { useUserContext } from "../hooks";
 import { Card } from "../styled/card";
 import { TextTitle } from "../styled/text";
 import { dateFormat } from "../utils";
-import { Icon } from "@material-ui/core";
+import { Icon } from "@mui/material";
 import { TagsLink } from "./tags-link";
 import { Sto } from "../domains/entities";
 import { O, pipe } from "../prelude";

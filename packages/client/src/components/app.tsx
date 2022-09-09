@@ -8,10 +8,10 @@ import {
   AppBar,
   Typography,
   Menu,
-} from "@material-ui/core";
+} from "@mui/material";
 
 import * as React from "react";
-import { Link, Route, Switch } from "react-router-dom";
+import { Link, Route, Switch, useLocation } from "react-router-dom";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import { UserData } from "../domains/entities";
 import { Env } from "../env";
@@ -26,16 +26,11 @@ import {
 import { User } from "../utils";
 import * as style from "./app.module.scss";
 import * as H from "history";
-import useRouter from "use-react-router";
 
 declare const gtag: any;
 
 export function App(): JSX.Element {
-  const { location } = useRouter<
-    {},
-    {},
-    { background: H.Location } | undefined
-  >();
+  const location = useLocation<{ background: H.Location } | undefined>();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const [initUserData, setInitUserData] = React.useState<

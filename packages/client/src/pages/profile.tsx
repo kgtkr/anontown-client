@@ -1,22 +1,22 @@
 import { option } from "fp-ts";
-import { Paper } from "@material-ui/core";
+import { Paper } from "@mui/material";
 import * as React from "react";
 import { useTitle } from "react-use";
-import useRouter from "use-react-router";
 import { Page, Profile, Snack } from "../components";
 import * as G from "../generated/graphql";
 import { withModal } from "../utils";
 import { pipe, RA } from "../prelude";
+import { useParams } from "react-router";
 
 interface ProfileBaseProps {
   zDepth?: number;
 }
 
 function ProfileBase(props: ProfileBaseProps) {
-  const { match } = useRouter<{ id: string }>();
+  const params = useParams<{ id: string }>();
   useTitle("プロフィール");
   const profilesResult = G.useFindProfilesQuery({
-    variables: { query: { id: [match.params.id] } },
+    variables: { query: { id: [params.id] } },
   });
   useTitle(
     pipe(
