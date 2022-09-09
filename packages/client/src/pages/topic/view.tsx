@@ -1,6 +1,8 @@
 import * as routes from "@anontown-frontend/routes";
 import { useApolloClient } from "@apollo/client";
-import { MenuItem, Toggle, Slider } from "material-ui";
+import { MenuItem, Toggle } from "material-ui";
+import { Slider } from "@material-ui/core";
+
 import { Icon, Paper, IconButton, Button } from "@material-ui/core";
 import moment from "moment";
 import * as React from "react";
@@ -90,9 +92,11 @@ export const TopicPage = (_props: {}) => {
             <Slider
               max={30}
               value={state.autoScrollSpeed}
-              onChange={(_e, v) =>
-                dispatch({ type: "CHANGE_AUTO_SCROLL_SPEED", value: v })
-              }
+              onChange={(_e, v) => {
+                if (typeof v === "number") {
+                  dispatch({ type: "CHANGE_AUTO_SCROLL_SPEED", value: v });
+                }
+              }}
             />
           </Modal>
           {state.userData !== null ? (
@@ -118,9 +122,11 @@ export const TopicPage = (_props: {}) => {
               min={new Date(state.topic.date).valueOf()}
               max={state.now.valueOf()}
               value={state.jumpValue}
-              onChange={(_e, v) =>
-                dispatch({ type: "CHANGE_JUMP_VALUE", value: v })
-              }
+              onChange={(_e, v) => {
+                if (typeof v === "number") {
+                  dispatch({ type: "CHANGE_JUMP_VALUE", value: v });
+                }
+              }}
             />
             <div>{moment(new Date(state.jumpValue)).format("YYYY-MM-DD")}</div>
             <div>

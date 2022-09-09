@@ -1,4 +1,4 @@
-import { Checkbox, FontIcon, IconButton, Slider } from "material-ui";
+import { Checkbox, Icon, IconButton, Slider } from "@material-ui/core";
 import * as React from "react";
 import { RGBColor } from "react-color";
 import { toColorString } from "../utils";
@@ -148,16 +148,20 @@ export class Oekaki extends React.Component<OekakiProps, OekakiState> {
             step={1}
             min={1}
             max={10}
-            onChange={(_e, v) => this.setState({ width: v })}
+            onChange={(_e, v) => {
+              if (typeof v === "number") {
+                this.setState({ width: v });
+              }
+            }}
           />
           <ColorPicker
             color={this.state.color}
             onChange={(color) => this.setState({ color })}
           />
+          塗りつぶす
           <Checkbox
-            label="塗りつぶす"
             checked={this.state.fill}
-            onCheck={(_e, v) => this.setState({ fill: v })}
+            onChange={(evt) => this.setState({ fill: evt.target.checked })}
           />
           <IconButton
             onClick={() =>
@@ -166,7 +170,7 @@ export class Oekaki extends React.Component<OekakiProps, OekakiState> {
               })
             }
           >
-            <FontIcon className="material-icons">undo</FontIcon>
+            <Icon>undo</Icon>
           </IconButton>
           <IconButton
             onClick={() =>
@@ -175,7 +179,7 @@ export class Oekaki extends React.Component<OekakiProps, OekakiState> {
               })
             }
           >
-            <FontIcon className="material-icons">redo</FontIcon>
+            <Icon>redo</Icon>
           </IconButton>
           <IconButton
             onClick={() => {
@@ -197,7 +201,7 @@ export class Oekaki extends React.Component<OekakiProps, OekakiState> {
               }
             }}
           >
-            <FontIcon className="material-icons">file_upload</FontIcon>
+            <Icon>file_upload</Icon>
           </IconButton>
         </div>
         <img

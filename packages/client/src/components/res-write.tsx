@@ -1,4 +1,4 @@
-import { FontIcon, IconButton } from "material-ui";
+import { Icon, IconButton } from "@material-ui/core";
 import * as React from "react";
 
 import { useCounter } from "react-use";
@@ -140,7 +140,7 @@ export const ResWrite = (props: ResWriteProps) => {
         fullWidth={true}
         actions={
           <IconButton type="button" onClick={submit}>
-            <FontIcon className="material-icons">send</FontIcon>
+            <Icon>send</Icon>
           </IconButton>
         }
       />

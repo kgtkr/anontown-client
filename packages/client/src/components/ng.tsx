@@ -1,4 +1,11 @@
-import { FontIcon, IconButton, List, ListItem } from "material-ui";
+import {
+  Icon,
+  IconButton,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+} from "@material-ui/core";
 import * as React from "react";
 import { ng, Storage, UserData, Sto } from "../domains/entities";
 import { Modal } from "./modal";
@@ -31,25 +38,13 @@ export class NG extends React.Component<NGProps, NGState> {
             )
           }
         >
-          <FontIcon className="material-icons">add_circle</FontIcon>
+          <Icon>add_circle</Icon>
         </IconButton>
         <List>
           {Sto.getNG(this.props.userData.storage).map((node) => (
             <ListItem
-              rightIconButton={
-                <IconButton
-                  onClick={() =>
-                    this.props.onChangeStorage(
-                      Sto.removeNG(node.id)(this.props.userData.storage)
-                    )
-                  }
-                >
-                  <FontIcon className="material-icons">close</FontIcon>
-                </IconButton>
-              }
               onClick={() => this.setState({ dialog: node.id })}
               key={node.id}
-              primaryText={node.name}
             >
               <Modal
                 isOpen={this.state.dialog === node.id}
@@ -65,6 +60,18 @@ export class NG extends React.Component<NGProps, NGState> {
                   }
                 />
               </Modal>
+              <ListItemText>{node.name}</ListItemText>
+              <ListItemSecondaryAction>
+                <IconButton
+                  onClick={() =>
+                    this.props.onChangeStorage(
+                      Sto.removeNG(node.id)(this.props.userData.storage)
+                    )
+                  }
+                >
+                  <Icon>close</Icon>
+                </IconButton>
+              </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>

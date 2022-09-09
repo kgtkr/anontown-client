@@ -6,7 +6,7 @@ import { useUserContext } from "../hooks";
 import { Card } from "../styled/card";
 import { TextTitle } from "../styled/text";
 import { dateFormat } from "../utils";
-import { Icon } from "./icon";
+import { Icon } from "@material-ui/core";
 import { TagsLink } from "./tags-link";
 import { Sto } from "../domains/entities";
 import { O, pipe } from "../prelude";
@@ -31,14 +31,12 @@ export const TopicListItem = (props: TopicListItemProps) => {
   return (
     <Card>
       <TextTitle>
-        {!props.topic.active ? <Icon icon="not_interested" /> : null}
-        {props.topic.__typename === "TopicOne" ? (
-          <Icon icon="looks_one" />
-        ) : null}
+        {!props.topic.active ? <Icon>not_interested</Icon> : null}
+        {props.topic.__typename === "TopicOne" ? <Icon>looks_one</Icon> : null}
         {props.topic.__typename === "TopicFork" ? (
-          <Icon icon="call_split" />
+          <Icon>call_split</Icon>
         ) : null}
-        {newRes !== null && newRes !== 0 ? <Icon icon="fiber_new" /> : null}
+        {newRes !== null && newRes !== 0 ? <Icon>fiber_new</Icon> : null}
         <Link to={routes.topic.to({ id: props.topic.id })}>
           {props.topic.title}
         </Link>

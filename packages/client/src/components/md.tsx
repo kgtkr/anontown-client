@@ -1,4 +1,4 @@
-import { FontIcon, IconButton } from "material-ui";
+import { Icon, IconButton } from "@material-ui/core";
 import * as React from "react";
 import { Rnd } from "react-rnd";
 import { Link } from "react-router-dom";
@@ -72,7 +72,7 @@ function MdYouTube(props: MdYouTubeProps) {
           }}
         >
           <IconButton type="button" onClick={() => setSlow(false)}>
-            <FontIcon className="material-icons">close</FontIcon>
+            <Icon>close</Icon>
           </IconButton>
           <div className={style.youtube}>
             <iframe

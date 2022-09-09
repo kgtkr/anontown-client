@@ -1,4 +1,4 @@
-import { FontIcon, IconButton, Paper } from "material-ui";
+import { Icon, IconButton, Paper } from "@material-ui/core";
 import * as React from "react";
 import { useTitle } from "react-use";
 import { Errors, Page, Snack } from "../components";
@@ -83,7 +83,7 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
                     }
                   }}
                 >
-                  <FontIcon className="material-icons">delete</FontIcon>
+                  <Icon>delete</Icon>
                 </IconButton>
               </Paper>
             ))

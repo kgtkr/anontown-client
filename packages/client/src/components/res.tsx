@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { FontIcon, IconButton, MenuItem, Paper } from "material-ui";
+import { Icon, IconButton, MenuItem, Paper } from "@material-ui/core";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import * as uuid from "uuid";
@@ -16,7 +16,6 @@ import {
 } from "../styled/card";
 import { color, fontSize } from "../styled/constant";
 import { dateFormat } from "../utils";
-import { Icon } from "./icon";
 import { Md } from "./md";
 import { PopupMenu } from "./popup-menu";
 import { ResWrite } from "./res-write";
@@ -36,10 +35,6 @@ export const Res = React.memo((props: ResProps) => {
   const user = useUserContext();
   const background = useBackground();
 
-  const smallIcon = {
-    width: 18,
-    height: 18,
-  };
   const small = {
     width: 36,
     height: 36,
@@ -85,12 +80,9 @@ export const Res = React.memo((props: ResProps) => {
             }}
             disabled={props.res.self || user.value === null}
           >
-            <FontIcon
-              className="material-icons"
-              color={props.res.voteFlag === "uv" ? "orange" : undefined}
-            >
+            <Icon color={props.res.voteFlag === "uv" ? "primary" : undefined}>
               keyboard_arrow_up
-            </FontIcon>
+            </Icon>
           </IconButton>
           <IconButton
             onClick={() => {
@@ -111,12 +103,9 @@ export const Res = React.memo((props: ResProps) => {
             }}
             disabled={props.res.self || user.value === null}
           >
-            <FontIcon
-              className="material-icons"
-              color={props.res.voteFlag === "dv" ? "orange" : undefined}
-            >
+            <Icon color={props.res.voteFlag === "dv" ? "primary" : undefined}>
               keyboard_arrow_down
-            </FontIcon>
+            </Icon>
           </IconButton>
         </CardFlexFixed>
         <CardFlexStretch>
@@ -195,10 +184,9 @@ export const Res = React.memo((props: ResProps) => {
                   <IconButton
                     style={{ width: "32px", height: "32px", padding: "0px" }}
                   >
-                    <Icon
-                      icon="keyboard_arrow_down"
-                      style={{ fontSize: "10px" }}
-                    />
+                    <Icon style={{ fontSize: "10px" }}>
+                      keyboard_arrow_down
+                    </Icon>
                   </IconButton>
                 }
               >
@@ -286,35 +274,29 @@ export const Res = React.memo((props: ResProps) => {
               {props.res.__typename === "ResNormal" &&
               !isNullish(props.res.reply) ? (
                 <IconButton
-                  containerElement={
-                    <Link
-                      to={routes.res.to(
-                        { id: props.res.reply.id, topic: props.res.topic.id },
-                        { state: { background } }
-                      )}
-                    />
-                  }
+                  component={Link}
+                  to={routes.res.to(
+                    { id: props.res.reply.id, topic: props.res.topic.id },
+                    { state: { background } }
+                  )}
                   style={small}
-                  iconStyle={smallIcon}
+                  size="small"
                 >
-                  <FontIcon className="material-icons">send</FontIcon>
+                  <Icon>send</Icon>
                 </IconButton>
               ) : null}
               {props.res.replyCount !== 0 ? (
                 <span>
                   <IconButton
-                    containerElement={
-                      <Link
-                        to={routes.resReply.to(
-                          { id: props.res.id, topic: props.res.topic.id },
-                          { state: { background } }
-                        )}
-                      />
-                    }
+                    component={Link}
+                    to={routes.resReply.to(
+                      { id: props.res.id, topic: props.res.topic.id },
+                      { state: { background } }
+                    )}
                     style={small}
-                    iconStyle={smallIcon}
+                    size="small"
                   >
-                    <FontIcon className="material-icons">reply</FontIcon>
+                    <Icon>reply</Icon>
                   </IconButton>
                   {props.res.replyCount}
                 </span>

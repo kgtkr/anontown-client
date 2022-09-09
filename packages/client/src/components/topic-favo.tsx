@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { FontIcon, IconButton, Paper } from "material-ui";
+import { Icon, IconButton, Paper } from "@material-ui/core";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import * as G from "../generated/graphql";
@@ -35,7 +35,7 @@ export class TopicFavo extends React.Component<TopicFavoProps, TopicFavoState> {
             return (
               <>
                 <IconButton onClick={() => refetch()}>
-                  <FontIcon className="material-icons">refresh</FontIcon>
+                  <Icon>refresh</Icon>
                 </IconButton>
                 {(() => {
                   if (loading) {

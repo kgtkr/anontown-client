@@ -1,10 +1,13 @@
 import {
-  FontIcon,
+  Icon,
   IconButton,
   ListItem,
+  ListItemSecondaryAction,
   MenuItem,
-  SelectField,
-} from "material-ui";
+  List,
+  ListItemText,
+} from "@material-ui/core";
+import { SelectField } from "material-ui";
 import * as React from "react";
 import { ng } from "../../domains/entities";
 import { Modal } from "../modal";
@@ -62,37 +65,40 @@ export class NGNodesEditor extends React.Component<
           {this.props.select}
         </Modal>
         <ListItem
-          nestedLevel={this.props.nestedLevel}
-          rightIconButton={this.props.rightIconButton}
+          style={{
+            paddingLeft: this.props.nestedLevel * 16,
+          }}
           onClick={this.handleDialogOpen}
-          open={true}
-          primaryText={
-            <>
+        >
+          <List>
+            <ListItemText>
               <a onClick={this.handleAddNode}>[+]</a>
               {this.props.primaryText}
-            </>
-          }
-          autoGenerateNestedIndicator={false}
-          nestedItems={this.props.values.map((value) => (
-            <NGNodeEditor
-              key={value.id}
-              value={value}
-              onChange={this.handleChangeNode}
-              nestedLevel={this.props.nestedLevel + 1}
-              rightIconButton={
-                <IconButton
-                  onClick={() =>
-                    this.props.onChange(
-                      this.props.values.filter((x) => x.id !== value.id)
-                    )
-                  }
-                >
-                  <FontIcon className="material-icons">close</FontIcon>
-                </IconButton>
-              }
-            />
-          ))}
-        />
+            </ListItemText>
+            {this.props.values.map((value) => (
+              <NGNodeEditor
+                key={value.id}
+                value={value}
+                onChange={this.handleChangeNode}
+                nestedLevel={this.props.nestedLevel + 1}
+                rightIconButton={
+                  <IconButton
+                    onClick={() =>
+                      this.props.onChange(
+                        this.props.values.filter((x) => x.id !== value.id)
+                      )
+                    }
+                  >
+                    <Icon>close</Icon>
+                  </IconButton>
+                }
+              />
+            ))}
+          </List>
+          <ListItemSecondaryAction>
+            {this.props.rightIconButton}
+          </ListItemSecondaryAction>
+        </ListItem>
       </>
     );
   }
@@ -409,26 +415,25 @@ export class NGNotNodeEditor extends React.Component<
           {this.props.select}
         </Modal>
         <ListItem
-          nestedLevel={this.props.nestedLevel}
-          rightIconButton={this.props.rightIconButton}
+          style={{ paddingLeft: 16 * this.props.nestedLevel }}
           onClick={() => this.props.changeOpenDialog(true)}
-          open={true}
-          primaryText="Not"
-          autoGenerateNestedIndicator={false}
-          nestedItems={[
-            <NGNodeEditor
-              nestedLevel={this.props.nestedLevel + 1}
-              key="node"
-              value={this.props.value.child}
-              onChange={(node) => {
-                this.props.onChange({
-                  ...this.props.value,
-                  child: node,
-                });
-              }}
-            />,
-          ]}
-        />
+        >
+          <NGNodeEditor
+            nestedLevel={this.props.nestedLevel + 1}
+            key="node"
+            value={this.props.value.child}
+            onChange={(node) => {
+              this.props.onChange({
+                ...this.props.value,
+                child: node,
+              });
+            }}
+          />
+          <ListItemText>Not</ListItemText>
+          <ListItemSecondaryAction>
+            {this.props.rightIconButton}
+          </ListItemSecondaryAction>
+        </ListItem>
       </>
     );
   }
