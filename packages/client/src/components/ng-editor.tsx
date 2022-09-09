@@ -7,7 +7,7 @@ export interface NGEditorProps {
   ng: ng.NG;
   onUpdate: (ng: ng.NG) => void;
 }
-// TODO:expirationDate,chain,transparent
+// TODO:expirationDate
 export function NGEditor(props: NGEditorProps) {
   return (
     <div>
@@ -27,7 +27,6 @@ export function NGEditor(props: NGEditorProps) {
       />
       <List>
         <NGNodeEditor
-          nestedLevel={0}
           value={props.ng.node}
           onChange={(v) => props.onUpdate({ ...props.ng, node: v })}
         />

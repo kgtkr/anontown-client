@@ -8,7 +8,6 @@ export interface NGNameNodeEditorProps {
   value: ng.NGNodeName;
   onChange: (node: ng.NGNodeName) => void;
   select: JSX.Element;
-  nestedLevel: number;
   rightIconButton?: React.ReactElement<any>;
   openDialog: boolean;
   changeOpenDialog: (v: boolean) => void;
@@ -45,7 +44,6 @@ export class NGNameNodeEditor extends React.Component<
           />
         </Modal>
         <ListItem
-          nestedLevel={this.props.nestedLevel}
           rightIconButton={this.props.rightIconButton}
           onClick={() => this.props.changeOpenDialog(true)}
           primaryText={`NAME:${this.props.value.matcher.source}`}

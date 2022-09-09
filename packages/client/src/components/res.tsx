@@ -220,8 +220,6 @@ export const Res = React.memo((props: ResProps) => {
                           topic: props.res.topic.id,
                           date: new Date(),
                           expirationDate: null,
-                          chain: 1,
-                          transparent: false,
                           node: {
                             type: "hash",
                             id: uuid.v4(),
@@ -251,8 +249,6 @@ export const Res = React.memo((props: ResProps) => {
                             topic: null,
                             date: new Date(),
                             expirationDate: null,
-                            chain: 1,
-                            transparent: false,
                             node: {
                               type: "profile",
                               id: uuid.v4(),

@@ -7,7 +7,6 @@ export interface NGProfileNodeEditorProps {
   value: ng.NGNodeProfile;
   onChange: (node: ng.NGNodeProfile) => void;
   select: JSX.Element;
-  nestedLevel: number;
   rightIconButton?: React.ReactElement<any>;
   openDialog: boolean;
   changeOpenDialog: (v: boolean) => void;
@@ -44,7 +43,6 @@ export class NGProfileNodeEditor extends React.Component<
           />
         </Modal>
         <ListItem
-          nestedLevel={this.props.nestedLevel}
           rightIconButton={this.props.rightIconButton}
           onClick={() => this.props.changeOpenDialog(true)}
           primaryText={`Profile:${this.props.value.profile}`}

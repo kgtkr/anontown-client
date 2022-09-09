@@ -7,7 +7,6 @@ export interface NGHashNodeEditorProps {
   value: ng.NGNodeHash;
   onChange: (node: ng.NGNodeHash) => void;
   select: JSX.Element;
-  nestedLevel: number;
   rightIconButton?: React.ReactElement<any>;
   openDialog: boolean;
   changeOpenDialog: (v: boolean) => void;
@@ -44,7 +43,6 @@ export class NGHashNodeEditor extends React.Component<
           />
         </Modal>
         <ListItem
-          nestedLevel={this.props.nestedLevel}
           rightIconButton={this.props.rightIconButton}
           onClick={() => this.props.changeOpenDialog(true)}
           primaryText={`HASH:${this.props.value.hash}`}

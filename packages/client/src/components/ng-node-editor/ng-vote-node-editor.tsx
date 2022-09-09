@@ -7,7 +7,6 @@ export interface NGVoteNodeEditorProps {
   value: ng.NGNodeVote;
   onChange: (node: ng.NGNodeVote) => void;
   select: JSX.Element;
-  nestedLevel: number;
   rightIconButton?: React.ReactElement<any>;
   openDialog: boolean;
   changeOpenDialog: (v: boolean) => void;
@@ -48,7 +47,6 @@ export class NGVoteNodeEditor extends React.Component<
           />
         </Modal>
         <ListItem
-          nestedLevel={this.props.nestedLevel}
           rightIconButton={this.props.rightIconButton}
           onClick={() => this.props.changeOpenDialog(true)}
           primaryText={`Vote:${this.props.value.value}`}

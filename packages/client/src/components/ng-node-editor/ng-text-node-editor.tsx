@@ -8,7 +8,6 @@ export interface NGTextNodeEditorProps {
   value: ng.NGNodeText;
   onChange: (node: ng.NGNodeText) => void;
   select: JSX.Element;
-  nestedLevel: number;
   rightIconButton?: React.ReactElement<any>;
   openDialog: boolean;
   changeOpenDialog: (v: boolean) => void;
@@ -45,7 +44,6 @@ export class NGTextNodeEditor extends React.Component<
           />
         </Modal>
         <ListItem
-          nestedLevel={this.props.nestedLevel}
           rightIconButton={this.props.rightIconButton}
           onClick={() => this.props.changeOpenDialog(true)}
           primaryText={`Text:${this.props.value.matcher.source}`}

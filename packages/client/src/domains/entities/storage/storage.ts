@@ -15,6 +15,7 @@ import {
   ReadonlyArrayExtra,
 } from "../../../prelude";
 import { Lens } from "monocle-ts";
+import { notNullish } from "@kgtkr/utils";
 
 interface TopicWriteA {
   name: string;
@@ -307,7 +308,7 @@ export function toStorage(json: StorageJSONLatest): Storage {
     tagsFavo: json.tagsFavo,
     topicRead: json.topicRead,
     topicWrite: json.topicWrite,
-    ng: json.ng.map((x) => N.fromJSON(x)),
+    ng: json.ng.map((x) => N.fromJSON(x)).filter(notNullish),
   });
 }
 

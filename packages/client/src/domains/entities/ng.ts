@@ -6,8 +6,8 @@ import * as ngJson from "./storage//storage-json/ng-json";
 export function createDefaultNode(): NGNode {
   return {
     id: uuid.v4(),
-    type: "and",
-    children: [],
+    type: "text",
+    matcher: { type: "text", source: "", i: false },
   };
 }
 
@@ -18,8 +18,6 @@ export function createDefaultNG(): NG {
     topic: null,
     date: new Date(),
     expirationDate: null,
-    chain: 1,
-    transparent: false,
     node: createDefaultNode(),
   };
 }
@@ -42,20 +40,6 @@ export function isNG(ng: NG, res: G.ResFragment) {
 
 function isNodeNG(node: NGNode, res: G.ResFragment): boolean | null {
   switch (node.type) {
-    case "not": {
-      const b = isNodeNG(node.child, res);
-      return b !== null ? !b : null;
-    }
-    case "and": {
-      return node.children.length === 0
-        ? null
-        : node.children.every((x) => !!isNodeNG(x, res));
-    }
-    case "or": {
-      return node.children.length === 0
-        ? null
-        : node.children.some((x) => !!isNodeNG(x, res));
-    }
     case "profile": {
       return (
         res.__typename === "ResNormal" &&
@@ -118,8 +102,8 @@ export function toJSON(ng: NG): ngJson.NGJson {
     expirationDate:
       ng.expirationDate !== null ? ng.expirationDate.toISOString() : null,
     date: ng.date.toISOString(),
-    chain: ng.chain,
-    transparent: ng.transparent,
+    chain: 1,
+    transparent: false,
   };
 }
 
@@ -136,18 +120,6 @@ function toJSONMatcher(
 
 function toJSONNode(node: NGNode): ngJson.NGNodeJson {
   switch (node.type) {
-    case "not":
-      return { type: "not", child: toJSONNode(node.child) };
-    case "and":
-      return {
-        type: "and",
-        children: node.children.map((x) => toJSONNode(x)),
-      };
-    case "or":
-      return {
-        type: "or",
-        children: node.children.map((x) => toJSONNode(x)),
-      };
     case "profile":
       return node;
     case "hash":
@@ -161,11 +133,15 @@ function toJSONNode(node: NGNode): ngJson.NGNodeJson {
   }
 }
 
-export function fromJSON(json: ngJson.NGJson): NG {
+export function fromJSON(json: ngJson.NGJson): NG | null {
+  const node = fromJSONNode(json.node);
+  if (node === null) {
+    return null;
+  }
   return {
     id: uuid.v4(),
     ...json,
-    node: fromJSONNode(json.node),
+    node,
     expirationDate:
       json.expirationDate !== null ? new Date(json.expirationDate) : null,
     date: new Date(json.date),
@@ -183,22 +159,8 @@ function fromJSONTextMatcher(
   }
 }
 
-function fromJSONNode(node: ngJson.NGNodeJson): NGNode {
+function fromJSONNode(node: ngJson.NGNodeJson): NGNode | null {
   switch (node.type) {
-    case "not":
-      return { id: uuid.v4(), type: "not", child: fromJSONNode(node.child) };
-    case "and":
-      return {
-        id: uuid.v4(),
-        type: "and",
-        children: node.children.map((x) => fromJSONNode(x)),
-      };
-    case "or":
-      return {
-        id: uuid.v4(),
-        type: "or",
-        children: node.children.map((x) => fromJSONNode(x)),
-      };
     case "profile":
       return { id: uuid.v4(), ...node };
     case "hash":
@@ -217,6 +179,8 @@ function fromJSONNode(node: ngJson.NGNodeJson): NGNode {
       };
     case "vote":
       return { id: uuid.v4(), ...node };
+    default:
+      return null;
   }
 }
 
@@ -227,37 +191,14 @@ export interface NG {
   readonly date: Date;
   readonly expirationDate: Date | null;
   readonly node: NGNode;
-  readonly chain: number;
-  readonly transparent: boolean;
 }
 
 export type NGNode =
-  | NGNodeNot
-  | NGNodeAnd
-  | NGNodeOr
   | NGNodeProfile
   | NGNodeHash
   | NGNodeText
   | NGNodeName
   | NGNodeVote;
-
-export interface NGNodeNot {
-  readonly id: string;
-  readonly type: "not";
-  readonly child: NGNode;
-}
-
-export interface NGNodeAnd {
-  readonly id: string;
-  readonly type: "and";
-  readonly children: ReadonlyArray<NGNode>;
-}
-
-export interface NGNodeOr {
-  readonly id: string;
-  readonly type: "or";
-  readonly children: ReadonlyArray<NGNode>;
-}
 
 export interface NGNodeProfile {
   readonly id: string;

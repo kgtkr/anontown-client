@@ -116,6 +116,7 @@ export const ngNodeJson: t.Type<NGNodeJson> = t.recursion("NGNodeJSON", () =>
   ])
 );
 
+// not, and, orは廃止
 export type NGNodeJson =
   | NGNodeNotJson
   | NGNodeAndJson
@@ -132,6 +133,7 @@ export const ngJson = t.strict({
   date: t.string,
   expirationDate: t.union([t.null, t.string]),
   node: ngNodeJson,
+  // chain, transparentは廃止
   chain: t.number,
   transparent: t.boolean,
 });
