@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { Tab, Tabs } from "material-ui";
+import { Tab, Tabs } from "@material-ui/core";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -12,18 +12,21 @@ interface HomePageProps {}
 
 export const HomePage = (_props: HomePageProps) => {
   const userContext = useUserContext();
+  const [tabIndex, setTabIndex] = React.useState(0);
   return (
     <Page>
       <Helmet title="Anontown" />
       {userContext.value !== null ? (
-        <Tabs>
-          <Tab label="トピック">
+        <div>
+          <Tabs value={tabIndex} onChange={(_e, v) => setTabIndex(v)}>
+            <Tab label="トピック" />
+            <Tab label="タグ" />
+          </Tabs>
+          {tabIndex === 0 ? (
             <TopicFavo detail={true} userData={userContext.value} />
-          </Tab>
-          <Tab label="タグ">
-            <TagFavo userData={userContext.value} />
-          </Tab>
-        </Tabs>
+          ) : null}
+          {tabIndex === 1 ? <TagFavo userData={userContext.value} /> : null}
+        </div>
       ) : (
         <Card>
           <h1>匿名掲示板Anontownへようこそ</h1>

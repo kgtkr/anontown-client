@@ -1,4 +1,4 @@
-import { Snackbar } from "material-ui";
+import { Snackbar } from "@material-ui/core";
 import * as React from "react";
 
 export function Snack(props: { msg: string | null; onHide?: () => void }) {
@@ -7,7 +7,7 @@ export function Snack(props: { msg: string | null; onHide?: () => void }) {
       open={props.msg !== null}
       message={props.msg ?? ""}
       autoHideDuration={5000}
-      onRequestClose={() => {
+      onClose={() => {
         props.onHide?.();
       }}
     />

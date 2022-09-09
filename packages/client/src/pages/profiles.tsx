@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { Paper } from "material-ui";
+import { Paper } from "@material-ui/core";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";

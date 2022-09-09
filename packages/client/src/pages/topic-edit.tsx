@@ -1,4 +1,4 @@
-import { Paper } from "material-ui";
+import { Paper } from "@material-ui/core";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import useRouter from "use-react-router";
@@ -22,7 +22,7 @@ const TopicEditBase = userSwitch((props: TopicEditBaseProps) => {
   const topic = topics.data !== undefined ? topics.data.topics[0] : null;
 
   return (
-    <Paper zDepth={props.zDepth}>
+    <Paper elevation={props.zDepth}>
       <Helmet title="トピック編集" />
       {topic !== null && topic.__typename === "TopicNormal" ? (
         <TopicEditor topic={topic} userData={props.userData} />

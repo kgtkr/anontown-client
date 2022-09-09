@@ -1,5 +1,5 @@
 import { option } from "fp-ts";
-import { Paper } from "material-ui";
+import { Paper } from "@material-ui/core";
 import * as React from "react";
 import { useTitle } from "react-use";
 import useRouter from "use-react-router";
@@ -40,7 +40,7 @@ function ProfileBase(props: ProfileBaseProps) {
             profilesResult.data.profiles,
             RA.head,
             option.map((p) => (
-              <Paper zDepth={props.zDepth} key={p.id}>
+              <Paper elevation={props.zDepth} key={p.id}>
                 <Profile profile={p} />
               </Paper>
             )),

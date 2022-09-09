@@ -1,4 +1,4 @@
-import { List, TextField } from "material-ui";
+import { List, TextField } from "@material-ui/core";
 import * as React from "react";
 import { ng } from "../domains/entities";
 import { NGNodeEditor } from "./ng-node-editor";
@@ -14,12 +14,16 @@ export function NGEditor(props: NGEditorProps) {
       <TextField
         placeholder="名前"
         value={props.ng.name}
-        onChange={(_e, v) => props.onUpdate({ ...props.ng, name: v })}
+        onChange={(evt) =>
+          props.onUpdate({ ...props.ng, name: evt.target.value })
+        }
       />
       <TextField
         placeholder="トピック"
         value={props.ng.topic || ""}
-        onChange={(_e, v) => props.onUpdate({ ...props.ng, topic: v || null })}
+        onChange={(evt) =>
+          props.onUpdate({ ...props.ng, topic: evt.target.value || null })
+        }
       />
       <List>
         <NGNodeEditor
