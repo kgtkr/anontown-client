@@ -1,4 +1,9 @@
-import { ListItem, TextField } from "material-ui";
+import {
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  TextField,
+} from "@material-ui/core";
 import * as React from "react";
 import { ng } from "../../domains/entities";
 import { Modal } from "../modal";
@@ -34,19 +39,20 @@ export class NGProfileNodeEditor extends React.Component<
           <TextField
             placeholder="ID"
             value={this.props.value.profile}
-            onChange={(_e, v) => {
+            onChange={(evt) => {
               this.props.onChange({
                 ...this.props.value,
-                profile: v,
+                profile: evt.target.value,
               });
             }}
           />
         </Modal>
-        <ListItem
-          rightIconButton={this.props.rightIconButton}
-          onClick={() => this.props.changeOpenDialog(true)}
-          primaryText={`Profile:${this.props.value.profile}`}
-        />
+        <ListItem onClick={() => this.props.changeOpenDialog(true)}>
+          <ListItemText>Profile:{this.props.value.profile}</ListItemText>
+          <ListItemSecondaryAction>
+            {this.props.rightIconButton}
+          </ListItemSecondaryAction>
+        </ListItem>
       </>
     );
   }

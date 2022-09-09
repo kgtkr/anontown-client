@@ -1,9 +1,8 @@
-import { AutoComplete, MenuItem } from "material-ui";
+import { Chip, TextField } from "@material-ui/core";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { Snack } from "./snack";
-import * as style from "./tags-input.module.scss";
-import { RA } from "../prelude";
+import { Autocomplete } from "@material-ui/lab";
 
 export interface TagsInputProps {
   value: ReadonlyArray<string>;
@@ -11,47 +10,17 @@ export interface TagsInputProps {
   fullWidth?: boolean;
 }
 
-interface TagsInputState {
-  inputValue: string;
-  open: boolean;
-}
+interface TagsInputState {}
 
 export class TagsInput extends React.Component<TagsInputProps, TagsInputState> {
   constructor(props: TagsInputProps) {
     super(props);
-    this.state = {
-      inputValue: "",
-      open: false,
-    };
-  }
-
-  addTag() {
-    if (this.state.inputValue.length !== 0) {
-      this.props.onChange?.(RA.snoc(this.props.value, this.state.inputValue));
-      this.setState({ inputValue: "" });
-    }
+    this.state = {};
   }
 
   render() {
     return (
       <>
-        <div>
-          {this.props.value.map((t) => (
-            <span key={t} className={style.tag}>
-              <span
-                className={style.tagButton}
-                onClick={() => {
-                  this.props.onChange?.(
-                    this.props.value.filter((x) => x !== t)
-                  );
-                }}
-              >
-                ×
-              </span>
-              {t}
-            </span>
-          ))}
-        </div>
         <G.FindTopicTagsComponent>
           {({ loading, error, data }) => {
             if (loading) {
@@ -62,44 +31,28 @@ export class TagsInput extends React.Component<TagsInputProps, TagsInputState> {
             }
 
             return (
-              <AutoComplete
+              <Autocomplete<string, true, undefined, true>
                 fullWidth={this.props.fullWidth}
                 placeholder="タグ"
-                dataSource={data.topicTags.map((t) => ({
-                  text: t.name,
-                  value: (
-                    <MenuItem secondaryText={t.count.toString()}>
-                      {t.name}
-                    </MenuItem>
-                  ),
-                }))}
-                open={this.state.open}
-                filter={(text, key) =>
-                  key.toLowerCase().includes(text.toLowerCase()) &&
-                  !this.props.value.includes(key)
+                freeSolo
+                multiple
+                options={data.topicTags.map((t) => t.name)}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="tag" />
+                )}
+                renderTags={(value: string[], getTagProps) =>
+                  value.map((option: string, index: number) => (
+                    <Chip
+                      variant="outlined"
+                      label={option}
+                      {...getTagProps({ index })}
+                      key={option}
+                    />
+                  ))
                 }
-                searchText={this.state.inputValue}
-                onUpdateInput={(v) => this.setState({ inputValue: v })}
-                onKeyDown={(e) => {
-                  // エンター/半角スペ
-                  if (e.keyCode === 13 || e.keyCode === 32) {
-                    e.preventDefault();
-                    this.addTag();
-                  }
-                }}
-                onNewRequest={() => this.addTag()}
-                onFocus={() => this.setState({ open: true })}
-                {...{ onClose: () => this.setState({ open: false }) }}
-                onBlur={() => {
-                  setTimeout(() => {
-                    if (!this.state.open) {
-                      this.addTag();
-                    }
-                  }, 0);
-                }}
-                listStyle={{
-                  maxHeight: "30vh",
-                  overflow: "auto",
+                value={[...this.props.value]}
+                onChange={(_e, v) => {
+                  this.props.onChange?.(v);
                 }}
               />
             );

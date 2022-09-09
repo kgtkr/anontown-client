@@ -1,16 +1,21 @@
 import * as routes from "@anontown-frontend/routes";
 import { useApolloClient } from "@apollo/client";
-import { MenuItem, Toggle } from "material-ui";
-import { Slider } from "@material-ui/core";
-
-import { Icon, Paper, IconButton, Button } from "@material-ui/core";
+import {
+  Icon,
+  Paper,
+  IconButton,
+  Button,
+  Slider,
+  MenuItem,
+  Menu,
+} from "@material-ui/core";
+import { ToggleButton } from "@material-ui/lab";
 import moment from "moment";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { useTitle } from "react-use";
 import useRouter from "use-react-router";
 import { Modal, NG, Page, Res, ResWrite, TopicFavo } from "../../components";
-import { PopupMenu } from "../../components/popup-menu";
 import * as G from "../../generated/graphql";
 import { useUserContext } from "../../hooks";
 import * as style from "./style.module.scss";
@@ -30,6 +35,7 @@ export const TopicPage = (_props: {}) => {
   const user = useUserContext();
   const apolloClient = useApolloClient();
   const background = useBackground();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const [state, dispatch] = useReducerWithObservable(
     reducer,
@@ -82,13 +88,17 @@ export const TopicPage = (_props: {}) => {
             }
           >
             <h1>自動スクロール</h1>
-            <Toggle
-              label="自動スクロール"
-              toggled={state.isAutoScroll}
-              onToggle={(_e, v) =>
-                dispatch({ type: "CHANGE_ENABLE_AUTO_SCROLL", value: v })
+            <ToggleButton
+              selected={state.isAutoScroll}
+              onChange={() =>
+                dispatch({
+                  type: "CHANGE_ENABLE_AUTO_SCROLL",
+                  value: !state.isAutoScroll,
+                })
               }
-            />
+            >
+              自動スクロール
+            </ToggleButton>
             <Slider
               max={30}
               value={state.autoScrollSpeed}
@@ -160,78 +170,80 @@ export const TopicPage = (_props: {}) => {
                     <Icon>{isFavo ? "star" : "star_border"}</Icon>
                   </IconButton>
                 ) : null}
-                <PopupMenu
-                  trigger={
-                    <IconButton>
-                      <Icon>more_vert</Icon>
-                    </IconButton>
-                  }
+                <IconButton onClick={(evt) => setAnchorEl(evt.currentTarget)}>
+                  <Icon>more_vert</Icon>
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={() => setAnchorEl(null)}
                 >
                   <MenuItem
-                    containerElement={
-                      <Link
-                        to={routes.topicData.to(
-                          {
-                            id: state.topicId,
-                          },
-                          { state: { background } }
-                        )}
-                      />
-                    }
+                    component={Link}
+                    onClick={() => setAnchorEl(null)}
+                    to={routes.topicData.to(
+                      {
+                        id: state.topicId,
+                      },
+                      { state: { background } }
+                    )}
                   >
                     詳細データ
                   </MenuItem>
                   {state.topic.__typename === "TopicNormal" &&
                   state.userData !== null ? (
                     <MenuItem
-                      containerElement={
-                        <Link
-                          to={routes.topicEdit.to(
-                            {
-                              id: state.topicId,
-                            },
-                            { state: { background } }
-                          )}
-                        />
-                      }
+                      component={Link}
+                      onClick={() => setAnchorEl(null)}
+                      to={routes.topicEdit.to(
+                        {
+                          id: state.topicId,
+                        },
+                        { state: { background } }
+                      )}
                     >
                       トピック編集
                     </MenuItem>
                   ) : null}
                   {state.topic.__typename === "TopicNormal" ? (
                     <MenuItem
-                      containerElement={
-                        <Link
-                          to={routes.topicFork.to(
-                            {
-                              id: state.topicId,
-                            },
-                            { state: { background } }
-                          )}
-                        />
-                      }
+                      component={Link}
+                      onClick={() => setAnchorEl(null)}
+                      to={routes.topicFork.to(
+                        {
+                          id: state.topicId,
+                        },
+                        { state: { background } }
+                      )}
                     >
                       派生トピック
                     </MenuItem>
                   ) : null}
                   <MenuItem
-                    onClick={() =>
-                      dispatch({ type: "CLICK_OPEN_AUTO_SCROLL_MODAL" })
-                    }
+                    onClick={() => {
+                      setAnchorEl(null);
+                      dispatch({ type: "CLICK_OPEN_AUTO_SCROLL_MODAL" });
+                    }}
                   >
                     自動スクロール
                   </MenuItem>
                   <MenuItem
-                    onClick={() => dispatch({ type: "CLICK_OPEN_JUMP_MODAL" })}
+                    onClick={() => {
+                      setAnchorEl(null);
+                      dispatch({ type: "CLICK_OPEN_JUMP_MODAL" });
+                    }}
                   >
                     ジャンプ
                   </MenuItem>
                   <MenuItem
-                    onClick={() => dispatch({ type: "CLICK_OPEN_NG_MODAL" })}
+                    onClick={() => {
+                      setAnchorEl(null);
+                      dispatch({ type: "CLICK_OPEN_NG_MODAL" });
+                    }}
                   >
                     NG
                   </MenuItem>
-                </PopupMenu>
+                </Menu>
               </div>
             </Paper>
             <InfiniteScroll<G.ResFragment>

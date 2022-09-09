@@ -1,4 +1,4 @@
-import { Checkbox, TextField } from "material-ui";
+import { Checkbox, TextField } from "@material-ui/core";
 import * as React from "react";
 import { ng } from "../../domains/entities";
 
@@ -12,11 +12,11 @@ export function NGMatcherEditor(
 ): React.ReactElement<any> {
   return (
     <div>
+      正規表現
       <Checkbox
-        label="正規表現"
         checked={props.matcher.type === "reg"}
-        onCheck={(_e, v) => {
-          if (v) {
+        onChange={(evt) => {
+          if (evt.target.checked) {
             props.onChange({
               ...props.matcher,
               type: "reg",
@@ -29,24 +29,24 @@ export function NGMatcherEditor(
           }
         }}
       />
+      大小文字区別しない
       <Checkbox
-        label="大小文字区別しない"
         checked={props.matcher.i}
-        onCheck={(_e, v) => {
+        onChange={(evt) => {
           props.onChange({
             ...props.matcher,
-            i: v,
+            i: evt.target.checked,
           });
         }}
       />
       <TextField
-        multiLine={true}
+        multiline={true}
         placeholder={props.placeholder}
         value={props.matcher.source}
-        onChange={(_e, v) => {
+        onChange={(evt) => {
           props.onChange({
             ...props.matcher,
-            source: v,
+            source: evt.target.value,
           });
         }}
       />

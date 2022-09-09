@@ -1,4 +1,9 @@
-import { ListItem, TextField } from "material-ui";
+import {
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  TextField,
+} from "@material-ui/core";
 import * as React from "react";
 import { ng } from "../../domains/entities";
 import { Modal } from "../modal";
@@ -35,8 +40,8 @@ export class NGVoteNodeEditor extends React.Component<
             placeholder="しきい値"
             type="number"
             value={this.props.value.value.toString()}
-            onChange={(_e, v) => {
-              const newV = +v;
+            onChange={(evt) => {
+              const newV = +evt.target.value;
               if (this.props.value.type === "vote" && !isNaN(newV)) {
                 this.props.onChange({
                   ...this.props.value,
@@ -46,11 +51,12 @@ export class NGVoteNodeEditor extends React.Component<
             }}
           />
         </Modal>
-        <ListItem
-          rightIconButton={this.props.rightIconButton}
-          onClick={() => this.props.changeOpenDialog(true)}
-          primaryText={`Vote:${this.props.value.value}`}
-        />
+        <ListItem onClick={() => this.props.changeOpenDialog(true)}>
+          <ListItemText>Vote:{this.props.value.value}</ListItemText>
+          <ListItemSecondaryAction>
+            {this.props.rightIconButton}
+          </ListItemSecondaryAction>
+        </ListItem>
       </>
     );
   }

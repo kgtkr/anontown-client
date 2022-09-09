@@ -37,7 +37,7 @@ export function History(props: HistoryProps) {
             }
           )}
         >
-          HASH:{props.history.hash.substr(0, 6)}
+          HASH:{props.history.hash.substring(0, 6)}
         </Link>
       </div>
       {detail ? (

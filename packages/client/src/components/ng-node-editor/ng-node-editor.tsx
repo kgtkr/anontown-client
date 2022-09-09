@@ -6,8 +6,8 @@ import {
   MenuItem,
   List,
   ListItemText,
+  Select,
 } from "@material-ui/core";
-import { SelectField } from "material-ui";
 import * as React from "react";
 import { ng } from "../../domains/entities";
 import { Modal } from "../modal";
@@ -122,67 +122,66 @@ export class NGNodeEditor extends React.Component<
     this.setState({ openDialog: v });
   };
 
-  handleChangeType = (_e: any, _i: any, type: ng.NGNode["type"]) => {
-    switch (type) {
-      case "profile":
-        this.props.onChange({
-          id: this.props.value.id,
-          type: "profile",
-          profile: "",
-        });
-        break;
-      case "hash":
-        this.props.onChange({
-          id: this.props.value.id,
-          type: "hash",
-          hash: "",
-        });
-        break;
-      case "text":
-        this.props.onChange({
-          id: this.props.value.id,
-          type: "text",
-          matcher: {
-            type: "text",
-            i: false,
-            source: "",
-          },
-        });
-        break;
-      case "name":
-        this.props.onChange({
-          id: this.props.value.id,
-          type: "name",
-          matcher: {
-            type: "text",
-            i: false,
-            source: "",
-          },
-        });
-        break;
-      case "vote":
-        this.props.onChange({
-          id: this.props.value.id,
-          type: "vote",
-          value: -5,
-        });
-        break;
-    }
-  };
-
   render(): React.ReactNode {
     const select = (
-      <SelectField
-        floatingLabelText="タイプ"
+      <Select
+        label="タイプ"
         value={this.props.value.type}
-        onChange={this.handleChangeType}
+        onChange={(evt) => {
+          const type = evt.target.value as ng.NGNode["type"];
+          switch (type) {
+            case "profile":
+              this.props.onChange({
+                id: this.props.value.id,
+                type: "profile",
+                profile: "",
+              });
+              break;
+            case "hash":
+              this.props.onChange({
+                id: this.props.value.id,
+                type: "hash",
+                hash: "",
+              });
+              break;
+            case "text":
+              this.props.onChange({
+                id: this.props.value.id,
+                type: "text",
+                matcher: {
+                  type: "text",
+                  i: false,
+                  source: "",
+                },
+              });
+              break;
+            case "name":
+              this.props.onChange({
+                id: this.props.value.id,
+                type: "name",
+                matcher: {
+                  type: "text",
+                  i: false,
+                  source: "",
+                },
+              });
+              break;
+            case "vote":
+              this.props.onChange({
+                id: this.props.value.id,
+                type: "vote",
+                value: -5,
+              });
+              break;
+          }
+        }}
       >
         <MenuItem value={"profile"}>profile</MenuItem>
         <MenuItem value={"hash"}>hash</MenuItem>
         <MenuItem value={"text"}>text</MenuItem>
         <MenuItem value={"name"}>name</MenuItem>
         <MenuItem value={"vote"}>vote</MenuItem>
-      </SelectField>
+      </Select>
     );
     return this.props.value.type === "profile" ? (
       <NGProfileNodeEditor

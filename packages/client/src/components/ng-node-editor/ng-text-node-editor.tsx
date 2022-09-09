@@ -1,4 +1,8 @@
-import { ListItem } from "material-ui";
+import {
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+} from "@material-ui/core";
 import * as React from "react";
 import { ng } from "../../domains/entities";
 import { Modal } from "../modal";
@@ -43,11 +47,12 @@ export class NGTextNodeEditor extends React.Component<
             }}
           />
         </Modal>
-        <ListItem
-          rightIconButton={this.props.rightIconButton}
-          onClick={() => this.props.changeOpenDialog(true)}
-          primaryText={`Text:${this.props.value.matcher.source}`}
-        />
+        <ListItem onClick={() => this.props.changeOpenDialog(true)}>
+          <ListItemText>Text:{this.props.value.matcher.source}</ListItemText>
+          <ListItemSecondaryAction>
+            {this.props.rightIconButton}
+          </ListItemSecondaryAction>
+        </ListItem>
       </>
     );
   }

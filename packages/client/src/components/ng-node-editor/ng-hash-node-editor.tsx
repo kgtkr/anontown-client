@@ -1,4 +1,9 @@
-import { ListItem, TextField } from "material-ui";
+import {
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  TextField,
+} from "@material-ui/core";
 import * as React from "react";
 import { ng } from "../../domains/entities";
 import { Modal } from "../modal";
@@ -34,19 +39,20 @@ export class NGHashNodeEditor extends React.Component<
           <TextField
             placeholder="HASH"
             value={this.props.value.hash}
-            onChange={(_e, v) => {
+            onChange={(evt) => {
               this.props.onChange({
                 ...this.props.value,
-                hash: v,
+                hash: evt.target.value,
               });
             }}
           />
         </Modal>
-        <ListItem
-          rightIconButton={this.props.rightIconButton}
-          onClick={() => this.props.changeOpenDialog(true)}
-          primaryText={`HASH:${this.props.value.hash}`}
-        />
+        <ListItem onClick={() => this.props.changeOpenDialog(true)}>
+          <ListItemText>HASH:{this.props.value.hash}</ListItemText>
+          <ListItemSecondaryAction>
+            {this.props.rightIconButton}
+          </ListItemSecondaryAction>
+        </ListItem>
       </>
     );
   }

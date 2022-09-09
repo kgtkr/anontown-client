@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { Icon, IconButton, MenuItem, Paper } from "@material-ui/core";
+import { Icon, IconButton, Paper, MenuItem, Menu } from "@material-ui/core";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import * as uuid from "uuid";
@@ -17,7 +17,6 @@ import {
 import { color, fontSize } from "../styled/constant";
 import { dateFormat } from "../utils";
 import { Md } from "./md";
-import { PopupMenu } from "./popup-menu";
 import { ResWrite } from "./res-write";
 import { Snack } from "./snack";
 import { isNullish } from "@kgtkr/utils";
@@ -34,6 +33,7 @@ export const Res = React.memo((props: ResProps) => {
   const [disableNG, setDisableNG] = React.useState(false);
   const user = useUserContext();
   const background = useBackground();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const small = {
     width: 36,
@@ -179,90 +179,101 @@ export const Res = React.memo((props: ResProps) => {
             &nbsp;
             <span>{props.res.uv - props.res.dv}vote</span>
             {user.value !== null ? (
-              <PopupMenu
-                trigger={
-                  <IconButton
-                    style={{ width: "32px", height: "32px", padding: "0px" }}
-                  >
-                    <Icon style={{ fontSize: "10px" }}>
-                      keyboard_arrow_down
-                    </Icon>
-                  </IconButton>
-                }
-              >
-                {props.res.self && props.res.__typename === "ResNormal" ? (
-                  <G.DelResComponent
-                    variables={{ res: props.res.id }}
-                    onCompleted={(data) => {
-                      if (props.update) {
-                        props.update(data.delRes);
-                      }
-                    }}
-                  >
-                    {(submit, { error }) => {
-                      return (
-                        <>
-                          {error && <Snack msg={"削除に失敗しました"} />}
-                          <MenuItem onClick={() => submit()}>削除</MenuItem>
-                        </>
-                      );
-                    }}
-                  </G.DelResComponent>
-                ) : null}
-                <MenuItem
-                  onClick={() => {
-                    if (user.value !== null) {
-                      user.update({
-                        ...user.value,
-                        storage: Sto.addNG({
-                          id: uuid.v4(),
-                          name: `HASH:${props.res.hash}`,
-                          topic: props.res.topic.id,
-                          date: new Date(),
-                          expirationDate: null,
-                          node: {
-                            type: "hash",
-                            id: uuid.v4(),
-                            hash: props.res.hash,
-                          },
-                        })(user.value.storage),
-                      });
-                    }
-                  }}
+              <>
+                <IconButton
+                  style={{ width: "32px", height: "32px", padding: "0px" }}
+                  onClick={(evt) => setAnchorEl(evt.currentTarget)}
                 >
-                  NG HASH
-                </MenuItem>
-                {props.res.__typename === "ResNormal" &&
-                props.res.profile !== null ? (
+                  <Icon style={{ fontSize: "10px" }}>keyboard_arrow_down</Icon>
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={() => setAnchorEl(null)}
+                >
+                  {props.res.self && props.res.__typename === "ResNormal" ? (
+                    <G.DelResComponent
+                      variables={{ res: props.res.id }}
+                      onCompleted={(data) => {
+                        if (props.update) {
+                          props.update(data.delRes);
+                        }
+                      }}
+                    >
+                      {(submit, { error }) => {
+                        return (
+                          <>
+                            {error && <Snack msg={"削除に失敗しました"} />}
+                            <MenuItem
+                              onClick={() => {
+                                setAnchorEl(null);
+                                submit();
+                              }}
+                            >
+                              削除
+                            </MenuItem>
+                          </>
+                        );
+                      }}
+                    </G.DelResComponent>
+                  ) : null}
                   <MenuItem
                     onClick={() => {
-                      if (
-                        user.value !== null &&
-                        props.res.__typename === "ResNormal" &&
-                        !isNullish(props.res.profile)
-                      ) {
+                      setAnchorEl(null);
+                      if (user.value !== null) {
                         user.update({
                           ...user.value,
                           storage: Sto.addNG({
                             id: uuid.v4(),
-                            name: `Profile:${props.res.profile.id}`,
-                            topic: null,
+                            name: `HASH:${props.res.hash}`,
+                            topic: props.res.topic.id,
                             date: new Date(),
                             expirationDate: null,
                             node: {
-                              type: "profile",
+                              type: "hash",
                               id: uuid.v4(),
-                              profile: props.res.profile.id,
+                              hash: props.res.hash,
                             },
                           })(user.value.storage),
                         });
                       }
                     }}
                   >
-                    NG Profile
+                    NG HASH
                   </MenuItem>
-                ) : null}
-              </PopupMenu>
+                  {props.res.__typename === "ResNormal" &&
+                  props.res.profile !== null ? (
+                    <MenuItem
+                      onClick={() => {
+                        setAnchorEl(null);
+                        if (
+                          user.value !== null &&
+                          props.res.__typename === "ResNormal" &&
+                          !isNullish(props.res.profile)
+                        ) {
+                          user.update({
+                            ...user.value,
+                            storage: Sto.addNG({
+                              id: uuid.v4(),
+                              name: `Profile:${props.res.profile.id}`,
+                              topic: null,
+                              date: new Date(),
+                              expirationDate: null,
+                              node: {
+                                type: "profile",
+                                id: uuid.v4(),
+                                profile: props.res.profile.id,
+                              },
+                            })(user.value.storage),
+                          });
+                        }
+                      }}
+                    >
+                      NG Profile
+                    </MenuItem>
+                  ) : null}
+                </Menu>
+              </>
             ) : null}
           </CardHeader>
           <CardContent>

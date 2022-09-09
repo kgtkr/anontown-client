@@ -1,6 +1,6 @@
 import * as routes from "@anontown-frontend/routes";
 import { Mutation } from "@apollo/client/react/components";
-import { MenuItem, SelectField } from "material-ui";
+import { MenuItem, Select } from "@material-ui/core";
 import { Paper, Button, TextField } from "@material-ui/core";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
@@ -95,14 +95,20 @@ export const TopicCreatePage = userSwitch(
                       </Modal>
                       {error && <Errors errors={["エラーが発生しました"]} />}
                       <div>
-                        <SelectField
-                          floatingLabelText="種類"
+                        <Select
+                          label="種類"
                           value={this.state.type}
-                          onChange={(_e, _i, v) => this.setState({ type: v })}
+                          onChange={(evt) =>
+                            this.setState({
+                              type: evt.target.value as
+                                | "TopicNormal"
+                                | "TopicOne",
+                            })
+                          }
                         >
                           <MenuItem value="TopicOne">単発</MenuItem>
                           <MenuItem value="TopicNormal">通常</MenuItem>
-                        </SelectField>
+                        </Select>
                       </div>
                       <div>
                         <TextField
