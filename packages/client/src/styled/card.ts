@@ -3,6 +3,9 @@ import styled from "styled-components";
 import * as constant from "./constant";
 import { textBase, textContent } from "./style";
 
+/**
+ * @deprecated
+ */
 export const Card = styled.div`
   background-color: white;
   border-style: solid;

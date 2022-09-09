@@ -9,6 +9,9 @@ export interface ColorPickerProps {
 }
 
 // http://casesandberg.github.io/react-color/
+/**
+ * @deprecated
+ */
 export function ColorPicker(props: ColorPickerProps) {
   const [display, toggleDisplay] = useToggle(false);
 

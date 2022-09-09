@@ -20,6 +20,9 @@ export interface InfiniteScrollProps<T> {
   autoScroll?: { speed: number; interval: number };
 }
 
+/**
+ * @deprecated
+ */
 export function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
   // 現在の実際のアイテムの位置
   const currentItemKeyRef = React.useRef<string | null>(null);
