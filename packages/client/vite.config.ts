@@ -1,5 +1,4 @@
 import { defineConfig } from "vite";
-import * as path from "path";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 import { loadEnv, htmlInject } from "@anontown-frontend/app-env";
@@ -13,6 +12,9 @@ export default defineConfig(({ command }) => {
         includeAssets: ["icon.svg"],
         manifest,
         filename: "vite-pwa-sw.js",
+        workbox: {
+          maximumFileSizeToCacheInBytes: 3000000,
+        },
       }),
       command === "serve"
         ? (() => {
@@ -31,6 +33,7 @@ export default defineConfig(({ command }) => {
       commonjsOptions: {
         include: [],
       },
+      chunkSizeWarningLimit: 3000,
     },
     optimizeDeps: {
       disabled: false,

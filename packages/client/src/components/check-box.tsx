@@ -14,7 +14,7 @@ interface CheckBoxProps {
 
 export function CheckBox(props: CheckBoxProps) {
   return (
-    <label className={style.comp} style={props.style}>
+    <label style={props.style}>
       <input
         type="checkbox"
         checked={props.value}
@@ -24,9 +24,7 @@ export function CheckBox(props: CheckBoxProps) {
         onFocus={props.onFocus}
         onBlur={props.onBlur}
       />
-      <span style={props.labelStyle} className={style.label}>
-        {props.label}
-      </span>
+      <span style={props.labelStyle}>{props.label}</span>
     </label>
   );
 }
