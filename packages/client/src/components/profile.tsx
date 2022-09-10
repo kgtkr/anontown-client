@@ -1,4 +1,3 @@
-import * as React from "react";
 import * as G from "../generated/graphql";
 import { Md } from "./md";
 

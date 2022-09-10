@@ -1,5 +1,4 @@
 import { List, TextField } from "@mui/material";
-import * as React from "react";
 import { ng } from "../domains/entities";
 import { NGNodeEditor } from "./ng-node-editor";
 

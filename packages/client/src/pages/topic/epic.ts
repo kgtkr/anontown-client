@@ -1,6 +1,5 @@
-import { rx, rxOps } from "../../prelude";
+import { rx, rxOps , pipe, O, RA, Monoid_, isNotNull, RxExtra } from "../../prelude";
 import * as G from "../../generated/graphql";
-import { pipe, O, RA, Monoid_, isNotNull, RxExtra } from "../../prelude";
 import { Sto, UserData } from "../../domains/entities";
 import { ApolloClient } from "@apollo/client";
 import { Epic } from "../../hooks/use-reducer-with-observable";

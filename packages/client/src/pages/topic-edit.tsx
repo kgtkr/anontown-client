@@ -1,5 +1,4 @@
 import { Paper } from "@mui/material";
-import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
 import { Page, TopicEditor } from "../components";

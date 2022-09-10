@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useParams } from "react-router";
 import { useTitle } from "react-use";
 import { Page, Res, Snack } from "../components";

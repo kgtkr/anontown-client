@@ -1,5 +1,4 @@
 import * as routes from "@anontown-frontend/routes";
-import * as React from "react";
 import { Link } from "react-router-dom";
 import * as G from "../generated/graphql";
 import { dateFormat } from "../utils";

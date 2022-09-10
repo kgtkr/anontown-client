@@ -1,6 +1,5 @@
 import { option } from "fp-ts";
 import { Paper } from "@mui/material";
-import * as React from "react";
 import { useTitle } from "react-use";
 import { Page, Profile, Snack } from "../components";
 import * as G from "../generated/graphql";

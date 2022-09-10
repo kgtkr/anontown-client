@@ -1,5 +1,4 @@
 import * as routes from "@anontown-frontend/routes";
-import * as React from "react";
 import { Link } from "react-router-dom";
 import * as style from "./tags-link.module.scss";
 

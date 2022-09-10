@@ -1,4 +1,3 @@
-import * as React from "react";
 import { RGBColor, SketchPicker } from "react-color";
 import { useToggle } from "react-use";
 import { toColorString } from "../utils";

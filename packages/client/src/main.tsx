@@ -1,5 +1,4 @@
 import { ApolloProvider } from "@apollo/client";
-import * as React from "react";
 import * as ReactDOM from "react-dom";
 import Modal from "react-modal";
 import { Provider } from "react-redux";

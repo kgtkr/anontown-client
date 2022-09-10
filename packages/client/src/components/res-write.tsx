@@ -1,5 +1,4 @@
 import { Icon, IconButton } from "@mui/material";
-import * as React from "react";
 
 import { useCounter } from "react-use";
 import * as G from "../generated/graphql";

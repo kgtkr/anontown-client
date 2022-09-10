@@ -1,6 +1,5 @@
 import { ApolloError } from "@apollo/client";
 import { Alert } from "@mui/material";
-import * as React from "react";
 
 export interface ErrorAlertProps {
   error?: string | ApolloError | null;

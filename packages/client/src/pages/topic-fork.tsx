@@ -1,6 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
 import { Paper } from "@mui/material";
-import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { useHistory, useParams } from "react-router";
 import { Page, TopicFork } from "../components";
