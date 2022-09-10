@@ -2,10 +2,10 @@ import * as routes from "@anontown-frontend/routes";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { UserData, Sto } from "../domains/entities";
-import { Card } from "../styled/card";
 import { TextTitle } from "../styled/text";
 import { TagsLink } from "./tags-link";
 import { RA, OrdT } from "../prelude";
+import { Paper } from "@mui/material";
 
 interface TagFavoProps {
   userData: UserData;
@@ -24,19 +24,19 @@ export class TagFavo extends React.Component<TagFavoProps, TagFavoState> {
       tagsFavo.map((tags) => {
         const sortedTags = RA.sort(OrdT.ordString)(tags);
         return (
-          <Card key={sortedTags.join(",")}>
+          <Paper sx={{ p: 1 }} key={sortedTags.join(",")}>
             <TextTitle>
               <TagsLink tags={sortedTags} />
             </TextTitle>
-          </Card>
+          </Paper>
         );
       })
     ) : (
-      <Card>
+      <Paper sx={{ p: 1 }}>
         お気に入りタグがありません。
         <br />
         <Link to={routes.topicSearch.to({})}>検索</Link>
-      </Card>
+      </Paper>
     );
   }
 }

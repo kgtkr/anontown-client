@@ -1,8 +1,7 @@
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Paper } from "@mui/material";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";
-import { Card } from "../styled/card";
 import { Errors } from "./errors";
 import { MdEditor } from "./md-editor";
 
@@ -20,7 +19,7 @@ export function ProfileAdd(props: ProfileAddProps) {
   const [submit, { error }] = G.useCreateProfileMutation();
 
   return (
-    <Card style={props.style}>
+    <Paper sx={{ p: 1 }} style={props.style}>
       <form>
         {error && <Errors errors={["エラーが発生しました"]} />}
         <TextField
@@ -50,6 +49,6 @@ export function ProfileAdd(props: ProfileAddProps) {
           OK
         </Button>
       </form>
-    </Card>
+    </Paper>
   );
 }

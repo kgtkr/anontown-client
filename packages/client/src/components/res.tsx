@@ -6,14 +6,6 @@ import * as uuid from "uuid";
 import * as G from "../generated/graphql";
 import { useUserContext } from "../hooks";
 import { ng, Sto } from "../domains/entities";
-import {
-  Card,
-  CardContent,
-  CardFlex,
-  CardFlexFixed,
-  CardFlexStretch,
-  CardHeader,
-} from "../styled/card";
 import { color, fontSize } from "../styled/constant";
 import { dateFormat } from "../utils";
 import { Md } from "./md";
@@ -47,16 +39,20 @@ export const Res = React.memo((props: ResProps) => {
     !props.res.self &&
     !disableNG &&
     Sto.getNG(user.value.storage).some((x) => ng.isNG(x, props.res)) ? (
-    <Card>
+    <Paper>
       あぼーん<a onClick={() => setDisableNG(true)}>[見る]</a>
-    </Card>
+    </Paper>
   ) : (
-    <Card padding="none">
+    <Paper>
       <Snack msg={snackMsg} onHide={() => setSnackMsg(null)} />
-      <CardFlex>
-        <CardFlexFixed
-          width={48}
+      <div
+        style={{
+          display: "flex",
+        }}
+      >
+        <div
           style={{
+            width: 48,
             display: "flex",
             flexDirection: "column",
           }}
@@ -107,9 +103,14 @@ export const Res = React.memo((props: ResProps) => {
               keyboard_arrow_down
             </Icon>
           </IconButton>
-        </CardFlexFixed>
-        <CardFlexStretch>
-          <CardHeader
+        </div>
+        <div
+          style={{
+            flex: 1,
+            minWidth: 0,
+          }}
+        >
+          <div
             style={{
               backgroundColor: props.res.self
                 ? color.primary
@@ -275,8 +276,8 @@ export const Res = React.memo((props: ResProps) => {
                 </Menu>
               </>
             ) : null}
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div>
             <span>
               {props.res.__typename === "ResNormal" &&
               !isNullish(props.res.reply) ? (
@@ -360,9 +361,9 @@ export const Res = React.memo((props: ResProps) => {
                 />
               </Paper>
             ) : null}
-          </CardContent>
-        </CardFlexStretch>
-      </CardFlex>
-    </Card>
+          </div>
+        </div>
+      </div>
+    </Paper>
   );
 });

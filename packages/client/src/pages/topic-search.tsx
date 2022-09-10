@@ -1,12 +1,18 @@
 import * as routes from "@anontown-frontend/routes";
-import { Checkbox, Icon, IconButton, Button, TextField } from "@mui/material";
+import {
+  Checkbox,
+  Icon,
+  IconButton,
+  Button,
+  TextField,
+  Paper,
+} from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useHistory } from "react-router-dom";
 import { Page, TagsInput, TopicListItem } from "../components";
 import * as G from "../generated/graphql";
 import { useUserContext } from "../hooks";
-import { Card } from "../styled/card";
 import { Sto } from "../domains/entities";
 import { useDebouncedCallback } from "use-debounce";
 import { useOnChnageUrlSearch } from "../hooks/use-on-change-url-search";
@@ -123,7 +129,7 @@ export const TopicSearchPage = (_props: {}) => {
   return (
     <Page>
       <Helmet title="検索" />
-      <Card>
+      <Paper sx={{ p: 1 }}>
         {user.value !== null ? (
           <IconButton
             onClick={() => {
@@ -173,7 +179,7 @@ export const TopicSearchPage = (_props: {}) => {
             }}
           />
         </div>
-      </Card>
+      </Paper>
       <div>
         {user.value !== null ? (
           <IconButton component={Link} to={routes.topicCreate.to({})}>

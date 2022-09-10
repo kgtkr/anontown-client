@@ -3,10 +3,9 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import * as G from "../generated/graphql";
 import { useUserContext } from "../hooks";
-import { Card } from "../styled/card";
 import { TextTitle } from "../styled/text";
 import { dateFormat } from "../utils";
-import { Icon } from "@mui/material";
+import { Icon, Paper } from "@mui/material";
 import { TagsLink } from "./tags-link";
 import { Sto } from "../domains/entities";
 import { O, pipe } from "../prelude";
@@ -29,7 +28,7 @@ export const TopicListItem = (props: TopicListItemProps) => {
   );
 
   return (
-    <Card>
+    <Paper sx={{ p: 1 }}>
       <TextTitle>
         {!props.topic.active ? <Icon>not_interested</Icon> : null}
         {props.topic.__typename === "TopicOne" ? <Icon>looks_one</Icon> : null}
@@ -71,6 +70,6 @@ export const TopicListItem = (props: TopicListItemProps) => {
           </div>
         </>
       ) : null}
-    </Card>
+    </Paper>
   );
 };

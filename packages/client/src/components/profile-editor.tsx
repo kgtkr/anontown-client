@@ -1,8 +1,7 @@
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Paper } from "@mui/material";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";
-import { Card } from "../styled/card";
 import { Errors } from "./errors";
 import { MdEditor } from "./md-editor";
 
@@ -28,7 +27,7 @@ export const ProfileEditor = (props: ProfileEditorProps) => {
   });
 
   return (
-    <Card style={props.style}>
+    <Paper sx={{ p: 1 }} style={props.style}>
       <form>
         <Errors errors={errors} />
         <TextField
@@ -60,6 +59,6 @@ export const ProfileEditor = (props: ProfileEditorProps) => {
           OK
         </Button>
       </form>
-    </Card>
+    </Paper>
   );
 };

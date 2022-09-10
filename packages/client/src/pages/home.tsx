@@ -1,12 +1,11 @@
 import * as routes from "@anontown-frontend/routes";
-import { Tab, Tabs } from "@mui/material";
+import { Tab, Tabs, Paper } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { Page } from "../components";
 import { TagFavo, TopicFavo } from "../components";
 import { useUserContext } from "../hooks";
-import { Card } from "../styled/card";
 
 interface HomePageProps {}
 
@@ -28,7 +27,7 @@ export const HomePage = (_props: HomePageProps) => {
           {tabIndex === 1 ? <TagFavo userData={userContext.value} /> : null}
         </div>
       ) : (
-        <Card>
+        <Paper sx={{ p: 1 }}>
           <h1>匿名掲示板Anontownへようこそ</h1>
           <ul>
             <li>
@@ -44,7 +43,7 @@ export const HomePage = (_props: HomePageProps) => {
               </a>
             </li>
           </ul>
-        </Card>
+        </Paper>
       )}
     </Page>
   );
