@@ -50,8 +50,8 @@ export const AuthPage = userSwitch((_props: AuthPageProps) => {
                       "&key=" +
                       encodeURI(data.data.createTokenGeneral.req.key);
                   }
-                } catch {
-                  setSnackMsg("エラーが発生しました");
+                } catch (e) {
+                  setSnackMsg(String(e));
                 }
               }
             }}

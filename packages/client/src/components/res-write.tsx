@@ -67,8 +67,8 @@ export const ResWrite = (props: ResWriteProps) => {
         setErrors([]);
         setTextCache("");
       })
-      .catch(() => {
-        setErrors(["エラーが発生しました"]);
+      .catch((e) => {
+        setErrors([String(e)]);
       });
   };
 

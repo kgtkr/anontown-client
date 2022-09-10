@@ -47,7 +47,7 @@ export class TopicEditor extends React.Component<
         {(submit, { error }) => {
           return (
             <form>
-              {error && <Errors errors={["エラーが発生しました"]} />}
+              {error && <Errors errors={[String(error)]} />}
               <TextField
                 fullWidth={true}
                 placeholder="タイトル"

@@ -93,7 +93,7 @@ export const TopicCreatePage = userSwitch(
                           いいえ
                         </Button>
                       </Modal>
-                      {error && <Errors errors={["エラーが発生しました"]} />}
+                      {error && <Errors errors={[String(error)]} />}
                       <div>
                         <Select
                           label="種類"

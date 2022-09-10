@@ -70,8 +70,8 @@ export const AccountSettingPage = userSwitch(
                             .createTokenMaster as G.TokenMasterFragment,
                         });
                       }
-                    } catch {
-                      setSnackMsg("エラーが発生しました");
+                    } catch (e) {
+                      setSnackMsg(String(e));
                     }
                   }
                 }}

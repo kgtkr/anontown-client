@@ -50,8 +50,8 @@ export const ProfileEditor = (props: ProfileEditorProps) => {
                 props.onUpdate?.(data.data!.updateProfile);
                 setErrors([]);
               })
-              .catch((_e) => {
-                setErrors(["エラーが発生しました"]);
+              .catch((e) => {
+                setErrors([String(e)]);
               })
           }
           variant="contained"

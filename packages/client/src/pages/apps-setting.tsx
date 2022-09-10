@@ -40,7 +40,7 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
       <div>
         <Snack msg={snackMsg} onHide={() => setSnackMsg(null)} />
         {tokens.error !== undefined || clients.error !== undefined ? (
-          <Errors errors={["エラーが発生しました。"]} />
+          <Errors errors={[String(tokens.error), String(clients.error)]} />
         ) : null}
         {tokens.loading || clients.loading ? <div>loading</div> : null}
         {clients.data !== undefined

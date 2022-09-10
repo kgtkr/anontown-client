@@ -17,11 +17,10 @@ export function ProfileAdd(props: ProfileAddProps) {
   const [text, setText] = React.useState("");
 
   const [submit, { error }] = G.useCreateProfileMutation();
-
   return (
     <Paper sx={{ p: 1 }} style={props.style}>
       <form>
-        {error && <Errors errors={["エラーが発生しました"]} />}
+        {error && <Errors errors={[String(error)]} />}
         <TextField
           fullWidth={true}
           placeholder="ID"
