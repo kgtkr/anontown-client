@@ -2,7 +2,7 @@ import { Button, TextField } from "@mui/material";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";
-import { Errors } from "./errors";
+import { ErrorAlert } from "./error-alert";
 import { MdEditor } from "./md-editor";
 import { TagsInput } from "./tags-input";
 
@@ -47,7 +47,7 @@ export class TopicEditor extends React.Component<
         {(submit, { error }) => {
           return (
             <form>
-              {error && <Errors errors={[String(error)]} />}
+              <ErrorAlert error={error} />
               <TextField
                 fullWidth={true}
                 placeholder="タイトル"

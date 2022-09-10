@@ -2,7 +2,7 @@ import { Button, TextField, Paper } from "@mui/material";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";
-import { Errors } from "./errors";
+import { ErrorAlert } from "./error-alert";
 import { MdEditor } from "./md-editor";
 
 interface ProfileAddProps {
@@ -20,7 +20,7 @@ export function ProfileAdd(props: ProfileAddProps) {
   return (
     <Paper sx={{ p: 1 }} style={props.style}>
       <form>
-        {error && <Errors errors={[String(error)]} />}
+        <ErrorAlert error={error} />
         <TextField
           fullWidth={true}
           placeholder="ID"

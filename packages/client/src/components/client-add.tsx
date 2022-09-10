@@ -3,7 +3,7 @@ import { Button, TextField } from "@mui/material";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";
-import { Errors } from "./errors";
+import { ErrorAlert } from "./error-alert";
 
 interface ClientAddProps {
   onAddUpdate?: MutationUpdaterFn<G.CreateClientMutation>;
@@ -13,9 +13,8 @@ interface ClientAddProps {
 export const ClientAdd = (props: ClientAddProps) => {
   const [url, setUrl] = React.useState("");
   const [name, setName] = React.useState("");
-  const [error, setError] = React.useState<any>(null);
 
-  const [submit] = G.useCreateClientMutation({
+  const [submit, { error }] = G.useCreateClientMutation({
     variables: {
       name,
       url,
@@ -25,7 +24,7 @@ export const ClientAdd = (props: ClientAddProps) => {
 
   return (
     <form>
-      {error && <Errors errors={["作成に失敗"]} />}
+      <ErrorAlert error={error} />
       <TextField
         placeholder="名前"
         value={name}
@@ -36,10 +35,7 @@ export const ClientAdd = (props: ClientAddProps) => {
         value={url}
         onChange={(evt) => setUrl(evt.target.value)}
       />
-      <Button
-        onClick={() => submit().catch((e) => setError(e))}
-        variant="contained"
-      >
+      <Button onClick={() => submit()} variant="contained">
         OK
       </Button>
     </form>

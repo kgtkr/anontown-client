@@ -2,7 +2,7 @@ import { Button, TextField } from "@mui/material";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";
-import { Errors } from "./errors";
+import { ErrorAlert } from "./error-alert";
 
 interface ClientEditorProps {
   client: G.ClientFragment;
@@ -17,7 +17,7 @@ export function ClientEditor(props: ClientEditorProps) {
 
   return (
     <form>
-      {data.error && <Errors errors={["更新に失敗"]} />}
+      <ErrorAlert error={data.error} />
       <TextField
         placeholder="名前"
         value={name}

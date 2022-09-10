@@ -5,7 +5,7 @@ import { Paper, Button, TextField } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Errors, MdEditor, Modal, Page, TagsInput } from "../components";
+import { ErrorAlert, MdEditor, Modal, Page, TagsInput } from "../components";
 import * as G from "../generated/graphql";
 import { userSwitch, UserSwitchProps } from "../utils";
 
@@ -93,7 +93,7 @@ export const TopicCreatePage = userSwitch(
                           いいえ
                         </Button>
                       </Modal>
-                      {error && <Errors errors={[String(error)]} />}
+                      <ErrorAlert error={error} />
                       <div>
                         <Select
                           label="種類"

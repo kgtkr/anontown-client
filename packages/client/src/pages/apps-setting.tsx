@@ -1,7 +1,7 @@
 import { Icon, IconButton, Paper } from "@mui/material";
 import * as React from "react";
 import { useTitle } from "react-use";
-import { Errors, Page, Snack } from "../components";
+import { ErrorAlert, Page, Snack } from "../components";
 import * as G from "../generated/graphql";
 import { userSwitch, UserSwitchProps } from "../utils";
 
@@ -39,9 +39,8 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
     <Page>
       <div>
         <Snack msg={snackMsg} onHide={() => setSnackMsg(null)} />
-        {tokens.error !== undefined || clients.error !== undefined ? (
-          <Errors errors={[String(tokens.error), String(clients.error)]} />
-        ) : null}
+        <ErrorAlert error={tokens.error} />
+        <ErrorAlert error={clients.error} />
         {tokens.loading || clients.loading ? <div>loading</div> : null}
         {clients.data !== undefined
           ? clients.data.clients.map((c) => (

@@ -1,7 +1,7 @@
 import { Icon, Menu, IconButton, MenuItem } from "@mui/material";
 import * as React from "react";
 import { imgur } from "../effects";
-import { Errors } from "./errors";
+import { ErrorAlert } from "./error-alert";
 import { Md } from "./md";
 import { Modal } from "./modal";
 import { Oekaki } from "./oekaki";
@@ -26,12 +26,10 @@ export function MdEditor(props: MdEditorProps) {
   const [showOekaki, setShowOekaki] = React.useState(false);
   const [showImage, setShowImage] = React.useState(false);
   const [showPreview, setShowPreview] = React.useState(false);
-  const [oekakiErrors, setOekakiErrors] = React.useState<
-    Array<string> | undefined
-  >(undefined);
-  const [imageErrors, setImageErrors] = React.useState<
-    Array<string> | undefined
-  >(undefined);
+
+  const [imageError, setImageError] = React.useState<string | undefined>(
+    undefined
+  );
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const upload = (datas: Array<FormData>) => {
@@ -43,12 +41,11 @@ export function MdEditor(props: MdEditorProps) {
       )
       .subscribe(
         (tags) => {
-          setOekakiErrors(undefined);
-          setImageErrors(undefined);
+          setImageError(undefined);
           props.onChange?.(props.value + tags);
         },
         () => {
-          setImageErrors(["アップロードに失敗しました"]);
+          setImageError("アップロードに失敗しました");
         }
       );
   };
@@ -71,12 +68,12 @@ export function MdEditor(props: MdEditorProps) {
     >
       <Modal isOpen={showOekaki} onRequestClose={() => setShowOekaki(false)}>
         <h1>お絵かき</h1>
-        <Errors errors={oekakiErrors} />
+        <ErrorAlert error={imageError} />
         <Oekaki size={{ x: 320, y: 240 }} onSubmit={(data) => upload([data])} />
       </Modal>
       <Modal isOpen={showImage} onRequestClose={() => setShowImage(false)}>
         <h1>画像アップロード</h1>
-        <Errors errors={imageErrors} />
+        <ErrorAlert error={imageError} />
         <input
           type="file"
           onChange={(e) => {

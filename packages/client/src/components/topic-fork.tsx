@@ -2,7 +2,7 @@ import { Button, TextField } from "@mui/material";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { useUserContext } from "../hooks";
-import { Errors } from "./errors";
+import { ErrorAlert } from "./error-alert";
 import { Snack } from "./snack";
 import { TopicListItem } from "./topic-list-item";
 
@@ -30,7 +30,7 @@ export const TopicFork = (props: TopicForkProps) => {
           {(submit, { error }) => {
             return (
               <form>
-                {error && <Errors errors={["作成に失敗"]} />}
+                <ErrorAlert error={error} />
                 <TextField
                   placeholder="タイトル"
                   value={title}

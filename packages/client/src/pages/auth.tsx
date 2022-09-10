@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import * as React from "react";
 import { useLocation } from "react-router";
 import { useTitle } from "react-use";
-import { Errors, Page, Snack } from "../components";
+import { ErrorAlert, Page, Snack } from "../components";
 import * as G from "../generated/graphql";
 import { userSwitch, UserSwitchProps } from "../utils";
 
@@ -17,7 +17,7 @@ export const AuthPage = userSwitch((_props: AuthPageProps) => {
     skip: query.id === undefined,
     variables: { query: { id: query.id !== undefined ? [query.id] : [] } },
   });
-  const [submit] = G.useCreateTokenGeneralMutation();
+  const [submit, { error }] = G.useCreateTokenGeneralMutation();
 
   useTitle("アプリ認証");
 
@@ -27,8 +27,9 @@ export const AuthPage = userSwitch((_props: AuthPageProps) => {
       {clients.loading ? <div>loading</div> : null}
       {query.id === undefined ? <div>パラメーターが不正です</div> : null}
       {clients.error !== undefined ? (
-        <Errors errors={["クライアント取得に失敗しました。"]} />
+        <ErrorAlert error="クライアント取得に失敗しました。" />
       ) : null}
+      <ErrorAlert error={error} />
       {clients.data !== undefined ? (
         <div>
           認証しますか？
@@ -37,21 +38,17 @@ export const AuthPage = userSwitch((_props: AuthPageProps) => {
             onClick={async () => {
               if (clients.data !== undefined) {
                 const client = clients.data.clients[0];
-                try {
-                  const data = await submit({
-                    variables: { client: client.id },
-                  });
-                  if (data.data) {
-                    window.location.href =
-                      client.url +
-                      "?" +
-                      "id=" +
-                      data.data.createTokenGeneral.req.token +
-                      "&key=" +
-                      encodeURI(data.data.createTokenGeneral.req.key);
-                  }
-                } catch (e) {
-                  setSnackMsg(String(e));
+                const data = await submit({
+                  variables: { client: client.id },
+                });
+                if (data.data) {
+                  window.location.href =
+                    client.url +
+                    "?" +
+                    "id=" +
+                    data.data.createTokenGeneral.req.token +
+                    "&key=" +
+                    encodeURI(data.data.createTokenGeneral.req.key);
                 }
               }
             }}

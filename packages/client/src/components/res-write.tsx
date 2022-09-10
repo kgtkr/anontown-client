@@ -6,7 +6,7 @@ import * as G from "../generated/graphql";
 import { useInputCache } from "../hooks";
 import { Storage, UserData, Sto } from "../domains/entities";
 import { CheckBox } from "./check-box";
-import { Errors } from "./errors";
+import { ErrorAlert } from "./error-alert";
 import { MdEditor } from "./md-editor";
 import { Select } from "./select";
 import { TextField } from "./text-field";
@@ -29,7 +29,6 @@ export const ResWrite = (props: ResWriteProps) => {
 
   const data = Sto.getTopicWrite(props.topic)(props.userData.storage);
 
-  const [errors, setErrors] = React.useState<Array<string>>([]);
   const [textCache, setTextCache] = useInputCache(
     Sto.getTopicWriteTextLens(props.reply).get(data),
     (value) => {
@@ -45,7 +44,7 @@ export const ResWrite = (props: ResWriteProps) => {
     },
   });
 
-  const [mutation] = G.useCreateResMutation({
+  const [mutation, { error }] = G.useCreateResMutation({
     variables: {
       topic: props.topic,
       name: pipe(data, Sto.topicWriteNameLens.get, (name) =>
@@ -59,17 +58,12 @@ export const ResWrite = (props: ResWriteProps) => {
   });
 
   const submit = () => {
-    mutation()
-      .then((x) => {
-        if (x.data) {
-          props.onSubmit?.(x.data.createRes);
-        }
-        setErrors([]);
-        setTextCache("");
-      })
-      .catch((e) => {
-        setErrors([String(e)]);
-      });
+    mutation().then((x) => {
+      if (x.data) {
+        props.onSubmit?.(x.data.createRes);
+      }
+      setTextCache("");
+    });
   };
 
   const [focusCounter, { inc: incFocusCounter, dec: decFocusCounter }] =
@@ -86,7 +80,7 @@ export const ResWrite = (props: ResWriteProps) => {
         }, 100);
       }}
     >
-      <Errors errors={errors} />
+      <ErrorAlert error={error} />
       {focusCounter !== 0 || textCache.length !== 0 ? (
         <>
           <TextField

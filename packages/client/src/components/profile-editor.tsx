@@ -2,7 +2,7 @@ import { Button, TextField, Paper } from "@mui/material";
 import * as React from "react";
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";
-import { Errors } from "./errors";
+import { ErrorAlert } from "./error-alert";
 import { MdEditor } from "./md-editor";
 
 interface ProfileEditorProps {
@@ -13,11 +13,10 @@ interface ProfileEditorProps {
 }
 
 export const ProfileEditor = (props: ProfileEditorProps) => {
-  const [errors, setErrors] = React.useState<Array<string>>([]);
   const [sn, setSn] = React.useState(props.profile.sn);
   const [name, setName] = React.useState(props.profile.name);
   const [text, setText] = React.useState(props.profile.text);
-  const [submit] = G.useUpdateProfileMutation({
+  const [submit, { error }] = G.useUpdateProfileMutation({
     variables: {
       id: props.profile.id,
       name,
@@ -29,7 +28,7 @@ export const ProfileEditor = (props: ProfileEditorProps) => {
   return (
     <Paper sx={{ p: 1 }} style={props.style}>
       <form>
-        <Errors errors={errors} />
+        <ErrorAlert error={error} />
         <TextField
           fullWidth={true}
           placeholder="ID"
@@ -45,14 +44,9 @@ export const ProfileEditor = (props: ProfileEditorProps) => {
         <MdEditor fullWidth={true} value={text} onChange={(v) => setText(v)} />
         <Button
           onClick={() =>
-            submit()
-              .then((data) => {
-                props.onUpdate?.(data.data!.updateProfile);
-                setErrors([]);
-              })
-              .catch((e) => {
-                setErrors([String(e)]);
-              })
+            submit().then((data) => {
+              props.onUpdate?.(data.data!.updateProfile);
+            })
           }
           variant="contained"
         >

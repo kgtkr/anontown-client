@@ -3,7 +3,7 @@ export * from "./client-editor";
 export * from "./client-add";
 export * from "./client";
 export * from "./color-picker";
-export * from "./errors";
+export * from "./error-alert";
 export * from "./history";
 export * from "./md-editor";
 export * from "./md";

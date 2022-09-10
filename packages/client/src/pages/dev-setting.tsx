@@ -2,7 +2,7 @@ import { Paper } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { RouteComponentProps } from "react-router-dom";
-import { ClientAdd, ClientEditor, Errors, Page } from "../components";
+import { ClientAdd, ClientEditor, ErrorAlert, Page } from "../components";
 import * as G from "../generated/graphql";
 import { userSwitch, UserSwitchProps } from "../utils";
 import { isNullish } from "@kgtkr/utils";
@@ -43,7 +43,7 @@ export const DevSettingPage = userSwitch((props: DevSettingPageProps) => {
           userData={props.userData}
         />
         {clients.error !== undefined ? (
-          <Errors errors={["クライアント取得に失敗しました。"]} />
+          <ErrorAlert error="クライアント取得に失敗しました。" />
         ) : null}
         {clients.loading ? <div>loading</div> : null}
         {clients.data !== undefined ? (

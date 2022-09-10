@@ -4,7 +4,7 @@ import * as React from "react";
 import Recaptcha from "react-google-recaptcha";
 import { Helmet } from "react-helmet-async";
 import { Link, Redirect } from "react-router-dom";
-import { Errors, Page } from "../components";
+import { ErrorAlert, Page } from "../components";
 import { Env } from "../env";
 import * as G from "../generated/graphql";
 import { UserContext } from "../hooks";
@@ -13,7 +13,6 @@ import { createUserData } from "../effects";
 interface SignupPageState {
   sn: string;
   pass: string;
-  errors?: Array<string>;
   recaptcha: string | null;
 }
 
@@ -40,7 +39,6 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
             ) : (
               <Paper>
                 <form>
-                  <Errors errors={this.state.errors} />
                   <div>
                     <TextField
                       placeholder="ID"
@@ -81,9 +79,6 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
                       if (rc) {
                         rc.reset();
                       }
-                      this.setState({
-                        errors: ["アカウント作成に失敗しました"],
-                      });
                     }}
                     onCompleted={async (x) => {
                       user.update(
@@ -98,8 +93,9 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
                       recaptcha: this.state.recaptcha!,
                     }}
                   >
-                    {(create) => (
+                    {(create, { error }) => (
                       <div>
+                        <ErrorAlert error={error} />
                         <Button onClick={() => create()} variant="contained">
                           利用規約に同意して登録
                         </Button>

@@ -1,7 +1,7 @@
 import { Paper, Button, TextField } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
-import { Errors, Page, Snack } from "../components";
+import { ErrorAlert, Page, Snack } from "../components";
 import * as G from "../generated/graphql";
 import { userSwitch, UserSwitchProps } from "../utils";
 
@@ -27,7 +27,7 @@ export const AccountSettingPage = userSwitch(
           <Helmet title="アカウント設定" />
           <Snack msg={snackMsg} onHide={() => setSnackMsg(null)} />
           {user.error !== undefined ? (
-            <Errors errors={["ユーザー情報取得に失敗しました"]} />
+            <ErrorAlert error="ユーザー情報取得に失敗しました" />
           ) : null}
           {user.loading ? <div>loading</div> : null}
           {user.data !== undefined ? (
