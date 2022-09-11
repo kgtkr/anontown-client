@@ -3,7 +3,7 @@ import { Tab, Tabs, Paper } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { Page , TagFavo, TopicFavo } from "../components";
+import { Page, TagFavo, TopicFavo } from "../components";
 import { useUserContext } from "../hooks";
 
 interface HomePageProps {}

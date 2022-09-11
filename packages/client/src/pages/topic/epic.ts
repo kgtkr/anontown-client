@@ -1,4 +1,13 @@
-import { rx, rxOps , pipe, O, RA, Monoid_, isNotNull, RxExtra } from "../../prelude";
+import {
+  rx,
+  rxOps,
+  pipe,
+  O,
+  RA,
+  Monoid_,
+  isNotNull,
+  RxExtra,
+} from "../../prelude";
 import * as G from "../../generated/graphql";
 import { Sto, UserData } from "../../domains/entities";
 import { ApolloClient } from "@apollo/client";
