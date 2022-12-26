@@ -2,7 +2,7 @@ version: "3"
 
 services:
   server:
-    image: ghcr.io/kgtkr/anontown-server:latest-webpush
+    image: ghcr.io/kgtkr/anontown-server:20221226102459041-8a444d2
     ports:
       - "8080:8080"
     environment:
