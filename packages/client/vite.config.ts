@@ -15,6 +15,13 @@ export default defineConfig(({ command }) => {
         workbox: {
           maximumFileSizeToCacheInBytes: 3000000,
         },
+        base: "/",
+        strategies: "injectManifest",
+        devOptions: {
+          enabled: true,
+          type: "module",
+        },
+        srcDir: "src",
       }),
       command === "serve"
         ? (() => {

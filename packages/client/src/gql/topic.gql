@@ -85,3 +85,11 @@ mutation createTopicFork($title:String!,$parent:ID!){
         ...topicFork
     }
 }
+
+mutation subscribeTopic($topic:ID!){
+    subscribeTopic(topic:$topic)
+}
+
+mutation unsubscribeTopic($topic:ID!){
+    unsubscribeTopic(topic:$topic)
+}
