@@ -6,11 +6,23 @@ import { Page, Res } from "../components";
 import * as G from "../generated/graphql";
 import { userSwitch, UserSwitchProps } from "../utils";
 import { RA, O } from "../prelude";
+import { useRegisterSW } from "virtual:pwa-register/react";
+import { Env } from "../env";
 
 type NotificationsPageProps = RouteComponentProps<{}> & UserSwitchProps;
 
 export const NotificationsPage = userSwitch(
   (_props: NotificationsPageProps) => {
+    const [registration, setRegistration] = React.useState<
+      ServiceWorkerRegistration | undefined
+    >(undefined);
+
+    useRegisterSW({
+      onRegistered(registration) {
+        setRegistration(registration);
+      },
+    });
+
     const now = React.useRef(new Date().toISOString());
     const reses = G.useFindResesQuery({
       variables: {
@@ -24,10 +36,43 @@ export const NotificationsPage = userSwitch(
       },
     });
 
+    const [resisterPushSubscription] = G.useResisterPushSubscriptionMutation();
+
     return (
       <Page>
         <Helmet title="通知" />
         <div>
+          {registration !== undefined ? (
+            <Button
+              onClick={async () => {
+                try {
+                  const subscription = await registration.pushManager.subscribe(
+                    {
+                      userVisibleOnly: true,
+                      applicationServerKey: Env.vapid.publicKey,
+                    }
+                  );
+                  const permission = await Notification.requestPermission();
+                  if (permission !== "granted") {
+                    return;
+                  }
+                  const subscriptionJson = subscription.toJSON();
+                  await resisterPushSubscription({
+                    variables: {
+                      endpoint: subscriptionJson.endpoint!,
+                      p256dh: subscriptionJson.keys!.p256dh,
+                      auth: subscriptionJson.keys!.auth,
+                    },
+                  });
+                } catch (e) {
+                  console.error(e);
+                }
+              }}
+              variant="contained"
+            >
+              ブラウザ通知を有効にする
+            </Button>
+          ) : null}
           <div>
             <Button
               onClick={async () => {

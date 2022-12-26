@@ -35,6 +35,8 @@ export const TopicPage = (_props: {}) => {
   const apolloClient = useApolloClient();
   const background = useBackground();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [subscribeTopic] = G.useSubscribeTopicMutation();
+  const [unsubscribeTopic] = G.useUnsubscribeTopicMutation();
 
   const [state, dispatch] = useReducerWithObservable(
     reducer,
@@ -217,6 +219,34 @@ export const TopicPage = (_props: {}) => {
                       )}
                     >
                       派生トピック
+                    </MenuItem>
+                  ) : null}
+                  {state.userData !== null ? (
+                    <MenuItem
+                      onClick={async () => {
+                        setAnchorEl(null);
+                        await subscribeTopic({
+                          variables: {
+                            topic: state.topicId,
+                          },
+                        });
+                      }}
+                    >
+                      トピックの通知を有効化
+                    </MenuItem>
+                  ) : null}
+                  {state.userData !== null ? (
+                    <MenuItem
+                      onClick={async () => {
+                        setAnchorEl(null);
+                        await unsubscribeTopic({
+                          variables: {
+                            topic: state.topicId,
+                          },
+                        });
+                      }}
+                    >
+                      トピックの通知を無効化
                     </MenuItem>
                   ) : null}
                   <MenuItem
