@@ -21,7 +21,6 @@ export default defineConfig(({ command }) => {
           enabled: true,
           type: "module",
         },
-        srcDir: "src",
       }),
       command === "serve"
         ? (() => {
@@ -37,13 +36,7 @@ export default defineConfig(({ command }) => {
       port: 3000,
     },
     build: {
-      commonjsOptions: {
-        include: [],
-      },
       chunkSizeWarningLimit: 3000,
-    },
-    optimizeDeps: {
-      disabled: false,
     },
   };
 });
