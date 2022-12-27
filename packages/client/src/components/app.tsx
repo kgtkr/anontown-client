@@ -26,6 +26,7 @@ import {
 import { User } from "../utils";
 import * as style from "./app.module.scss";
 import * as H from "history";
+import { useRegisterSW } from "virtual:pwa-register/react";
 
 declare const gtag: any;
 
@@ -37,6 +38,11 @@ export function App(): JSX.Element {
     UserData | undefined | null
   >(undefined);
   const [serverStatus, setServerStatus] = React.useState(true);
+
+  const {
+    needRefresh: [needRefresh],
+    updateServiceWorker,
+  } = useRegisterSW({});
 
   React.useEffect(() => {
     if (Env.ga !== null) {
@@ -168,6 +174,16 @@ export function App(): JSX.Element {
                       </MenuItem>
                     )}
                   </Menu>
+                  {needRefresh && (
+                    <IconButton
+                      color="secondary"
+                      onClick={() => {
+                        updateServiceWorker(true);
+                      }}
+                    >
+                      <Icon>upgrade</Icon>
+                    </IconButton>
+                  )}
                 </Toolbar>
               </AppBar>
               <div className={style.main}>
