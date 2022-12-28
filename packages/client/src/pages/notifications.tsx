@@ -8,6 +8,7 @@ import { userSwitch, UserSwitchProps } from "../utils";
 import { RA, O } from "../prelude";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { Env } from "../env";
+import { Snack } from "../components/snack";
 
 type NotificationsPageProps = RouteComponentProps<{}> & UserSwitchProps;
 
@@ -36,43 +37,59 @@ export const NotificationsPage = userSwitch(
       },
     });
 
+    const [snackMsg, setSnackMsg] = React.useState<string | null>(null);
+
     const [resisterPushSubscription] = G.useResisterPushSubscriptionMutation();
 
     return (
       <Page>
         <Helmet title="通知" />
+        <Snack msg={snackMsg} onHide={() => setSnackMsg(null)} />
         <div>
-          {registration !== undefined ? (
-            <Button
-              onClick={async () => {
-                try {
-                  const subscription = await registration.pushManager.subscribe(
-                    {
-                      userVisibleOnly: true,
-                      applicationServerKey: Env.vapid.publicKey,
-                    }
-                  );
-                  const permission = await Notification.requestPermission();
-                  if (permission !== "granted") {
-                    return;
-                  }
-                  const subscriptionJson = subscription.toJSON();
-                  await resisterPushSubscription({
-                    variables: {
-                      endpoint: subscriptionJson.endpoint!,
-                      p256dh: subscriptionJson.keys!.p256dh,
-                      auth: subscriptionJson.keys!.auth,
-                    },
-                  });
-                } catch (e) {
-                  console.error(e);
+          <Button
+            disabled={
+              typeof Notification === "undefined" ||
+              Notification.permission === "granted" ||
+              registration === undefined
+            }
+            onClick={async () => {
+              if (registration === undefined) {
+                return;
+              }
+              try {
+                const subscription = await registration.pushManager.subscribe({
+                  userVisibleOnly: true,
+                  applicationServerKey: Env.vapid.publicKey,
+                });
+                const subscriptionJson = subscription.toJSON();
+                await resisterPushSubscription({
+                  variables: {
+                    endpoint: subscriptionJson.endpoint!,
+                    p256dh: subscriptionJson.keys!.p256dh,
+                    auth: subscriptionJson.keys!.auth,
+                  },
+                });
+                const permission = await Notification.requestPermission();
+                if (permission !== "granted") {
+                  setSnackMsg("通知権限を得られませんでした");
+                  return;
                 }
-              }}
-              variant="contained"
-            >
-              ブラウザ通知を有効にする
-            </Button>
-          ) : null}
+
+                new Notification("通知を有効にしました", {
+                  body: "通知を受け取ることができます",
+                });
+              } catch (e) {
+                setSnackMsg("通知の有効化に失敗しました。" + String(e));
+              }
+            }}
+            variant="contained"
+          >
+            {typeof Notification === "undefined" || registration === undefined
+              ? "このブラウザは通知をサポートしていません"
+              : Notification.permission === "granted"
+              ? "既に通知が有効です"
+              : "通知を有効にする"}
+          </Button>
           <div>
             <Button
               onClick={async () => {

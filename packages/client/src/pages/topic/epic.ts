@@ -75,7 +75,7 @@ function fetchTopic(
     RxExtra.fromTask(() =>
       env.apolloClient.query<G.FindTopicsQuery, G.FindTopicsQueryVariables>({
         query: G.FindTopicsDocument,
-        variables: { query: { id: [topicId] } },
+        variables: { query: { id: [topicId] }, includeSubscribe: true },
       })
     ).pipe(
       rxOps.mergeMap((res) =>

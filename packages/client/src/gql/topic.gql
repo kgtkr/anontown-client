@@ -61,9 +61,10 @@ mutation createTopicOne($title:String!,$tags:[String!]!,$text:String!){
     }
 }
 
-query findTopics($query:TopicQuery!,$skip:Int,$limit:Int){
+query findTopics($query:TopicQuery!,$skip:Int,$limit:Int,$includeSubscribe:Boolean = false){
     topics(query:$query,skip:$skip,limit:$limit){
         ...topic
+        subscribe @include(if:$includeSubscribe)
     }
 }
 

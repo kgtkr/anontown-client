@@ -222,33 +222,54 @@ export const TopicPage = (_props: {}) => {
                     </MenuItem>
                   ) : null}
                   {state.userData !== null ? (
-                    <MenuItem
-                      onClick={async () => {
-                        setAnchorEl(null);
-                        await subscribeTopic({
-                          variables: {
-                            topic: state.topicId,
-                          },
-                        });
-                      }}
-                    >
-                      トピックの通知を有効化
-                    </MenuItem>
+                    typeof Notification !== "undefined" &&
+                    Notification.permission === "granted" ? (
+                      <MenuItem
+                        onClick={async () => {
+                          const topic = state.topic;
+                          if (topic === null) {
+                            return;
+                          }
+                          setAnchorEl(null);
+                          if (topic.subscribe) {
+                            await unsubscribeTopic({
+                              variables: {
+                                topic: state.topicId,
+                              },
+                            });
+                            dispatch({
+                              type: "CHANGE_TOPIC_SUBSCRIBE",
+                              value: false,
+                            });
+                          } else {
+                            await subscribeTopic({
+                              variables: {
+                                topic: state.topicId,
+                              },
+                            });
+                            dispatch({
+                              type: "CHANGE_TOPIC_SUBSCRIBE",
+                              value: true,
+                            });
+                          }
+                        }}
+                      >
+                        トピックの通知を
+                        {state.topic.subscribe ? "無効化" : "有効化"}
+                      </MenuItem>
+                    ) : (
+                      <MenuItem
+                        onClick={() => {
+                          setAnchorEl(null);
+                        }}
+                        to={routes.notifications.to({})}
+                        component={Link}
+                      >
+                        ブラウザ通知設定
+                      </MenuItem>
+                    )
                   ) : null}
-                  {state.userData !== null ? (
-                    <MenuItem
-                      onClick={async () => {
-                        setAnchorEl(null);
-                        await unsubscribeTopic({
-                          variables: {
-                            topic: state.topicId,
-                          },
-                        });
-                      }}
-                    >
-                      トピックの通知を無効化
-                    </MenuItem>
-                  ) : null}
+
                   <MenuItem
                     onClick={() => {
                       setAnchorEl(null);
