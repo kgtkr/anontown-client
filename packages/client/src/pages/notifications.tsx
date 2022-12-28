@@ -57,6 +57,12 @@ export const NotificationsPage = userSwitch(
                 return;
               }
               try {
+                const permission = await Notification.requestPermission();
+                if (permission !== "granted") {
+                  setSnackMsg("通知権限を得られませんでした");
+                  return;
+                }
+
                 const subscription = await registration.pushManager.subscribe({
                   userVisibleOnly: true,
                   applicationServerKey: Env.vapid.publicKey,
@@ -69,11 +75,6 @@ export const NotificationsPage = userSwitch(
                     auth: subscriptionJson.keys!.auth,
                   },
                 });
-                const permission = await Notification.requestPermission();
-                if (permission !== "granted") {
-                  setSnackMsg("通知権限を得られませんでした");
-                  return;
-                }
 
                 new Notification("通知を有効にしました", {
                   body: "通知を受け取ることができます",
