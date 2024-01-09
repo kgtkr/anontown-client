@@ -136,13 +136,6 @@ export function App(): JSX.Element {
                           プロフ管理
                         </MenuItem>
                         <MenuItem
-                          to={routes.messages.to({})}
-                          component={Link}
-                          onClick={() => setAnchorEl(null)}
-                        >
-                          お知らせ
-                        </MenuItem>
-                        <MenuItem
                           to={routes.settings.to({})}
                           component={Link}
                           onClick={() => setAnchorEl(null)}
@@ -241,11 +234,6 @@ export function App(): JSX.Element {
                     exact={true}
                     path={routes.notifications.matcher()}
                     component={pages.NotificationsPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.messages.matcher()}
-                    component={pages.MessagesPage}
                   />
                   <Route
                     exact={true}
