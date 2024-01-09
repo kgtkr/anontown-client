@@ -4,7 +4,10 @@ import { Sto, UserData } from "../../domains/entities";
 export type Action =
   | { type: "INIT"; topicId: string; now: Date }
   | { type: "FETCH_TOPIC_REQUEST" }
-  | { type: "FETCH_TOPIC_SUCCESS"; topic: G.TopicFragment }
+  | {
+      type: "FETCH_TOPIC_SUCCESS";
+      topic: G.TopicFragment & { subscribe?: boolean | null };
+    }
   | { type: "FETCH_TOPIC_FAILURE" }
   | { type: "FETCH_INIT_RES_REQUEST" }
   | {
@@ -38,4 +41,5 @@ export type Action =
   | { type: "UPDATE_USER_DATA"; userData: UserData | null }
   | { type: "RECEIVE_NEW_RES"; res: G.ResFragment; count: number }
   | { type: "UPDATE_RES"; res: G.ResFragment }
-  | { type: "RESET_JUMP_RES" };
+  | { type: "RESET_JUMP_RES" }
+  | { type: "CHANGE_TOPIC_SUBSCRIBE"; value: boolean };

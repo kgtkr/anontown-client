@@ -21,6 +21,9 @@ export interface Env {
   ga: {
     id: string;
   } | null;
+  vapid: {
+    publicKey: string;
+  };
 }
 
 function unwrap<A>(x: A | undefined): A {
@@ -53,6 +56,9 @@ export function loadEnv(env: Record<string, string | undefined>): Env {
       clientID: unwrap(env["IMGUR_CLIENT_ID"]),
     },
     ga: env["GA"] ? { id: env["GA"] } : null,
+    vapid: {
+      publicKey: unwrap(env["VAPID_PUBLIC_KEY"]),
+    },
   };
 }
 

@@ -35,6 +35,8 @@ export const TopicPage = (_props: {}) => {
   const apolloClient = useApolloClient();
   const background = useBackground();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [subscribeTopic] = G.useSubscribeTopicMutation();
+  const [unsubscribeTopic] = G.useUnsubscribeTopicMutation();
 
   const [state, dispatch] = useReducerWithObservable(
     reducer,
@@ -219,6 +221,55 @@ export const TopicPage = (_props: {}) => {
                       派生トピック
                     </MenuItem>
                   ) : null}
+                  {state.userData !== null ? (
+                    typeof Notification !== "undefined" &&
+                    Notification.permission === "granted" ? (
+                      <MenuItem
+                        onClick={async () => {
+                          const topic = state.topic;
+                          if (topic === null) {
+                            return;
+                          }
+                          setAnchorEl(null);
+                          if (topic.subscribe) {
+                            await unsubscribeTopic({
+                              variables: {
+                                topic: state.topicId,
+                              },
+                            });
+                            dispatch({
+                              type: "CHANGE_TOPIC_SUBSCRIBE",
+                              value: false,
+                            });
+                          } else {
+                            await subscribeTopic({
+                              variables: {
+                                topic: state.topicId,
+                              },
+                            });
+                            dispatch({
+                              type: "CHANGE_TOPIC_SUBSCRIBE",
+                              value: true,
+                            });
+                          }
+                        }}
+                      >
+                        トピックの通知を
+                        {state.topic.subscribe ? "無効化" : "有効化"}
+                      </MenuItem>
+                    ) : (
+                      <MenuItem
+                        onClick={() => {
+                          setAnchorEl(null);
+                        }}
+                        to={routes.notifications.to({})}
+                        component={Link}
+                      >
+                        ブラウザ通知設定
+                      </MenuItem>
+                    )
+                  ) : null}
+
                   <MenuItem
                     onClick={() => {
                       setAnchorEl(null);

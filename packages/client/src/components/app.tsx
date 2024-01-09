@@ -26,6 +26,7 @@ import {
 import { User } from "../utils";
 import * as style from "./app.module.scss";
 import * as H from "history";
+import { useRegisterSW } from "virtual:pwa-register/react";
 
 declare const gtag: any;
 
@@ -37,6 +38,53 @@ export function App(): JSX.Element {
     UserData | undefined | null
   >(undefined);
   const [serverStatus, setServerStatus] = React.useState(true);
+  const [resisterPushSubscription] = G.useResisterPushSubscriptionMutation();
+
+  const [registration, setRegistration] = React.useState<
+    ServiceWorkerRegistration | undefined
+  >(undefined);
+
+  const {
+    needRefresh: [needRefresh],
+    updateServiceWorker,
+  } = useRegisterSW({
+    onRegistered(registration) {
+      setRegistration(registration);
+    },
+  });
+
+  const isLogin = initUserData !== undefined && initUserData !== null;
+
+  React.useEffect(() => {
+    if (
+      typeof Notification === "undefined" ||
+      Notification.permission !== "granted" ||
+      !isLogin ||
+      registration === undefined
+    ) {
+      return;
+    }
+
+    // 本当はswでpushsubscriptionchangeイベントなどを使ってやるべきだが再ログインなどを考えるとめんどくさいので毎回やる
+    void (async () => {
+      try {
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: Env.vapid.publicKey,
+        });
+        const subscriptionJson = subscription.toJSON();
+        await resisterPushSubscription({
+          variables: {
+            endpoint: subscriptionJson.endpoint!,
+            p256dh: subscriptionJson.keys!.p256dh,
+            auth: subscriptionJson.keys!.auth,
+          },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, [isLogin, registration, resisterPushSubscription]);
 
   React.useEffect(() => {
     if (Env.ga !== null) {
@@ -161,6 +209,16 @@ export function App(): JSX.Element {
                       </MenuItem>
                     )}
                   </Menu>
+                  {needRefresh && (
+                    <IconButton
+                      color="secondary"
+                      onClick={() => {
+                        updateServiceWorker(true);
+                      }}
+                    >
+                      <Icon>upgrade</Icon>
+                    </IconButton>
+                  )}
                 </Toolbar>
               </AppBar>
               <div className={style.main}>

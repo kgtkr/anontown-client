@@ -12,7 +12,7 @@ export interface State {
   isAutoScroll: boolean;
   jumpResId: string | null;
   // 以下の値が全てnullでなくなれば準備完了
-  topic: G.TopicFragment | null;
+  topic: (G.TopicFragment & { subscribe?: boolean | null }) | null;
   now: Date | null;
   reses: ReadonlyArray<G.ResFragment> | null;
   jumpValue: number | null;

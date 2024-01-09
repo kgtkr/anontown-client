@@ -210,5 +210,17 @@ export function reducer(prevState: State, action: Action): State {
         jumpResId: null,
       };
     }
+    case "CHANGE_TOPIC_SUBSCRIBE": {
+      return {
+        ...prevState,
+        topic:
+          prevState.topic !== null
+            ? {
+                ...prevState.topic,
+                subscribe: action.value,
+              }
+            : null,
+      };
+    }
   }
 }

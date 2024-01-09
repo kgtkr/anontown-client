@@ -11,9 +11,17 @@ export default defineConfig(({ command }) => {
       VitePWA({
         includeAssets: ["icon.svg"],
         manifest,
-        filename: "vite-pwa-sw.js",
-        workbox: {
+        filename: "vite-pwa-sw.ts",
+        srcDir: "src",
+        injectManifest: {
           maximumFileSizeToCacheInBytes: 3000000,
+        },
+        base: "/",
+        strategies: "injectManifest",
+        devOptions: {
+          enabled: true,
+          type: "module",
+          navigateFallback: "index.html",
         },
       }),
       command === "serve"
@@ -30,13 +38,7 @@ export default defineConfig(({ command }) => {
       port: 3000,
     },
     build: {
-      commonjsOptions: {
-        include: [],
-      },
       chunkSizeWarningLimit: 3000,
-    },
-    optimizeDeps: {
-      disabled: false,
     },
   };
 });

@@ -35,5 +35,6 @@ module.exports = {
     "@typescript-eslint/no-unsafe-call": "warn",
     "@typescript-eslint/restrict-plus-operands": "warn",
     "@typescript-eslint/no-unsafe-argument": "warn",
+    "import/no-unresolved": ["error", { ignore: ["^virtual:"] }],
   },
 };
