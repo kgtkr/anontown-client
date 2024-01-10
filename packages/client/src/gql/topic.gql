@@ -3,11 +3,7 @@ fragment topicSearch on TopicSearch{
     ...topicOne
 }
 
-fragment topicNormal on TopicNormal{
-    #
-    tags
-    text
-    #
+fragment topicBase on Topic{
     id
     title
     update
@@ -16,30 +12,25 @@ fragment topicNormal on TopicNormal{
     active
 }
 
-fragment topicOne on TopicOne{
-    #
+fragment topicSearchBase on TopicSearch{
     tags
     text
-    #
-    id
-    title
-    update
-    date
-    resCount
-    active
+    ...topicBase
+}
+
+fragment topicNormal on TopicNormal{
+    ...topicSearchBase
+}
+
+fragment topicOne on TopicOne{
+    ...topicSearchBase
 }
 
 fragment topicFork on TopicFork{
     parent{
         ...topicSearch
     }
-    #
-    id
-    title
-    update
-    date
-    resCount
-    active
+    ...topicBase
 }
 
 

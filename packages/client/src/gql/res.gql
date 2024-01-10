@@ -10,6 +10,20 @@ fragment res on Res{
     ...resTopic
 }
 
+fragment resBase on Res{
+    id
+    topic{
+        ...topic
+    }
+    date
+    self
+    uv
+    dv
+    hash
+    replyCount
+    voteFlag
+}
+
 fragment resNormal on ResNormal{
     name
     text
@@ -20,85 +34,30 @@ fragment resNormal on ResNormal{
         ...profile
     }
     isReply
-    #
-    id
-    topic{
-        ...topic
-    }
-    date
-    self
-    uv
-    dv
-    hash
-    replyCount
-    voteFlag
+    ...resBase
 }
 
 fragment resHistory on ResHistory{
     history{
         ...history
     }
-    #
-    id
-    topic{
-        ...topic
-    }
-    date
-    self
-    uv
-    dv
-    hash
-    replyCount
-    voteFlag
+    ...resBase
 }
 
 fragment resTopic on ResTopic{
-    #
-    id
-    topic{
-        ...topic
-    }
-    date
-    self
-    uv
-    dv
-    hash
-    replyCount
-    voteFlag
+    ...resBase
 }
 
 fragment resFork on ResFork{
     fork{
         ...topicFork
     }
-    #
-    id
-    topic{
-        ...topic
-    }
-    date
-    self
-    uv
-    dv
-    hash
-    replyCount
-    voteFlag
+    ...resBase
 }
 
 fragment resDelete on ResDelete{
     flag
-    #
-    id
-    topic{
-        ...topic
-    }
-    date
-    self
-    uv
-    dv
-    hash
-    replyCount
-    voteFlag
+    ...resBase
 }
 
 query findReses($query:ResQuery!){
