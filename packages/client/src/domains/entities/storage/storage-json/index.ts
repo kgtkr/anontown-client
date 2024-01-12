@@ -8,6 +8,7 @@ import { convert5To6, storageJSON6 } from "./storage-json-6";
 import { convert6To7, storageJSON7 } from "./storage-json-7";
 import { convert7To8, storageJSON8 } from "./storage-json-8";
 import { convert8To9, storageJSON9 } from "./storage-json-9";
+import { convert9To10, storageJSON10 } from "./storage-json-10";
 
 export const storageJSON = t.taggedUnion("ver", [
   storageJSON1,
@@ -19,23 +20,20 @@ export const storageJSON = t.taggedUnion("ver", [
   storageJSON7,
   storageJSON8,
   storageJSON9,
+  storageJSON10,
 ]);
 
 export type StorageJSON = t.TypeOf<typeof storageJSON>;
 
-export const storageJSONLatest = storageJSON9;
+export const storageJSONLatest = storageJSON10;
 
-export type StorageJSONLatest = t.TypeOf<typeof storageJSON9>;
+export type StorageJSONLatest = t.TypeOf<typeof storageJSONLatest>;
 
 export const initStorage: StorageJSONLatest = {
-  ver: "9",
-  topicFavo: [],
-  tagsFavo: [],
-  topicRead: {},
-  topicWrite: {},
-  ng: [],
+  ver: "10",
 };
 export const verArray: Array<StorageJSON["ver"]> = [
+  "10",
   "9",
   "8",
   "7",
@@ -58,8 +56,9 @@ export async function convert(storage: unknown): Promise<StorageJSONLatest> {
     const s7 = s6.ver === "6" ? convert6To7(s6) : s6;
     const s8 = s7.ver === "7" ? await convert7To8(s7) : s7;
     const s9 = s8.ver === "8" ? convert8To9(s8) : s8;
+    const s10 = s9.ver === "9" ? await convert9To10(s9) : s9;
 
-    const json = s9;
+    const json = s10;
 
     return json;
   } else {
