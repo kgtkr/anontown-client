@@ -12,6 +12,7 @@ import {
 } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 import generatedIntrospection from "../generated/introspection-result";
+import { Kind, OperationTypeNode } from "graphql";
 
 export function createHeaders(id: string, key: string): {} {
   return {
@@ -59,8 +60,8 @@ const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
+      definition.kind === Kind.OPERATION_DEFINITION &&
+      definition.operation === OperationTypeNode.SUBSCRIPTION
     );
   },
   wsLink,

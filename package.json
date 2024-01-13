@@ -2,14 +2,14 @@
   "name": "@anontown-frontend/root",
   "private": true,
   "devDependencies": {
-    "@lerna-lite/cli": "^1.11.2",
-    "@lerna-lite/run": "^1.11.2",
-    "@typescript-eslint/eslint-plugin": "^5.36.1",
-    "@typescript-eslint/parser": "^5.36.1",
-    "eslint": "^8.23.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "prettier": "^2.7.1",
+    "@lerna-lite/cli": "^3.2.1",
+    "@lerna-lite/run": "^3.2.1",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.18.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.2.1",
     "typescript": "^5.3.3"
   },
   "scripts": {
