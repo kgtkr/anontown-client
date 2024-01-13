@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { StorageCollection } from "./StorageCollection";
 
-export const topicReads = StorageCollection({
-  keyPrefix: "topicReads:",
+export const FavoriteTopics = StorageCollection({
+  keyPrefix: "favoriteTopics:",
   validator: z.object({
     topicId: z.string(),
-    resCreatedAt: z.number(),
-    resId: z.string(),
+    createdAt: z.number(),
   }),
   keyPayload: (value) => value.topicId,
+  compare: (a, b) => b.createdAt - a.createdAt,
 });

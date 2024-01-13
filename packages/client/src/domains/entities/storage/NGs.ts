@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { StorageCollection } from "./StorageCollection";
 
-const TextMatcher = z.object({
+export const TextMatcher = z.object({
   text: z.string(),
   ignoreCase: z.boolean(),
   regExp: z.boolean(),
 });
 
-export const ngs = StorageCollection({
+export const NGs = StorageCollection({
   keyPrefix: "ngs:",
   validator: z.object({
     id: z.string(),
@@ -24,5 +24,5 @@ export const ngs = StorageCollection({
     }),
   }),
   keyPayload: (value) => `${value.topicId ?? ""}:${value.id}`,
-  compare: (a, b) => a.createdAt - b.createdAt,
+  compare: (a, b) => b.createdAt - a.createdAt,
 });

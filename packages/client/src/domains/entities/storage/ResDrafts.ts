@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { StorageCollection } from "./StorageCollection";
 
-export const resDrafts = StorageCollection({
+export const ResDrafts = StorageCollection({
   keyPrefix: "resDrafts:",
   validator: z.object({
     topicId: z.string(),

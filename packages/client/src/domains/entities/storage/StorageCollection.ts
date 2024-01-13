@@ -14,6 +14,10 @@ export function StorageCollection<T>(
   return value;
 }
 
-export function key<T>(collection: StorageCollection<T>, value: T): string {
+export function getKey<T>(collection: StorageCollection<T>, value: T): string {
   return `${collection.keyPrefix}${collection.keyPayload(value)}`;
 }
+
+export type StorageCollectionTypeOf<T> = T extends StorageCollection<infer U>
+  ? U
+  : never;

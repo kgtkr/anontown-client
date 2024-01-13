@@ -1,12 +1,12 @@
 import * as G from "../generated/graphql";
 import { UserData } from "../domains/entities";
 import { createHeaders, gqlClient } from "./gql-client";
-import * as storageAPI from "./storage-api";
+import { migration } from "../domains/entities/storage/migration";
 
 export async function createUserData(
   token: G.TokenMasterFragment
 ): Promise<UserData> {
-  const storage = await storageAPI.load(token);
+  await migration(token);
   const user = await gqlClient.query<G.FindUserQuery, G.FindUserQueryVariables>(
     {
       query: G.FindUserDocument,
@@ -17,5 +17,5 @@ export async function createUserData(
     }
   );
 
-  return { storage, token, id: user.data.user.id };
+  return { token, id: user.data.user.id };
 }
