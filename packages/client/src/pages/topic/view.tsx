@@ -19,15 +19,12 @@ import * as G from "../../generated/graphql";
 import { useUserContext } from "../../hooks";
 import * as style from "./style.module.scss";
 import { RA } from "../../prelude";
-import { Sto } from "../../domains/entities";
 import { InfiniteScroll } from "../../components/infinite-scroll";
 import { useReducerWithObservable } from "../../hooks/use-reducer-with-observable";
 import { reducer } from "./reducer";
 import { State } from "./state";
 import { epic } from "./epic";
 import { useBackground } from "../../hooks/useBackground";
-
-// TODO:NGのtransparent
 
 export const TopicPage = (_props: {}) => {
   const params = useParams<{ id: string }>();

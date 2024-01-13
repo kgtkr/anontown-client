@@ -8,7 +8,6 @@ import {
   UserContext,
   UserContextType,
 } from "../hooks";
-import { useSave } from "../effects/storage-api";
 
 // TODO: 最悪な実装なのであとで何とかする
 let _auth: G.TokenMasterFragment | null = null;
@@ -32,26 +31,6 @@ export const User = (props: UserProps): JSX.Element => {
   useEffectSkipN(() => {
     subjectRef.current.next(userData);
   }, [userData]);
-  const storageSave = useSave();
-  useEffectRef(
-    (f) => {
-      const subs = subjectRef.current
-        .pipe(rxOps.debounceTime(5000))
-        .subscribe((data) => {
-          f.current(data);
-        });
-
-      return () => {
-        subs.unsubscribe();
-      };
-    },
-    (data: UserData | null) => {
-      if (data !== null) {
-        storageSave(data.storage);
-      }
-    },
-    []
-  );
 
   useEffectSkipN(() => {
     if (userData !== null) {
