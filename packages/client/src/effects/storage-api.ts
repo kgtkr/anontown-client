@@ -1,8 +1,9 @@
 import * as G from "../generated/graphql";
-import { Storage, Sto } from "../domains/entities";
+import * as Sto from "../domains/entities/storage/classic-storage-json";
 import { createHeaders, gqlClient } from "../effects";
 
 export async function load(token: G.TokenMasterFragment) {
+  // TODO: 10がある時(マイグレーション済み)は全てロードしない
   const storages = await gqlClient.query<
     G.FindStoragesQuery,
     G.FindStoragesQueryVariables
