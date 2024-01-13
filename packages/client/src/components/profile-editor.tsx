@@ -1,13 +1,13 @@
 import { Button, TextField, Paper } from "@mui/material";
 import * as React from "react";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { UserData } from "../domains/entities";
 import { ErrorAlert } from "./error-alert";
 import { MdEditor } from "./md-editor";
 
 interface ProfileEditorProps {
-  profile: G.ProfileFragment;
-  onUpdate?: (profile: G.ProfileFragment) => void;
+  profile: GA.ProfileFragment;
+  onUpdate?: (profile: GA.ProfileFragment) => void;
   userData: UserData;
   style?: React.CSSProperties;
 }
@@ -16,7 +16,7 @@ export const ProfileEditor = (props: ProfileEditorProps) => {
   const [sn, setSn] = React.useState(props.profile.sn);
   const [name, setName] = React.useState(props.profile.name);
   const [text, setText] = React.useState(props.profile.text);
-  const [submit, { error }] = G.useUpdateProfileMutation({
+  const [submit, { error }] = GA.useUpdateProfileMutation({
     variables: {
       id: props.profile.id,
       name,

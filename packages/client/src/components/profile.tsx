@@ -1,8 +1,8 @@
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { Md } from "./md";
 
 export interface ProfileProps {
-  profile: G.ProfileFragment;
+  profile: GA.ProfileFragment;
 }
 
 export function Profile(props: ProfileProps) {

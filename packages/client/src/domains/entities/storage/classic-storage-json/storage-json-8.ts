@@ -1,5 +1,5 @@
 import * as t from "io-ts";
-import * as G from "../../../../generated/graphql";
+import * as GA from "../../../../generated/graphql-apollo";
 import { gqlClient } from "../../../../effects";
 import { ngJson } from "./ng-json";
 import { StorageJSON7 } from "./storage-json-7";
@@ -24,8 +24,8 @@ export async function convert7To8(val: StorageJSON7): Promise<StorageJSON8> {
   const topicRead: StorageJSON8["topicRead"] = {};
   const dates = new Map(
     (
-      await gqlClient.query<G.FindResesQuery, G.FindResesQueryVariables>({
-        query: G.FindResesDocument,
+      await gqlClient.query<GA.FindResesQuery, GA.FindResesQueryVariables>({
+        query: GA.FindResesDocument,
         variables: {
           query: {
             id: Object.entries(val.topicRead).map(([_l, { res }]) => res),

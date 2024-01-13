@@ -1,12 +1,12 @@
 import { Icon, IconButton } from "@mui/material";
 import { useToggle } from "react-use";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { UserData } from "../domains/entities";
 import { ClientEditor } from "./client-editor";
 
 interface ClientProps {
-  client: G.ClientFragment;
-  onUpdate?: (client: G.ClientFragment) => void;
+  client: GA.ClientFragment;
+  onUpdate?: (client: GA.ClientFragment) => void;
   userData: UserData | null;
 }
 

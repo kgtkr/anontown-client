@@ -2,7 +2,7 @@ import { Paper } from "@mui/material";
 import * as React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Page, Snack, TopicData } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { withModal } from "../utils";
 
 interface TopicDataBaseProps extends RouteComponentProps<{ id: string }> {
@@ -20,7 +20,7 @@ const TopicDataBase = withRouter(
     render() {
       return (
         <Paper elevation={this.props.zDepth}>
-          <G.FindTopicsComponent
+          <GA.FindTopicsComponent
             variables={{ query: { id: [this.props.match.params.id] } }}
           >
             {({ loading, error, data }) => {
@@ -37,7 +37,7 @@ const TopicDataBase = withRouter(
                 </Paper>
               );
             }}
-          </G.FindTopicsComponent>
+          </GA.FindTopicsComponent>
         </Paper>
       );
     }

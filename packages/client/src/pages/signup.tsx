@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet-async";
 import { Link, Redirect } from "react-router-dom";
 import { ErrorAlert, Page } from "../components";
 import { Env } from "../env";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { UserContext } from "../hooks";
 import { createUserData } from "../effects";
 
@@ -73,7 +73,7 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
                     </a>
                   </div>
 
-                  <G.CreateUserComponent
+                  <GA.CreateUserComponent
                     onError={() => {
                       const rc = this.recaptchaRef.current;
                       if (rc) {
@@ -83,7 +83,7 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
                     onCompleted={async (x) => {
                       user.update(
                         await createUserData(
-                          x.createUser.token as G.TokenMasterFragment
+                          x.createUser.token as GA.TokenMasterFragment
                         )
                       );
                     }}
@@ -101,7 +101,7 @@ export const SignupPage = class extends React.Component<{}, SignupPageState> {
                         </Button>
                       </div>
                     )}
-                  </G.CreateUserComponent>
+                  </GA.CreateUserComponent>
                   <Link to={routes.login.to({})}>ログイン</Link>
                 </form>
               </Paper>

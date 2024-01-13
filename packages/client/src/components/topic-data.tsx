@@ -1,12 +1,12 @@
 import * as routes from "@anontown-frontend/routes";
 import { Link } from "react-router-dom";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { dateFormat } from "../utils";
 import { Md } from "./md";
 import { TagsLink } from "./tags-link";
 
 export interface TopicDataProps {
-  topic: G.TopicFragment;
+  topic: GA.TopicFragment;
 }
 
 export function TopicData(props: TopicDataProps) {

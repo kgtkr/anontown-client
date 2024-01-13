@@ -1,7 +1,7 @@
 import * as React from "react";
 import { rx, rxOps } from "../prelude";
 import { UserData } from "../domains/entities";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import {
   useEffectRef,
   useEffectSkipN,
@@ -10,12 +10,12 @@ import {
 } from "../hooks";
 
 // TODO: 最悪な実装なのであとで何とかする
-let _auth: G.TokenMasterFragment | null = null;
-function setAuth(auth: G.TokenMasterFragment | null) {
+let _auth: GA.TokenMasterFragment | null = null;
+function setAuth(auth: GA.TokenMasterFragment | null) {
   _auth = auth;
 }
 
-export function getAuth(): G.TokenMasterFragment | null {
+export function getAuth(): GA.TokenMasterFragment | null {
   return _auth;
 }
 

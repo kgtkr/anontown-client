@@ -8,7 +8,7 @@ import {
   isNotNull,
   RxExtra,
 } from "../../prelude";
-import * as G from "../../generated/graphql";
+import * as GA from "../../generated/graphql-apollo";
 import { Sto, UserData } from "../../domains/entities";
 import { ApolloClient } from "@apollo/client";
 import { Epic } from "../../hooks/use-reducer-with-observable";
@@ -73,8 +73,8 @@ function fetchTopic(
   return rx.merge(
     rx.of<Action>({ type: "FETCH_TOPIC_REQUEST" }),
     RxExtra.fromTask(() =>
-      env.apolloClient.query<G.FindTopicsQuery, G.FindTopicsQueryVariables>({
-        query: G.FindTopicsDocument,
+      env.apolloClient.query<GA.FindTopicsQuery, GA.FindTopicsQueryVariables>({
+        query: GA.FindTopicsDocument,
         variables: { query: { id: [topicId] }, includeSubscribe: true },
       })
     ).pipe(
@@ -93,12 +93,12 @@ function fetchTopic(
 }
 
 function fetchRes(
-  { topicId, dateQuery }: { topicId: string; dateQuery: G.DateQuery },
+  { topicId, dateQuery }: { topicId: string; dateQuery: GA.DateQuery },
   env: Env
-): rx.Observable<ReadonlyArray<G.ResFragment>> {
+): rx.Observable<ReadonlyArray<GA.ResFragment>> {
   return RxExtra.fromTask(() =>
-    env.apolloClient.query<G.FindResesQuery, G.FindResesQueryVariables>({
-      query: G.FindResesDocument,
+    env.apolloClient.query<GA.FindResesQuery, GA.FindResesQueryVariables>({
+      query: GA.FindResesDocument,
       variables: {
         query: {
           topic: topicId,
@@ -193,11 +193,11 @@ export const epic: Epic<Action, State, Env> = (action$, state$, env) =>
         rx.merge(
           RxExtra.fromZen(
             env.apolloClient.subscribe<
-              G.ResAddedSubscription,
-              G.ResAddedSubscriptionVariables
+              GA.ResAddedSubscription,
+              GA.ResAddedSubscriptionVariables
             >({
               variables: { topic: action.topicId },
-              query: G.ResAddedDocument,
+              query: GA.ResAddedDocument,
             })
           ).pipe(
             rxOps.map((res) => res.data ?? null),

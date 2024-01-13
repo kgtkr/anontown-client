@@ -1,13 +1,13 @@
 import { useParams } from "react-router";
 import { useTitle } from "react-use";
 import { Page, Res, Snack } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { withModal } from "../utils";
 
 function ResHashBase(_props: {}) {
   const params = useParams<{ hash: string }>();
   const hash = decodeURIComponent(params.hash);
-  const resesResult = G.useFindResesQuery({ variables: { query: { hash } } });
+  const resesResult = GA.useFindResesQuery({ variables: { query: { hash } } });
   useTitle(`HASH:${hash}`);
 
   return (

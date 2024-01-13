@@ -5,7 +5,7 @@ import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ErrorAlert, MdEditor, Modal, Page, TagsInput } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { userSwitch, UserSwitchProps } from "../utils";
 
 type TopicCreatePageProps = RouteComponentProps<{}> & UserSwitchProps;
@@ -38,14 +38,14 @@ export const TopicCreatePage = userSwitch(
             <Helmet title="トピック作成" />
             <Paper>
               <Mutation<
-                G.CreateTopicNormalMutation | G.CreateTopicOneMutation,
-                | G.CreateTopicNormalMutationVariables
-                | G.CreateTopicOneMutationVariables
+                GA.CreateTopicNormalMutation | GA.CreateTopicOneMutation,
+                | GA.CreateTopicNormalMutationVariables
+                | GA.CreateTopicOneMutationVariables
               >
                 mutation={
                   this.state.type === "TopicNormal"
-                    ? G.CreateTopicNormalDocument
-                    : G.CreateTopicOneDocument
+                    ? GA.CreateTopicNormalDocument
+                    : GA.CreateTopicOneDocument
                 }
                 variables={{
                   title: this.state.title,

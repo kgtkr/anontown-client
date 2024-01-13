@@ -2,7 +2,7 @@ import * as routes from "@anontown-frontend/routes";
 import { Icon, IconButton, Paper } from "@mui/material";
 import * as React from "react";
 import { Link } from "react-router-dom";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { UserData, Sto } from "../domains/entities";
 import { Snack } from "./snack";
 import { TopicListItem } from "./topic-list-item";
@@ -24,7 +24,7 @@ export class TopicFavo extends React.Component<TopicFavoProps, TopicFavoState> {
   render() {
     return (
       <div>
-        <G.FindTopicsComponent
+        <GA.FindTopicsComponent
           variables={{
             query: {
               id: Sto.getTopicFavo(this.props.userData.storage),
@@ -48,7 +48,7 @@ export class TopicFavo extends React.Component<TopicFavoProps, TopicFavoState> {
                   const topics = pipe(
                     data.topics,
                     RA.sortBy([
-                      OrdT.contramap((x: G.TopicFragment) =>
+                      OrdT.contramap((x: GA.TopicFragment) =>
                         new Date(x.update).valueOf()
                       )(OrdT.ordNumber),
                     ]),
@@ -80,7 +80,7 @@ export class TopicFavo extends React.Component<TopicFavoProps, TopicFavoState> {
               </>
             );
           }}
-        </G.FindTopicsComponent>
+        </GA.FindTopicsComponent>
       </div>
     );
   }

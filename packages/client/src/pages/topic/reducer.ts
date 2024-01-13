@@ -1,10 +1,10 @@
-import * as G from "../../generated/graphql";
+import * as GA from "../../generated/graphql-apollo";
 import { pipe, O, RA, Monoid_, ArrayExtra, Ord, OrdT } from "../../prelude";
 
 import { Action } from "./action";
 import { State } from "./state";
 
-function getKeyFromRes(x: G.ResFragment): ResKey {
+function getKeyFromRes(x: GA.ResFragment): ResKey {
   return [-new Date(x.date).valueOf(), x.id];
 }
 
@@ -15,9 +15,9 @@ const ordListItemKey: Ord<ResKey> = OrdT.getTupleOrd(
 );
 
 function mergeReses(
-  xs: ReadonlyArray<G.ResFragment>,
-  ys: ReadonlyArray<G.ResFragment>
-): ReadonlyArray<G.ResFragment> {
+  xs: ReadonlyArray<GA.ResFragment>,
+  ys: ReadonlyArray<GA.ResFragment>
+): ReadonlyArray<GA.ResFragment> {
   return ArrayExtra.mergeAndUniqSortedArray(ordListItemKey)(getKeyFromRes, ys)(
     xs
   );

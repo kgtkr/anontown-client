@@ -15,7 +15,7 @@ import { Link, Route, Switch, useLocation } from "react-router-dom";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import { UserData } from "../domains/entities";
 import { Env } from "../env";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import * as pages from "../pages";
 import {
   createHeaders,
@@ -38,7 +38,7 @@ export function App(): JSX.Element {
     UserData | undefined | null
   >(undefined);
   const [serverStatus, setServerStatus] = React.useState(true);
-  const [resisterPushSubscription] = G.useResisterPushSubscriptionMutation();
+  const [resisterPushSubscription] = GA.useResisterPushSubscriptionMutation();
 
   const [registration, setRegistration] = React.useState<
     ServiceWorkerRegistration | undefined
@@ -117,8 +117,8 @@ export function App(): JSX.Element {
         } else {
           throw Error();
         }
-        const res = await gqlClient.query<G.FindTokenQuery>({
-          query: G.FindTokenDocument,
+        const res = await gqlClient.query<GA.FindTokenQuery>({
+          query: GA.FindTokenDocument,
           context: {
             headers: createHeaders(token.id, token.key),
           },
@@ -128,7 +128,7 @@ export function App(): JSX.Element {
         }
         setInitUserData(
           await createUserData(
-            res.data.token as G.TokenMasterFragment // TODO: ここのキャストおかしい
+            res.data.token as GA.TokenMasterFragment // TODO: ここのキャストおかしい
           )
         );
       } catch {

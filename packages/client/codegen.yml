@@ -5,6 +5,12 @@ generates:
   src/generated/graphql.tsx:
     plugins:
       - "typescript"
+      - "typescript-operations"
+      - "typed-document-node"
+  # deprecated
+  src/generated/graphql-apollo.tsx:
+    plugins:
+      - "typescript"
       - "typescript-react-apollo"
       - "typescript-operations"
   src/generated/introspection-result.ts:

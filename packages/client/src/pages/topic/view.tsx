@@ -15,7 +15,7 @@ import * as React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTitle } from "react-use";
 import { Modal, NG, Page, Res, ResWrite, TopicFavo } from "../../components";
-import * as G from "../../generated/graphql";
+import * as GA from "../../generated/graphql-apollo";
 import { useUserContext } from "../../hooks";
 import * as style from "./style.module.scss";
 import { RA } from "../../prelude";
@@ -32,8 +32,8 @@ export const TopicPage = (_props: {}) => {
   const apolloClient = useApolloClient();
   const background = useBackground();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [subscribeTopic] = G.useSubscribeTopicMutation();
-  const [unsubscribeTopic] = G.useUnsubscribeTopicMutation();
+  const [subscribeTopic] = GA.useSubscribeTopicMutation();
+  const [unsubscribeTopic] = GA.useUnsubscribeTopicMutation();
 
   const [state, dispatch] = useReducerWithObservable(
     reducer,
@@ -61,7 +61,7 @@ export const TopicPage = (_props: {}) => {
     [state.reses]
   );
 
-  const handleUpdateRes = React.useCallback((res: G.ResFragment) => {
+  const handleUpdateRes = React.useCallback((res: GA.ResFragment) => {
     dispatch({ type: "UPDATE_RES", res });
   }, []);
 
@@ -294,7 +294,7 @@ export const TopicPage = (_props: {}) => {
                 </Menu>
               </div>
             </Paper>
-            <InfiniteScroll<G.ResFragment>
+            <InfiniteScroll<GA.ResFragment>
               itemToKey={(res) => res.id}
               renderItem={(res) => <Res res={res} update={handleUpdateRes} />}
               className={style.reses}

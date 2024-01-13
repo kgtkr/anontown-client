@@ -2,7 +2,7 @@ import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Page, Res, Snack } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { withModal } from "../utils";
 
 type ResReplyBaseProps = RouteComponentProps<{ id: string }>;
@@ -19,7 +19,7 @@ const ResReplyBase = withRouter(
       return (
         <div>
           <Helmet title="リプライ" />
-          <G.FindResesComponent
+          <GA.FindResesComponent
             variables={{ query: { reply: this.props.match.params.id } }}
           >
             {({ loading, error, data }) => {
@@ -37,7 +37,7 @@ const ResReplyBase = withRouter(
                 </>
               );
             }}
-          </G.FindResesComponent>
+          </GA.FindResesComponent>
         </div>
       );
     }

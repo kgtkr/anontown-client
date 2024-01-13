@@ -1,6 +1,6 @@
 import { isNullish } from "../../utils/isNullish";
 import * as uuid from "uuid";
-import * as G from "../../generated/graphql";
+import * as GA from "../../generated/graphql-apollo";
 import * as ngJson from "./storage/classic-storage-json/ng-json";
 
 export function createDefaultNode(): NGNode {
@@ -23,7 +23,7 @@ export function createDefaultNG(): NG {
 }
 
 // TODO:chain
-export function isNG(ng: NG, res: G.ResFragment) {
+export function isNG(ng: NG, res: GA.ResFragment) {
   if (ng.topic !== null && ng.topic !== res.topic.id) {
     return false;
   }
@@ -38,7 +38,7 @@ export function isNG(ng: NG, res: G.ResFragment) {
   return !!isNodeNG(ng.node, res);
 }
 
-function isNodeNG(node: NGNode, res: G.ResFragment): boolean | null {
+function isNodeNG(node: NGNode, res: GA.ResFragment): boolean | null {
   switch (node.type) {
     case "profile": {
       return (

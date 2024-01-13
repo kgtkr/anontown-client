@@ -1,14 +1,14 @@
 import { Button, TextField } from "@mui/material";
 import * as React from "react";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { useUserContext } from "../hooks";
 import { ErrorAlert } from "./error-alert";
 import { Snack } from "./snack";
 import { TopicListItem } from "./topic-list-item";
 
 interface TopicForkProps {
-  topic: G.TopicNormalFragment;
-  onCreate?: (topic: G.TopicForkFragment) => void;
+  topic: GA.TopicNormalFragment;
+  onCreate?: (topic: GA.TopicForkFragment) => void;
 }
 
 export const TopicFork = (props: TopicForkProps) => {
@@ -18,7 +18,7 @@ export const TopicFork = (props: TopicForkProps) => {
   return (
     <div>
       {user.value !== null ? (
-        <G.CreateTopicForkComponent
+        <GA.CreateTopicForkComponent
           variables={{
             title,
             parent: props.topic.id,
@@ -42,10 +42,10 @@ export const TopicFork = (props: TopicForkProps) => {
               </form>
             );
           }}
-        </G.CreateTopicForkComponent>
+        </GA.CreateTopicForkComponent>
       ) : null}
       <hr />
-      <G.FindTopicsComponent variables={{ query: { parent: props.topic.id } }}>
+      <GA.FindTopicsComponent variables={{ query: { parent: props.topic.id } }}>
         {({ loading, error, data }) => {
           if (loading) {
             return <span>Loading...</span>;
@@ -61,7 +61,7 @@ export const TopicFork = (props: TopicForkProps) => {
             </div>
           );
         }}
-      </G.FindTopicsComponent>
+      </GA.FindTopicsComponent>
     </div>
   );
 };

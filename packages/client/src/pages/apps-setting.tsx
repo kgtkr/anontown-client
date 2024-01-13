@@ -2,15 +2,15 @@ import { Icon, IconButton, Paper } from "@mui/material";
 import * as React from "react";
 import { useTitle } from "react-use";
 import { ErrorAlert, Page, Snack } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { userSwitch, UserSwitchProps } from "../utils";
 
 type AppsSettingPageProps = UserSwitchProps;
 
 export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
   const [snackMsg, setSnackMsg] = React.useState<string | null>(null);
-  const tokens = G.useFindTokensQuery({ variables: {} });
-  const variables: G.FindClientsQueryVariables = {
+  const tokens = GA.useFindTokensQuery({ variables: {} });
+  const variables: GA.FindClientsQueryVariables = {
     query: {
       id:
         tokens.data !== undefined
@@ -18,7 +18,7 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
               new Set(
                 tokens.data.tokens
                   .filter(
-                    (x): x is G.TokenGeneralFragment =>
+                    (x): x is GA.TokenGeneralFragment =>
                       x.__typename === "TokenGeneral"
                   )
                   .map((x) => x.client.id)
@@ -27,11 +27,11 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
           : [],
     },
   };
-  const clients = G.useFindClientsQuery({
+  const clients = GA.useFindClientsQuery({
     skip: tokens.data === undefined,
     variables,
   });
-  const [delToken] = G.useDelTokenClientMutation();
+  const [delToken] = GA.useDelTokenClientMutation();
 
   useTitle("連携アプリ管理");
 
@@ -54,18 +54,18 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
                         variables: { client: c.id },
                         update: (cache) => {
                           const cs = cache.readQuery<
-                            G.FindClientsQuery,
-                            G.FindClientsQueryVariables
+                            GA.FindClientsQuery,
+                            GA.FindClientsQueryVariables
                           >({
-                            query: G.FindClientsDocument,
+                            query: GA.FindClientsDocument,
                             variables,
                           });
                           if (cs !== null) {
                             cache.writeQuery<
-                              G.FindClientsQuery,
-                              G.FindClientsQueryVariables
+                              GA.FindClientsQuery,
+                              GA.FindClientsQueryVariables
                             >({
-                              query: G.FindClientsDocument,
+                              query: GA.FindClientsDocument,
                               variables,
                               data: {
                                 __typename: "Query",

@@ -11,7 +11,7 @@ import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useHistory } from "react-router-dom";
 import { Page, TagsInput, TopicListItem } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { useUserContext } from "../hooks";
 import { Sto } from "../domains/entities";
 import { useDebouncedCallback } from "use-debounce";
@@ -115,7 +115,7 @@ export const TopicSearchPage = (_props: {}) => {
   const user = useUserContext();
   const limit = 100;
 
-  const topics = G.useFindTopicsQuery({
+  const topics = GA.useFindTopicsQuery({
     variables: {
       query: {
         title: state.query.title,

@@ -3,7 +3,7 @@ import { Icon, IconButton, Paper, MenuItem, Menu } from "@mui/material";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import * as uuid from "uuid";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { useUserContext } from "../hooks";
 import { ng, Sto } from "../domains/entities";
 import { color, fontSize } from "../styled/constant";
@@ -15,8 +15,8 @@ import { isNullish } from "../utils/isNullish";
 import { useBackground } from "../hooks/useBackground";
 
 interface ResProps {
-  res: G.ResFragment;
-  update?: (res: G.ResFragment) => void;
+  res: GA.ResFragment;
+  update?: (res: GA.ResFragment) => void;
 }
 
 export const Res = React.memo((props: ResProps) => {
@@ -33,7 +33,7 @@ export const Res = React.memo((props: ResProps) => {
     padding: 8,
   };
 
-  const [submitVote] = G.useVoteResMutation();
+  const [submitVote] = GA.useVoteResMutation();
 
   return user.value !== null &&
     !props.res.self &&
@@ -193,7 +193,7 @@ export const Res = React.memo((props: ResProps) => {
                   onClose={() => setAnchorEl(null)}
                 >
                   {props.res.self && props.res.__typename === "ResNormal" ? (
-                    <G.DelResComponent
+                    <GA.DelResComponent
                       variables={{ res: props.res.id }}
                       onCompleted={(data) => {
                         if (props.update) {
@@ -216,7 +216,7 @@ export const Res = React.memo((props: ResProps) => {
                           </>
                         );
                       }}
-                    </G.DelResComponent>
+                    </GA.DelResComponent>
                   ) : null}
                   <MenuItem
                     onClick={() => {

@@ -1,14 +1,14 @@
 import { Button, TextField } from "@mui/material";
 import * as React from "react";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { UserData } from "../domains/entities";
 import { ErrorAlert } from "./error-alert";
 import { MdEditor } from "./md-editor";
 import { TagsInput } from "./tags-input";
 
 interface TopicEditorProps {
-  topic: G.TopicNormalFragment;
-  onUpdate?: (topic: G.TopicNormalFragment) => void;
+  topic: GA.TopicNormalFragment;
+  onUpdate?: (topic: GA.TopicNormalFragment) => void;
   userData: UserData;
 }
 
@@ -33,7 +33,7 @@ export class TopicEditor extends React.Component<
 
   render() {
     return (
-      <G.UpdateTopicComponent
+      <GA.UpdateTopicComponent
         variables={{
           id: this.props.topic.id,
           title: this.state.title,
@@ -70,7 +70,7 @@ export class TopicEditor extends React.Component<
             </form>
           );
         }}
-      </G.UpdateTopicComponent>
+      </GA.UpdateTopicComponent>
     );
   }
 }

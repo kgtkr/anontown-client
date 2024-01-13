@@ -3,13 +3,13 @@ import { Paper } from "@mui/material";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { Page } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { userSwitch, UserSwitchProps } from "../utils";
 
 type ProfilesPageProps = UserSwitchProps;
 
 export const ProfilesPage = userSwitch((_props: ProfilesPageProps) => {
-  const profiles = G.useFindProfilesQuery({
+  const profiles = GA.useFindProfilesQuery({
     variables: {
       query: {
         self: true,

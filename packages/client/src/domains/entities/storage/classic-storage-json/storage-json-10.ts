@@ -10,7 +10,7 @@ import { NGs, TextMatcher } from "../NGs";
 import * as uuid from "uuid";
 import { NGNodeTextMatcherJson } from "./ng-json";
 import { TypeOf } from "zod";
-import * as G from "../../../../generated/graphql";
+import * as GA from "../../../../generated/graphql-apollo";
 import { createHeaders, gqlClient } from "../../../../effects";
 
 export const storageJSON10 = t.strict({
@@ -22,7 +22,7 @@ export type StorageJSON10 = t.TypeOf<typeof storageJSON10>;
 // 1つの巨大storageは廃止したので、マイグレーション処理を行い空のオブジェクトを返す
 // ver: 10が存在するのがマイグレーション済みのキーになっている
 export async function convert9To10(
-  token: G.TokenMasterFragment,
+  token: GA.TokenMasterFragment,
   val: StorageJSON9
 ): Promise<StorageJSON10> {
   const now = Date.now();
@@ -122,10 +122,10 @@ export async function convert9To10(
   await Promise.all(
     keyValues.map(async ({ key, value }) => {
       const result = await gqlClient.mutate<
-        G.SetStorageMutation,
-        G.SetStorageMutationVariables
+        GA.SetStorageMutation,
+        GA.SetStorageMutationVariables
       >({
-        mutation: G.SetStorageDocument,
+        mutation: GA.SetStorageDocument,
         variables: {
           key,
           value,

@@ -1,6 +1,6 @@
 import { Chip, TextField, Autocomplete } from "@mui/material";
 import * as React from "react";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { Snack } from "./snack";
 
 export interface TagsInputProps {
@@ -20,7 +20,7 @@ export class TagsInput extends React.Component<TagsInputProps, TagsInputState> {
   render() {
     return (
       <>
-        <G.FindTopicTagsComponent>
+        <GA.FindTopicTagsComponent>
           {({ loading, error, data }) => {
             if (loading) {
               return <span>Loading...</span>;
@@ -56,7 +56,7 @@ export class TagsInput extends React.Component<TagsInputProps, TagsInputState> {
               />
             );
           }}
-        </G.FindTopicTagsComponent>
+        </GA.FindTopicTagsComponent>
       </>
     );
   }

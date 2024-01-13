@@ -1,12 +1,12 @@
 import { MutationUpdaterFn } from "@apollo/client";
 import { Button, TextField } from "@mui/material";
 import * as React from "react";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { UserData } from "../domains/entities";
 import { ErrorAlert } from "./error-alert";
 
 interface ClientAddProps {
-  onAddUpdate?: MutationUpdaterFn<G.CreateClientMutation>;
+  onAddUpdate?: MutationUpdaterFn<GA.CreateClientMutation>;
   userData: UserData;
 }
 
@@ -14,7 +14,7 @@ export const ClientAdd = (props: ClientAddProps) => {
   const [url, setUrl] = React.useState("");
   const [name, setName] = React.useState("");
 
-  const [submit, { error }] = G.useCreateClientMutation({
+  const [submit, { error }] = GA.useCreateClientMutation({
     variables: {
       name,
       url,

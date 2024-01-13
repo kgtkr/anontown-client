@@ -3,7 +3,7 @@ import { Paper } from "@mui/material";
 import { Helmet } from "react-helmet-async";
 import { useHistory, useParams } from "react-router";
 import { Page, TopicFork } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { userSwitch, UserSwitchProps, withModal } from "../utils";
 
 type TopicForkBaseProps = UserSwitchProps & {
@@ -13,7 +13,7 @@ type TopicForkBaseProps = UserSwitchProps & {
 const TopicForkBase = userSwitch((props: TopicForkBaseProps) => {
   const params = useParams<{ id: string }>();
   const history = useHistory();
-  const topics = G.useFindTopicsQuery({
+  const topics = GA.useFindTopicsQuery({
     variables: {
       query: {
         id: [params.id],

@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { Page, ProfileEditor } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { userSwitch, UserSwitchProps } from "../utils";
 import { pipe, O, RA } from "../prelude";
 import { useParams } from "react-router";
@@ -8,7 +8,7 @@ type ProfileEditPageProps = UserSwitchProps;
 
 export const ProfileEditPage = userSwitch((props: ProfileEditPageProps) => {
   const params = useParams<{ id: string }>();
-  const profiles = G.useFindProfilesQuery({
+  const profiles = GA.useFindProfilesQuery({
     variables: {
       query: {
         id: [params.id],

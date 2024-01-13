@@ -2,15 +2,15 @@ import { Paper } from "@mui/material";
 import { Helmet } from "react-helmet-async";
 import { RouteComponentProps } from "react-router-dom";
 import { ClientAdd, ClientEditor, ErrorAlert, Page } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { userSwitch, UserSwitchProps } from "../utils";
 import { isNullish } from "../utils/isNullish";
 
 type DevSettingPageProps = RouteComponentProps<{}> & UserSwitchProps;
 
 export const DevSettingPage = userSwitch((props: DevSettingPageProps) => {
-  const variables: G.FindClientsQueryVariables = { query: { self: true } };
-  const clients = G.useFindClientsQuery({ variables });
+  const variables: GA.FindClientsQueryVariables = { query: { self: true } };
+  const clients = GA.useFindClientsQuery({ variables });
 
   return (
     <Page>
@@ -20,16 +20,16 @@ export const DevSettingPage = userSwitch((props: DevSettingPageProps) => {
         <ClientAdd
           onAddUpdate={(cache, data) => {
             const cs = cache.readQuery<
-              G.FindClientsQuery,
-              G.FindClientsQueryVariables
+              GA.FindClientsQuery,
+              GA.FindClientsQueryVariables
             >({
-              query: G.FindClientsDocument,
+              query: GA.FindClientsDocument,
               variables,
             });
             if (cs !== null && !isNullish(data.data)) {
-              cache.writeQuery<G.FindClientsQuery, G.FindClientsQueryVariables>(
+              cache.writeQuery<GA.FindClientsQuery, GA.FindClientsQueryVariables>(
                 {
-                  query: G.FindClientsDocument,
+                  query: GA.FindClientsDocument,
                   variables,
                   data: {
                     __typename: "Query",

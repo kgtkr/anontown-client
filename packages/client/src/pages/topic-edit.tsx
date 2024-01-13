@@ -2,7 +2,7 @@ import { Paper } from "@mui/material";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
 import { Page, TopicEditor } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { userSwitch, UserSwitchProps, withModal } from "../utils";
 
 type TopicEditBaseProps = UserSwitchProps & {
@@ -11,7 +11,7 @@ type TopicEditBaseProps = UserSwitchProps & {
 
 const TopicEditBase = userSwitch((props: TopicEditBaseProps) => {
   const params = useParams<{ id: string }>();
-  const topics = G.useFindTopicsQuery({
+  const topics = GA.useFindTopicsQuery({
     variables: {
       query: {
         id: [params.id],

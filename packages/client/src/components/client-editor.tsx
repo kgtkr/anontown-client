@@ -1,19 +1,19 @@
 import { Button, TextField } from "@mui/material";
 import * as React from "react";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { UserData } from "../domains/entities";
 import { ErrorAlert } from "./error-alert";
 
 interface ClientEditorProps {
-  client: G.ClientFragment;
-  onUpdate?: (client: G.ClientFragment) => void;
+  client: GA.ClientFragment;
+  onUpdate?: (client: GA.ClientFragment) => void;
   userData: UserData;
 }
 
 export function ClientEditor(props: ClientEditorProps) {
   const [url, setUrl] = React.useState(props.client.url);
   const [name, setName] = React.useState(props.client.name);
-  const [submit, data] = G.useUpdateClientMutation();
+  const [submit, data] = GA.useUpdateClientMutation();
 
   return (
     <form>

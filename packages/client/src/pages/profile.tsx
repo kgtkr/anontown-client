@@ -2,7 +2,7 @@ import { option } from "fp-ts";
 import { Paper } from "@mui/material";
 import { useTitle } from "react-use";
 import { Page, Profile, Snack } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { withModal } from "../utils";
 import { pipe, RA } from "../prelude";
 import { useParams } from "react-router";
@@ -14,7 +14,7 @@ interface ProfileBaseProps {
 function ProfileBase(props: ProfileBaseProps) {
   const params = useParams<{ id: string }>();
   useTitle("プロフィール");
-  const profilesResult = G.useFindProfilesQuery({
+  const profilesResult = GA.useFindProfilesQuery({
     variables: { query: { id: [params.id] } },
   });
   useTitle(

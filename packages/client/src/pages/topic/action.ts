@@ -1,4 +1,4 @@
-import * as G from "../../generated/graphql";
+import * as GA from "../../generated/graphql-apollo";
 import { Sto, UserData } from "../../domains/entities";
 
 export type Action =
@@ -6,23 +6,23 @@ export type Action =
   | { type: "FETCH_TOPIC_REQUEST" }
   | {
       type: "FETCH_TOPIC_SUCCESS";
-      topic: G.TopicFragment & { subscribe?: boolean | null };
+      topic: GA.TopicFragment & { subscribe?: boolean | null };
     }
   | { type: "FETCH_TOPIC_FAILURE" }
   | { type: "FETCH_INIT_RES_REQUEST" }
   | {
       type: "FETCH_INIT_RES_SUCCESS";
-      afterReses: ReadonlyArray<G.ResFragment>;
-      beforeReses: ReadonlyArray<G.ResFragment>;
+      afterReses: ReadonlyArray<GA.ResFragment>;
+      beforeReses: ReadonlyArray<GA.ResFragment>;
     }
   | { type: "FETCH_INIT_RES_FAILURE" }
   | { type: "SCROLL_TO_FIRST" }
   | { type: "FETCH_NEW_RES_REQUEST" }
-  | { type: "FETCH_NEW_RES_SUCCESS"; reses: ReadonlyArray<G.ResFragment> }
+  | { type: "FETCH_NEW_RES_SUCCESS"; reses: ReadonlyArray<GA.ResFragment> }
   | { type: "FETCH_NEW_RES_FAILURE" }
   | { type: "SCROLL_TO_LAST" }
   | { type: "FETCH_OLD_RES_REQUEST" }
-  | { type: "FETCH_OLD_RES_SUCCESS"; reses: ReadonlyArray<G.ResFragment> }
+  | { type: "FETCH_OLD_RES_SUCCESS"; reses: ReadonlyArray<GA.ResFragment> }
   | { type: "FETCH_OLD_RES_FAILURE" }
   | { type: "CLICK_OPEN_AUTO_SCROLL_MODAL" }
   | { type: "CLICK_CLOSE_AUTO_SCROLL_MODAL" }
@@ -36,10 +36,10 @@ export type Action =
   | { type: "CHANGE_JUMP_VALUE"; value: number }
   | { type: "CLICK_JUMP" }
   | { type: "TOGGLE_FAVO" }
-  | { type: "CHANGE_CURRENT_RES"; res: G.ResFragment | null }
+  | { type: "CHANGE_CURRENT_RES"; res: GA.ResFragment | null }
   | { type: "SUBMIT_RES"; storage: Sto.Storage }
   | { type: "UPDATE_USER_DATA"; userData: UserData | null }
-  | { type: "RECEIVE_NEW_RES"; res: G.ResFragment; count: number }
-  | { type: "UPDATE_RES"; res: G.ResFragment }
+  | { type: "RECEIVE_NEW_RES"; res: GA.ResFragment; count: number }
+  | { type: "UPDATE_RES"; res: GA.ResFragment }
   | { type: "RESET_JUMP_RES" }
   | { type: "CHANGE_TOPIC_SUBSCRIBE"; value: boolean };

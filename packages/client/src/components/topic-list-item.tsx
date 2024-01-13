@@ -1,6 +1,6 @@
 import * as routes from "@anontown-frontend/routes";
 import { Link } from "react-router-dom";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { useUserContext } from "../hooks";
 import { TextTitle } from "../styled/text";
 import { dateFormat } from "../utils";
@@ -10,7 +10,7 @@ import { Sto } from "../domains/entities";
 import { O, pipe } from "../prelude";
 
 interface TopicListItemProps {
-  topic: G.TopicFragment;
+  topic: GA.TopicFragment;
   detail: boolean;
 }
 

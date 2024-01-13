@@ -9,7 +9,7 @@ import { convert6To7, storageJSON7 } from "./storage-json-7";
 import { convert7To8, storageJSON8 } from "./storage-json-8";
 import { convert8To9, storageJSON9 } from "./storage-json-9";
 import { convert9To10, storageJSON10 } from "./storage-json-10";
-import * as G from "../../../../generated/graphql";
+import * as GA from "../../../../generated/graphql-apollo";
 
 export const storageJSON = t.taggedUnion("ver", [
   storageJSON1,
@@ -47,7 +47,7 @@ export const verArray: Array<StorageJSON["ver"]> = [
 ];
 
 export async function convert(
-  token: G.TokenMasterFragment,
+  token: GA.TokenMasterFragment,
   storage: unknown
 ): Promise<StorageJSONLatest> {
   if (storageJSON.is(storage)) {

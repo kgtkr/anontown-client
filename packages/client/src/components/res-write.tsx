@@ -1,7 +1,7 @@
 import { Icon, IconButton } from "@mui/material";
 
 import { useCounter } from "react-use";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { useInputCache } from "../hooks";
 import { Storage, UserData, Sto } from "../domains/entities";
 import { CheckBox } from "./check-box";
@@ -12,7 +12,7 @@ import { TextField } from "./text-field";
 import { pipe } from "../prelude";
 
 interface ResWriteProps {
-  onSubmit?: (value: G.ResNormalFragment) => void;
+  onSubmit?: (value: GA.ResNormalFragment) => void;
   topic: string;
   reply: string | null;
   userData: UserData;
@@ -35,7 +35,7 @@ export const ResWrite = (props: ResWriteProps) => {
     }
   );
 
-  const profiles = G.useFindProfilesQuery({
+  const profiles = GA.useFindProfilesQuery({
     variables: {
       query: {
         self: true,
@@ -43,7 +43,7 @@ export const ResWrite = (props: ResWriteProps) => {
     },
   });
 
-  const [mutation, { error }] = G.useCreateResMutation({
+  const [mutation, { error }] = GA.useCreateResMutation({
     variables: {
       topic: props.topic,
       name: pipe(data, Sto.topicWriteNameLens.get, (name) =>

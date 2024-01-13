@@ -12,7 +12,7 @@ import {
 } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 import generatedIntrospection from "../generated/introspection-result";
-import { Kind, OperationTypeNode } from "graphql";
+import { Kind, OperationTypeNode } from "graphql-apollo";
 
 export function createHeaders(id: string, key: string): {} {
   return {
