@@ -8,5 +8,5 @@ const schema = await fetch("http://localhost:8080", {
     "Content-Type": "application/json",
   },
   body: JSON.stringify({ query: introspectionQuery }),
-}).then((res) => res.data);
+}).then((res) => res.json());
 await fs.writeFile("schema.json", JSON.stringify(schema));

@@ -1,12 +1,10 @@
 overwrite: true
 schema: "./schema.json"
-documents: "./src/**/*.gql"
+documents: ["./src/**/*.gql", "./src/**/*.ts", "./src/**/*.tsx"]
 generates:
-  src/generated/graphql.tsx:
-    plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typed-document-node"
+  src/generated/graphql/:
+    preset: "client"
+    plugins: []
   # deprecated
   src/generated/graphql-apollo.tsx:
     plugins:
