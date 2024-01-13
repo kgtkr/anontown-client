@@ -8,5 +8,5 @@ export const resDrafts = StorageCollection({
     replyResId: z.nullable(z.string()),
     text: z.string(),
   }),
-  keyPayload: (value) => `${value.topicId}-${value.replyResId ?? ""}`,
+  keyPayload: (value) => `${value.topicId}:${value.replyResId ?? ""}`,
 });
