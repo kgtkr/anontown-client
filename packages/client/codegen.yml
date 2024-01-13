@@ -7,9 +7,6 @@ generates:
       - "typescript"
       - "typescript-react-apollo"
       - "typescript-operations"
-  src/generated/graphql.d.ts:
-    plugins:
-      - "typescript-graphql-files-modules"
   src/generated/introspection-result.ts:
     plugins:
       - "fragment-matcher"

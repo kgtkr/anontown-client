@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/anontown/anontown#readme",
   "devDependencies": {
-    "typescript": "^4.8.2"
+    "typescript": "^5.3.3"
   },
   "dependencies": {}
 }
