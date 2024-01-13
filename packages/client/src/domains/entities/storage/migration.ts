@@ -1,14 +1,11 @@
-import * as GA from "../../../generated/graphql-apollo";
+import * as G from "../../../generated/graphql";
 import * as Sto from "./classic-storage-json";
 import { createHeaders, gqlClient } from "../../../effects";
 
 // classic storageからのマイグレーション処理を行う
-export async function migration(token: GA.TokenMasterFragment) {
-  const latestStorage = await gqlClient.query<
-    GA.FindStoragesQuery,
-    GA.FindStoragesQueryVariables
-  >({
-    query: GA.FindStoragesDocument,
+export async function migration(token: G.TokenMasterFragment) {
+  const latestStorage = await gqlClient.query({
+    query: G.FindStoragesDocument,
     variables: {
       query: {
         key: [Sto.verArray[0]],
@@ -23,11 +20,8 @@ export async function migration(token: GA.TokenMasterFragment) {
     return;
   }
 
-  const storages = await gqlClient.query<
-    GA.FindStoragesQuery,
-    GA.FindStoragesQueryVariables
-  >({
-    query: GA.FindStoragesDocument,
+  const storages = await gqlClient.query({
+    query: G.FindStoragesDocument,
     variables: {
       query: {},
     },
@@ -45,8 +39,8 @@ export async function migration(token: GA.TokenMasterFragment) {
     sto !== undefined ? JSON.parse(sto.value) : Sto.initStorage
   );
 
-  await gqlClient.mutate<GA.SetStorageMutation, GA.SetStorageMutationVariables>({
-    mutation: GA.SetStorageDocument,
+  await gqlClient.mutate({
+    mutation: G.SetStorageDocument,
     variables: {
       key: Sto.verArray[0],
       value: JSON.stringify(storage),
