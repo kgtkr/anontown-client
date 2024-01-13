@@ -4,7 +4,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { ClientAdd, ClientEditor, ErrorAlert, Page } from "../components";
 import * as G from "../generated/graphql";
 import { userSwitch, UserSwitchProps } from "../utils";
-import { isNullish } from "@kgtkr/utils";
+import { isNullish } from "../utils/isNullish";
 
 type DevSettingPageProps = RouteComponentProps<{}> & UserSwitchProps;
 

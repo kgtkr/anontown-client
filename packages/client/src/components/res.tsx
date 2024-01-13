@@ -11,7 +11,7 @@ import { dateFormat } from "../utils";
 import { Md } from "./md";
 import { ResWrite } from "./res-write";
 import { Snack } from "./snack";
-import { isNullish } from "@kgtkr/utils";
+import { isNullish } from "../utils/isNullish";
 import { useBackground } from "../hooks/useBackground";
 
 interface ResProps {
