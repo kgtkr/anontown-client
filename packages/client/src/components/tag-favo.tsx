@@ -11,32 +11,25 @@ interface TagFavoProps {
   userData: UserData;
 }
 
-interface TagFavoState {}
+export function TagFavo({ userData }: TagFavoProps) {
+  const tagsFavo = Sto.getTagsFavo(userData.storage);
 
-export class TagFavo extends React.Component<TagFavoProps, TagFavoState> {
-  constructor(props: TagFavoProps) {
-    super(props);
-  }
-
-  render() {
-    const tagsFavo = Sto.getTagsFavo(this.props.userData.storage);
-    return tagsFavo.length !== 0 ? (
-      tagsFavo.map((tags) => {
-        const sortedTags = RA.sort(OrdT.ordString)(tags);
-        return (
-          <Paper sx={{ p: 1 }} key={sortedTags.join(",")}>
-            <TextTitle>
-              <TagsLink tags={sortedTags} />
-            </TextTitle>
-          </Paper>
-        );
-      })
-    ) : (
-      <Paper sx={{ p: 1 }}>
-        お気に入りタグがありません。
-        <br />
-        <Link to={routes.topicSearch.to({})}>検索</Link>
-      </Paper>
-    );
-  }
+  return tagsFavo.length !== 0 ? (
+    tagsFavo.map((tags) => {
+      const sortedTags = RA.sort(OrdT.ordString)(tags);
+      return (
+        <Paper sx={{ p: 1 }} key={sortedTags.join(",")}>
+          <TextTitle>
+            <TagsLink tags={sortedTags} />
+          </TextTitle>
+        </Paper>
+      );
+    })
+  ) : (
+    <Paper sx={{ p: 1 }}>
+      お気に入りタグがありません。
+      <br />
+      <Link to={routes.topicSearch.to({})}>検索</Link>
+    </Paper>
+  );
 }

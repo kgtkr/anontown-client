@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import * as uuid from "uuid";
 import * as GA from "../generated/graphql-apollo";
 import { useUserContext } from "../hooks";
-import { ng, Sto } from "../domains/entities";
 import { color, fontSize } from "../styled/constant";
 import { dateFormat } from "../utils";
 import { Md } from "./md";
@@ -423,11 +422,7 @@ export const Res = React.memo(function Res(props: ResProps) {
             ) : null}
             {isReply && user.value !== null ? (
               <Paper>
-                <ResWrite
-                  topic={props.res.topic.id}
-                  reply={props.res.id}
-                  userData={user.value}
-                />
+                <ResWrite topic={props.res.topic.id} reply={props.res.id} />
               </Paper>
             ) : null}
           </div>
