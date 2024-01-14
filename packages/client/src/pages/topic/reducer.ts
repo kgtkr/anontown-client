@@ -170,9 +170,6 @@ export function reducer(prevState: State, action: Action): State {
     case "CHANGE_CURRENT_RES": {
       return prevState;
     }
-    case "SUBMIT_RES": {
-      return prevState;
-    }
     case "UPDATE_USER_DATA": {
       return {
         ...prevState,

@@ -323,21 +323,6 @@ export const epic: Epic<Action, State, Env> = (action$, state$, env) =>
       )
     ),
     action$.pipe(
-      rxOps.map((action) => (action.type === "SUBMIT_RES" ? action : null)),
-      rxOps.filter(isNotNull),
-      rxOps.withLatestFrom(state$),
-      rxOps.mergeMap(([action, state]): rx.Observable<Action> => {
-        return RxExtra.fromIOVoid(() => {
-          if (state.userData !== null) {
-            env.updateUserData({
-              ...state.userData,
-              storage: action.storage,
-            });
-          }
-        });
-      })
-    ),
-    action$.pipe(
       rxOps.map((action) =>
         action.type === "CHANGE_CURRENT_RES" ? action : null
       ),

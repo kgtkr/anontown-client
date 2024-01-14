@@ -334,14 +334,7 @@ export const TopicPage = (_props: {}) => {
             ) : null}
             {state.userData !== null ? (
               <Paper className={style.resWrite}>
-                <ResWrite
-                  topic={state.topic.id}
-                  reply={null}
-                  userData={state.userData}
-                  changeStorage={(storage) => {
-                    dispatch({ type: "SUBMIT_RES", storage });
-                  }}
-                />
+                <ResWrite topic={state.topic.id} reply={null} />
               </Paper>
             ) : null}
           </div>
