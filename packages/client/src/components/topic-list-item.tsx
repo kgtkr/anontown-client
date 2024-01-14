@@ -1,13 +1,13 @@
 import * as routes from "@anontown-frontend/routes";
 import { Link } from "react-router-dom";
 import * as GA from "../generated/graphql-apollo";
-import { useUserContext } from "../hooks";
 import { TextTitle } from "../styled/text";
 import { dateFormat } from "../utils";
 import { Icon, Paper } from "@mui/material";
 import { TagsLink } from "./tags-link";
-import { Sto } from "../domains/entities";
 import { O, pipe } from "../prelude";
+import { useSingleStorage } from "../domains/entities/storage/StorageCollectionHooks";
+import { TopicReads } from "../domains/entities/storage/TopicReads";
 
 interface TopicListItemProps {
   topic: GA.TopicFragment;
@@ -15,14 +15,17 @@ interface TopicListItemProps {
 }
 
 export const TopicListItem = (props: TopicListItemProps) => {
-  const user = useUserContext();
-
+  // TODO: リクエスト数を減らす
+  const topicRead = useSingleStorage(
+    TopicReads,
+    {
+      topicId: props.topic.id,
+    },
+    null
+  );
   const newRes = pipe(
-    O.fromNullable(user.value),
-    O.chain((userData) => Sto.getTopicRead(props.topic.id)(userData.storage)),
-    O.map((topicData) =>
-      Math.max(0, props.topic.resCount - Sto.topicReadCountLens.get(topicData))
-    ),
+    O.fromNullable(topicRead?.resCount),
+    O.map((count) => Math.max(0, props.topic.resCount - count)),
     O.toNullable
   );
 

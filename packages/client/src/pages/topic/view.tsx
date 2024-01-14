@@ -77,9 +77,7 @@ export const TopicPage = (_props: {}) => {
     <Page
       disableScroll={true}
       sidebar={
-        state.userData !== null ? (
-          <TopicFavo detail={false} userData={state.userData} />
-        ) : undefined
+        state.userData !== null ? <TopicFavo detail={false} /> : undefined
       }
     >
       {state.topic !== null &&

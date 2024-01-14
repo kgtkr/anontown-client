@@ -2,21 +2,23 @@ import * as routes from "@anontown-frontend/routes";
 import { Icon, IconButton, Paper } from "@mui/material";
 import { Link } from "react-router-dom";
 import * as GA from "../generated/graphql-apollo";
-import { UserData, Sto } from "../domains/entities";
 import { Snack } from "./snack";
 import { TopicListItem } from "./topic-list-item";
 import { RA, pipe, OrdT } from "../prelude";
+import { useStorageCollection } from "../domains/entities/storage/StorageCollectionHooks";
+import { FavoriteTopics } from "../domains/entities/storage/FavoriteTopics";
 
 interface TopicFavoProps {
-  userData: UserData;
   detail: boolean;
 }
 
-export function TopicFavo({ userData, detail }: TopicFavoProps) {
+export function TopicFavo({ detail }: TopicFavoProps) {
+  const favoTopics = useStorageCollection(FavoriteTopics);
+
   const { loading, error, data, refetch } = GA.useFindTopicsQuery({
     variables: {
       query: {
-        id: Sto.getTopicFavo(userData.storage),
+        id: favoTopics.map((t) => t.topicId),
       },
     },
   });

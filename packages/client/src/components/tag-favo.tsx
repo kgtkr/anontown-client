@@ -1,30 +1,28 @@
 import * as routes from "@anontown-frontend/routes";
-import * as React from "react";
 import { Link } from "react-router-dom";
-import { UserData, Sto } from "../domains/entities";
 import { TextTitle } from "../styled/text";
 import { TagsLink } from "./tags-link";
-import { RA, OrdT } from "../prelude";
 import { Paper } from "@mui/material";
+import { useStorageCollection } from "../domains/entities/storage/StorageCollectionHooks";
+import { FavoriteTags } from "../domains/entities/storage/FavoriteTags";
 
-interface TagFavoProps {
-  userData: UserData;
-}
+interface TagFavoProps {}
 
-export function TagFavo({ userData }: TagFavoProps) {
-  const tagsFavo = Sto.getTagsFavo(userData.storage);
+export function TagFavo(_props: TagFavoProps) {
+  const favoTags = useStorageCollection(FavoriteTags);
 
-  return tagsFavo.length !== 0 ? (
-    tagsFavo.map((tags) => {
-      const sortedTags = RA.sort(OrdT.ordString)(tags);
-      return (
-        <Paper sx={{ p: 1 }} key={sortedTags.join(",")}>
-          <TextTitle>
-            <TagsLink tags={sortedTags} />
-          </TextTitle>
-        </Paper>
-      );
-    })
+  return favoTags.length !== 0 ? (
+    <>
+      {favoTags.map((tags) => {
+        return (
+          <Paper sx={{ p: 1 }} key={tags.tag}>
+            <TextTitle>
+              <TagsLink tags={[tags.tag]} />
+            </TextTitle>
+          </Paper>
+        );
+      })}
+    </>
   ) : (
     <Paper sx={{ p: 1 }}>
       お気に入りタグがありません。

@@ -13,7 +13,6 @@ import { Link, useHistory } from "react-router-dom";
 import { Page, TagsInput, TopicListItem } from "../components";
 import * as GA from "../generated/graphql-apollo";
 import { useUserContext } from "../hooks";
-import { Sto } from "../domains/entities";
 import { useDebouncedCallback } from "use-debounce";
 import { useOnChnageUrlSearch } from "../hooks/use-on-change-url-search";
 
@@ -130,28 +129,6 @@ export const TopicSearchPage = (_props: {}) => {
     <Page>
       <Helmet title="検索" />
       <Paper sx={{ p: 1 }}>
-        {user.value !== null ? (
-          <IconButton
-            onClick={() => {
-              if (user.value === null) {
-                return;
-              }
-              const storage = user.value.storage;
-              user.update({
-                ...user.value,
-                storage: (Sto.isTagsFavo(state.query.tags)(storage)
-                  ? Sto.unfavoTags
-                  : Sto.favoTags)(state.query.tags)(storage),
-              });
-            }}
-          >
-            {Sto.isTagsFavo(state.query.tags)(user.value.storage) ? (
-              <Icon>star</Icon>
-            ) : (
-              <Icon>star_border</Icon>
-            )}
-          </IconButton>
-        ) : null}
         <div>
           <TagsInput
             fullWidth={true}
