@@ -27,7 +27,7 @@ export function reducer(prevState: State, action: Action): State {
   switch (action.type) {
     case "INIT": {
       return {
-        ...State({ userData: prevState.userData, topicId: action.topicId }),
+        ...State({ topicId: action.topicId }),
         now: action.now,
         jumpValue: action.now.valueOf(),
       };
@@ -169,12 +169,6 @@ export function reducer(prevState: State, action: Action): State {
     }
     case "CHANGE_CURRENT_RES": {
       return prevState;
-    }
-    case "UPDATE_USER_DATA": {
-      return {
-        ...prevState,
-        userData: action.userData,
-      };
     }
     case "RECEIVE_NEW_RES": {
       return {

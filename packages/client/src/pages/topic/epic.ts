@@ -9,7 +9,6 @@ import {
   RxExtra,
 } from "../../prelude";
 import * as GA from "../../generated/graphql-apollo";
-import { Sto, UserData } from "../../domains/entities";
 import { ApolloClient } from "@apollo/client";
 import { Epic } from "../../hooks/use-reducer-with-observable";
 import { Action } from "./action";
@@ -17,7 +16,12 @@ import { State } from "./state";
 
 export interface Env {
   apolloClient: ApolloClient<object>;
-  updateUserData: (userData: UserData | null) => void;
+  setTopicRead: (_: {
+    topicId: string;
+    resCreatedAt: string;
+    resCount: number;
+  }) => void;
+  initTopicDate: string | undefined;
 }
 
 export function storageSaveDate(
@@ -26,22 +30,13 @@ export function storageSaveDate(
   env: Env
 ): rx.Observable<Action> {
   return RxExtra.fromIOVoid(() => {
-    if (
-      state.userData === null ||
-      state.topic === null ||
-      state.reses === null
-    ) {
+    if (state.topic === null || state.reses === null) {
       return;
     }
-    const storage = state.userData.storage;
     const odate = pipe(
       [
         O.fromNullable(date),
-        pipe(
-          storage,
-          Sto.getTopicRead(state.topicId),
-          O.map((storageRes) => Sto.topicReadDateLens.get(storageRes))
-        ),
+        O.fromNullable(env.initTopicDate),
         pipe(
           state.reses,
           RA.head,
@@ -52,15 +47,10 @@ export function storageSaveDate(
     );
 
     if (O.isSome(odate)) {
-      env.updateUserData({
-        ...state.userData,
-        storage: Sto.setTopicRead(
-          state.topicId,
-          Sto.makeTopicRead({
-            date: odate.value,
-            count: count ?? state.topic.resCount,
-          })
-        )(storage),
+      env.setTopicRead({
+        topicId: state.topicId,
+        resCreatedAt: odate.value,
+        resCount: count ?? state.topic.resCount,
       });
     }
   });
@@ -188,8 +178,7 @@ export const epic: Epic<Action, State, Env> = (action$, state$, env) =>
     action$.pipe(
       rxOps.map((action) => (action.type === "INIT" ? action : null)),
       rxOps.filter(isNotNull),
-      rxOps.withLatestFrom(state$),
-      rxOps.mergeMap(([action, state]) =>
+      rxOps.mergeMap((action) =>
         rx.merge(
           RxExtra.fromZen(
             env.apolloClient.subscribe<
@@ -215,12 +204,7 @@ export const epic: Epic<Action, State, Env> = (action$, state$, env) =>
             {
               topicId: action.topicId,
               base: pipe(
-                O.fromNullable(state.userData),
-                O.chain((userData) =>
-                  Sto.getTopicRead(action.topicId)(userData.storage)
-                ),
-                O.map(Sto.topicReadDateLens.get),
-                O.map((date) => new Date(date)),
+                O.fromNullable(action.date),
                 O.getOrElse(() => action.now)
               ),
             },

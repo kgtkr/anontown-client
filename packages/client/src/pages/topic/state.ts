@@ -1,5 +1,4 @@
 import * as GA from "../../generated/graphql-apollo";
-import { UserData } from "../../domains/entities";
 
 export interface State {
   topicId: string;
@@ -7,7 +6,6 @@ export interface State {
   isJumpDialog: boolean;
   isAutoScrollDialog: boolean;
   isNGDialog: boolean;
-  userData: UserData | null;
   autoScrollSpeed: number;
   isAutoScroll: boolean;
   jumpResId: string | null;
@@ -20,13 +18,7 @@ export interface State {
   fetchingNew: boolean;
 }
 
-export function State({
-  userData,
-  topicId,
-}: {
-  userData: UserData | null;
-  topicId: string;
-}): State {
+export function State({ topicId }: { topicId: string }): State {
   return {
     topicId,
     now: null,
@@ -34,7 +26,6 @@ export function State({
     isJumpDialog: false,
     isAutoScrollDialog: false,
     isNGDialog: false,
-    userData,
     topic: null,
     reses: null,
     autoScrollSpeed: 15,

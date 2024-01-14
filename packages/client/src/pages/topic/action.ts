@@ -1,8 +1,7 @@
 import * as GA from "../../generated/graphql-apollo";
-import { UserData } from "../../domains/entities";
 
 export type Action =
-  | { type: "INIT"; topicId: string; now: Date }
+  | { type: "INIT"; topicId: string; now: Date; date: Date | null }
   | { type: "FETCH_TOPIC_REQUEST" }
   | {
       type: "FETCH_TOPIC_SUCCESS";
@@ -35,7 +34,6 @@ export type Action =
   | { type: "CHANGE_JUMP_VALUE"; value: number }
   | { type: "CLICK_JUMP" }
   | { type: "CHANGE_CURRENT_RES"; res: GA.ResFragment | null }
-  | { type: "UPDATE_USER_DATA"; userData: UserData | null }
   | { type: "RECEIVE_NEW_RES"; res: GA.ResFragment; count: number }
   | { type: "UPDATE_RES"; res: GA.ResFragment }
   | { type: "RESET_JUMP_RES" }

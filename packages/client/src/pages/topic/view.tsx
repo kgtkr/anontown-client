@@ -32,9 +32,19 @@ import {
   useSingleStorage,
 } from "../../domains/entities/storage/StorageCollectionHooks";
 import { FavoriteTopics } from "../../domains/entities/storage/FavoriteTopics";
+import { TopicReads } from "../../domains/entities/storage/TopicReads";
 
 export const TopicPage = (_props: {}) => {
   const params = useParams<{ id: string }>();
+
+  const topicRead = useSingleStorage(
+    TopicReads,
+    {
+      topicId: params.id,
+    },
+    null
+  );
+  const [setTopicRead] = useSetStorage(TopicReads);
   const user = useUserContext();
   const apolloClient = useApolloClient();
   const background = useBackground();
@@ -44,17 +54,22 @@ export const TopicPage = (_props: {}) => {
 
   const [state, dispatch] = useReducerWithObservable(
     reducer,
-    State({ userData: user.value, topicId: params.id }),
+    State({ topicId: params.id }),
     epic,
-    { apolloClient: apolloClient, updateUserData: (ud) => user.update(ud) }
+    {
+      apolloClient: apolloClient,
+      setTopicRead,
+      initTopicDate: topicRead?.resCreatedAt,
+    }
   );
 
   React.useEffect(() => {
-    dispatch({ type: "UPDATE_USER_DATA", userData: user.value });
-  }, [user.value]);
-
-  React.useEffect(() => {
-    dispatch({ type: "INIT", topicId: params.id, now: new Date() });
+    dispatch({
+      type: "INIT",
+      topicId: params.id,
+      now: new Date(),
+      date: topicRead?.resCreatedAt ? new Date(topicRead.resCreatedAt) : null,
+    });
   }, [params.id]);
 
   const favo = useSingleStorage(FavoriteTopics, { topicId: params.id }, null);
@@ -76,9 +91,7 @@ export const TopicPage = (_props: {}) => {
   return (
     <Page
       disableScroll={true}
-      sidebar={
-        state.userData !== null ? <TopicFavo detail={false} /> : undefined
-      }
+      sidebar={user.value !== null ? <TopicFavo detail={false} /> : undefined}
     >
       {state.topic !== null &&
       reversedReses !== null &&
@@ -114,7 +127,7 @@ export const TopicPage = (_props: {}) => {
               }}
             />
           </Modal>
-          {state.userData !== null ? (
+          {user.value !== null ? (
             <Modal
               isOpen={state.isNGDialog}
               onRequestClose={() => dispatch({ type: "CLICK_CLOSE_NG_MODAL" })}
@@ -163,7 +176,7 @@ export const TopicPage = (_props: {}) => {
                 {state.topic.title}
               </div>
               <div className={style.toolbar}>
-                {state.userData !== null ? (
+                {user.value !== null ? (
                   <IconButton
                     onClick={() => {
                       if (isFavo) {
@@ -197,7 +210,7 @@ export const TopicPage = (_props: {}) => {
                     詳細データ
                   </MenuItem>
                   {state.topic.__typename === "TopicNormal" &&
-                  state.userData !== null ? (
+                  user.value !== null ? (
                     <MenuItem
                       component={Link}
                       onClick={() => setAnchorEl(null)}
@@ -225,7 +238,7 @@ export const TopicPage = (_props: {}) => {
                       派生トピック
                     </MenuItem>
                   ) : null}
-                  {state.userData !== null ? (
+                  {user.value !== null ? (
                     typeof Notification !== "undefined" &&
                     Notification.permission === "granted" ? (
                       <MenuItem
@@ -330,7 +343,7 @@ export const TopicPage = (_props: {}) => {
                 }}
               />
             ) : null}
-            {state.userData !== null ? (
+            {user.value !== null ? (
               <Paper className={style.resWrite}>
                 <ResWrite topic={state.topic.id} reply={null} />
               </Paper>

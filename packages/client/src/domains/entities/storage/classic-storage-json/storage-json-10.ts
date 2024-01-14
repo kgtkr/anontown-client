@@ -46,7 +46,7 @@ export async function convert9To10(
       typeof TopicReads
     > => ({
       topicId,
-      resCreatedAt: new Date(date).getTime(),
+      resCreatedAt: date,
       resCount: count,
     })
   );
