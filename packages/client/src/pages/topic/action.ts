@@ -1,5 +1,5 @@
 import * as GA from "../../generated/graphql-apollo";
-import { Sto, UserData } from "../../domains/entities";
+import { UserData } from "../../domains/entities";
 
 export type Action =
   | { type: "INIT"; topicId: string; now: Date }
@@ -34,7 +34,6 @@ export type Action =
   | { type: "CLICK_CLOSE_JUMP_MODAL" }
   | { type: "CHANGE_JUMP_VALUE"; value: number }
   | { type: "CLICK_JUMP" }
-  | { type: "TOGGLE_FAVO" }
   | { type: "CHANGE_CURRENT_RES"; res: GA.ResFragment | null }
   | { type: "SUBMIT_RES"; storage: Sto.Storage }
   | { type: "UPDATE_USER_DATA"; userData: UserData | null }

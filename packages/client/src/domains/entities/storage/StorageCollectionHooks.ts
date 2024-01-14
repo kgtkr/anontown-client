@@ -7,6 +7,7 @@ import {
 } from "@apollo/client";
 import { StorageCollection, getKey } from "./StorageCollection";
 import { graphql } from "../../../generated/graphql/gql";
+import { useUserContext } from "../../../hooks";
 
 const PrefixedStorageQueryDocument = graphql(/* GraphQL */ `
   query StorageCollectionHooks_prefixedStorageQuery($prefix: String!) {
@@ -47,11 +48,17 @@ export function useStorageCollection<T>(
   storageCollection: StorageCollection<T>,
   additionalPrefix?: string
 ): T[] {
+  const { value: userData } = useUserContext();
   const { data } = useSuspenseQuery(PrefixedStorageQueryDocument, {
     variables: {
       prefix: `${storageCollection.keyPrefix}${additionalPrefix ?? ""}`,
     },
+    skip: !userData,
   });
+
+  if (data === undefined) {
+    return [];
+  }
 
   const result: T[] = [];
   for (const storage of data.storages) {
@@ -69,17 +76,22 @@ export function useStorageCollection<T>(
   return result;
 }
 
-export function useSingleStorage<T, K extends keyof T>(
+export function useSingleStorage<T, K extends keyof T, D>(
   storageCollection: StorageCollection<T, K>,
   key: Pick<T, K>,
-  defaultValue: T
-): T {
+  defaultValue: D | T // `| T` は不要だが補完のため
+): T | D {
+  const { value: userData } = useUserContext();
   const { data } = useSuspenseQuery(StorageQueryDocument, {
     variables: {
       key: getKey(storageCollection, key),
     },
+    skip: !userData,
   });
 
+  if (data === undefined) {
+    return defaultValue;
+  }
   if (data.storages.length === 0) {
     return defaultValue;
   }

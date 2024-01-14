@@ -323,27 +323,6 @@ export const epic: Epic<Action, State, Env> = (action$, state$, env) =>
       )
     ),
     action$.pipe(
-      rxOps.map((action) => (action.type === "TOGGLE_FAVO" ? action : null)),
-      rxOps.filter(isNotNull),
-      rxOps.withLatestFrom(state$),
-      rxOps.mergeMap(([_action, state]): rx.Observable<Action> => {
-        return RxExtra.fromIOVoid(() => {
-          if (state.userData !== null) {
-            const isFavo = Sto.isTopicFavo(state.topicId)(
-              state.userData.storage
-            );
-            const storage = state.userData.storage;
-            env.updateUserData({
-              ...state.userData,
-              storage: (isFavo ? Sto.unfavoTopic : Sto.favoTopic)(
-                state.topicId
-              )(storage),
-            });
-          }
-        });
-      })
-    ),
-    action$.pipe(
       rxOps.map((action) => (action.type === "SUBMIT_RES" ? action : null)),
       rxOps.filter(isNotNull),
       rxOps.withLatestFrom(state$),

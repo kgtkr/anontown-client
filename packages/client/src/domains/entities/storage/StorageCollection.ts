@@ -11,7 +11,7 @@ export type StorageCollection<T, K extends keyof T = keyof T> = {
 export function StorageCollection<T, K extends keyof T>(
   value: StorageCollection<T, K>,
   _keys?: K[]
-): StorageCollection<T> {
+): StorageCollection<T, K> {
   return value;
 }
 

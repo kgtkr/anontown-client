@@ -26,6 +26,12 @@ import { reducer } from "./reducer";
 import { State } from "./state";
 import { epic } from "./epic";
 import { useBackground } from "../../hooks/useBackground";
+import {
+  useDeleteStorage,
+  useSetStorage,
+  useSingleStorage,
+} from "../../domains/entities/storage/StorageCollectionHooks";
+import { FavoriteTopics } from "../../domains/entities/storage/FavoriteTopics";
 
 export const TopicPage = (_props: {}) => {
   const params = useParams<{ id: string }>();
@@ -51,9 +57,10 @@ export const TopicPage = (_props: {}) => {
     dispatch({ type: "INIT", topicId: params.id, now: new Date() });
   }, [params.id]);
 
-  const isFavo =
-    state.userData !== null &&
-    Sto.isTopicFavo(state.topicId)(state.userData.storage);
+  const favo = useSingleStorage(FavoriteTopics, { topicId: params.id }, null);
+  const isFavo = favo !== null;
+  const [setFavo] = useSetStorage(FavoriteTopics);
+  const [deleteFavo] = useDeleteStorage(FavoriteTopics);
 
   useTitle(state.topic?.title ?? "トピック");
 
@@ -161,7 +168,11 @@ export const TopicPage = (_props: {}) => {
                 {state.userData !== null ? (
                   <IconButton
                     onClick={() => {
-                      dispatch({ type: "TOGGLE_FAVO" });
+                      if (isFavo) {
+                        deleteFavo({ topicId: params.id });
+                      } else {
+                        setFavo({ topicId: params.id, createdAt: Date.now() });
+                      }
                     }}
                   >
                     <Icon>{isFavo ? "star" : "star_border"}</Icon>

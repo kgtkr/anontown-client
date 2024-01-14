@@ -167,9 +167,6 @@ export function reducer(prevState: State, action: Action): State {
     case "CLICK_JUMP": {
       return prevState;
     }
-    case "TOGGLE_FAVO": {
-      return prevState;
-    }
     case "CHANGE_CURRENT_RES": {
       return prevState;
     }
