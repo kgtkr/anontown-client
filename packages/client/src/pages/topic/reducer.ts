@@ -146,9 +146,6 @@ export function reducer(prevState: State, action: Action): State {
         isNGDialog: false,
       };
     }
-    case "UPDATE_NG": {
-      return prevState;
-    }
     case "CLICK_OPEN_JUMP_MODAL": {
       return {
         ...prevState,

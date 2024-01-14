@@ -303,17 +303,6 @@ export const epic: Epic<Action, State, Env> = (action$, state$, env) =>
       )
     ),
     action$.pipe(
-      rxOps.map((action) => (action.type === "UPDATE_NG" ? action : null)),
-      rxOps.filter(isNotNull),
-      rxOps.withLatestFrom(state$),
-      rxOps.mergeMap(([action, state]): rx.Observable<Action> => {
-        if (state.userData !== null) {
-          env.updateUserData({ ...state.userData, storage: action.storage });
-        }
-        return rx.never();
-      })
-    ),
-    action$.pipe(
       rxOps.map((action) => (action.type === "CLICK_JUMP" ? action : null)),
       rxOps.filter(isNotNull),
       rxOps.withLatestFrom(state$),

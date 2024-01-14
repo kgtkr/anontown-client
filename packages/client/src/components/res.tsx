@@ -13,13 +13,102 @@ import { ResWrite } from "./res-write";
 import { Snack } from "./snack";
 import { isNullish } from "../utils/isNullish";
 import { useBackground } from "../hooks/useBackground";
+import { NG, NGs, TextMatcher } from "../domains/entities/storage/NGs";
+import {
+  useSetStorage,
+  useStorageCollection,
+} from "../domains/entities/storage/StorageCollectionHooks";
+
+function textMatcher(matcher: TextMatcher, text: string): boolean {
+  if (matcher.text.length === 0) {
+    return false;
+  }
+  if (matcher.regExp) {
+    try {
+      return new RegExp(
+        matcher.text,
+        [matcher.ignoreCase ? "i" : ""].join("")
+      ).test(text);
+    } catch {
+      return false;
+    }
+  } else {
+    if (matcher.ignoreCase) {
+      return text.toLowerCase().includes(matcher.text.toLowerCase());
+    }
+    return text.includes(matcher.text);
+  }
+}
+
+function isNG(ng: NG, res: GA.ResFragment): boolean {
+  if (ng.topicId !== undefined && ng.topicId !== res.topic.id) {
+    return false;
+  }
+
+  if (
+    ng.expirationDate !== undefined &&
+    new Date(ng.expirationDate).valueOf() < new Date(res.date).valueOf()
+  ) {
+    return false;
+  }
+
+  // 空のandは数学的にはtrueになるが全部NGは混乱の元なのでfalseとして扱う
+  if (
+    Object.entries(ng.condition).filter(([, v]) => v !== undefined).length === 0
+  ) {
+    return false;
+  }
+
+  if (ng.condition.profileId !== undefined) {
+    if (
+      res.__typename !== "ResNormal" ||
+      isNullish(res.profile) ||
+      res.profile.id !== ng.condition.profileId
+    ) {
+      return false;
+    }
+  }
+
+  if (ng.condition.hash !== undefined) {
+    if (res.hash !== ng.condition.hash) {
+      return false;
+    }
+  }
+
+  if (ng.condition.name !== undefined) {
+    if (
+      res.__typename !== "ResNormal" ||
+      isNullish(res.name) ||
+      !textMatcher(ng.condition.name, res.name)
+    ) {
+      return false;
+    }
+  }
+
+  if (ng.condition.content !== undefined) {
+    if (
+      res.__typename !== "ResNormal" ||
+      !textMatcher(ng.condition.content, res.text)
+    ) {
+      return false;
+    }
+  }
+
+  if (ng.condition.vote !== undefined) {
+    if (res.uv - res.dv < ng.condition.vote) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 interface ResProps {
   res: GA.ResFragment;
   update?: (res: GA.ResFragment) => void;
 }
 
-export const Res = React.memo((props: ResProps) => {
+export const Res = React.memo(function Res(props: ResProps) {
   const [isReply, setIsReply] = React.useState(false);
   const [snackMsg, setSnackMsg] = React.useState<string | null>(null);
   const [disableNG, setDisableNG] = React.useState(false);
@@ -34,11 +123,13 @@ export const Res = React.memo((props: ResProps) => {
   };
 
   const [submitVote] = GA.useVoteResMutation();
+  const ngs = useStorageCollection(NGs);
+  const [addNG] = useSetStorage(NGs);
 
   return user.value !== null &&
     !props.res.self &&
     !disableNG &&
-    Sto.getNG(user.value.storage).some((x) => ng.isNG(x, props.res)) ? (
+    ngs.some((ng) => isNG(ng, props.res)) ? (
     <Paper>
       あぼーん<a onClick={() => setDisableNG(true)}>[見る]</a>
     </Paper>
@@ -115,8 +206,8 @@ export const Res = React.memo((props: ResProps) => {
               backgroundColor: props.res.self
                 ? color.primary
                 : props.res.__typename === "ResNormal" && props.res.isReply
-                ? color.secondary
-                : undefined,
+                  ? color.secondary
+                  : undefined,
               fontSize: fontSize.sub,
             }}
           >
@@ -222,20 +313,13 @@ export const Res = React.memo((props: ResProps) => {
                     onClick={() => {
                       setAnchorEl(null);
                       if (user.value !== null) {
-                        user.update({
-                          ...user.value,
-                          storage: Sto.addNG({
-                            id: uuid.v4(),
-                            name: `HASH:${props.res.hash}`,
-                            topic: props.res.topic.id,
-                            date: new Date(),
-                            expirationDate: null,
-                            node: {
-                              type: "hash",
-                              id: uuid.v4(),
-                              hash: props.res.hash,
-                            },
-                          })(user.value.storage),
+                        addNG({
+                          id: uuid.v4(),
+                          name: `HASH:@${props.res.hash}`,
+                          createdAt: Date.now(),
+                          condition: {
+                            hash: props.res.hash,
+                          },
                         });
                       }
                     }}
@@ -252,20 +336,13 @@ export const Res = React.memo((props: ResProps) => {
                           props.res.__typename === "ResNormal" &&
                           !isNullish(props.res.profile)
                         ) {
-                          user.update({
-                            ...user.value,
-                            storage: Sto.addNG({
-                              id: uuid.v4(),
-                              name: `Profile:${props.res.profile.id}`,
-                              topic: null,
-                              date: new Date(),
-                              expirationDate: null,
-                              node: {
-                                type: "profile",
-                                id: uuid.v4(),
-                                profile: props.res.profile.id,
-                              },
-                            })(user.value.storage),
+                          addNG({
+                            id: uuid.v4(),
+                            name: `Profile:@${props.res.profile.sn}`,
+                            createdAt: Date.now(),
+                            condition: {
+                              profileId: props.res.profile.id,
+                            },
                           });
                         }
                       }}
@@ -350,14 +427,6 @@ export const Res = React.memo((props: ResProps) => {
                   topic={props.res.topic.id}
                   reply={props.res.id}
                   userData={user.value}
-                  changeStorage={(x) => {
-                    if (user.value !== null) {
-                      user.update({
-                        ...user.value,
-                        storage: x,
-                      });
-                    }
-                  }}
                 />
               </Paper>
             ) : null}

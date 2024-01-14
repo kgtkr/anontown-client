@@ -126,31 +126,37 @@ function refetchQueries(key: string): InternalRefetchQueriesInclude {
 }
 
 export function useSetStorage<T>(storageCollection: StorageCollection<T>) {
-  const [mutation] = useMutation(SetStorageMutationDocument);
+  const [mutation, result] = useMutation(SetStorageMutationDocument);
 
-  return async (value: T) => {
-    const key = getKey(storageCollection, value);
-    await mutation({
-      variables: {
-        key,
-        value: JSON.stringify(value),
-      },
-      refetchQueries: refetchQueries(key),
-    });
-  };
+  return [
+    async (value: T) => {
+      const key = getKey(storageCollection, value);
+      await mutation({
+        variables: {
+          key,
+          value: JSON.stringify(value),
+        },
+        refetchQueries: refetchQueries(key),
+      });
+    },
+    result,
+  ] as const;
 }
 
 export function useDeleteStorage<T, K extends keyof T>(
   storageCollection: StorageCollection<T, K>
 ) {
-  const [mutation] = useMutation(DeleteStorageMutationDocument);
+  const [mutation, result] = useMutation(DeleteStorageMutationDocument);
 
-  return async (key: Pick<T, K>) => {
-    await mutation({
-      variables: {
-        key: getKey(storageCollection, key),
-      },
-      refetchQueries: refetchQueries(getKey(storageCollection, key)),
-    });
-  };
+  return [
+    async (key: Pick<T, K>) => {
+      await mutation({
+        variables: {
+          key: getKey(storageCollection, key),
+        },
+        refetchQueries: refetchQueries(getKey(storageCollection, key)),
+      });
+    },
+    result,
+  ] as const;
 }

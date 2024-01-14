@@ -27,50 +27,59 @@ export async function convert9To10(
 ): Promise<StorageJSON10> {
   const now = Date.now();
 
-  const favoriteTopics: StorageCollectionTypeOf<typeof FavoriteTopics>[] =
-    val.topicFavo.map((topicId, i) => ({
+  const favoriteTopics = val.topicFavo.map(
+    (topicId, i): StorageCollectionTypeOf<typeof FavoriteTopics> => ({
       topicId,
       createdAt: now - i,
-    }));
+    })
+  );
 
-  const favoriteTags: StorageCollectionTypeOf<typeof FavoriteTags>[] =
-    Array.from(new Set(val.tagsFavo.flat())).map((tag, i) => ({
+  const favoriteTags = Array.from(new Set(val.tagsFavo.flat())).map(
+    (tag, i): StorageCollectionTypeOf<typeof FavoriteTags> => ({
       tag,
       createdAt: now - i,
-    }));
+    })
+  );
 
-  const topicReads: StorageCollectionTypeOf<typeof TopicReads>[] =
-    Object.entries(val.topicRead).map(([topicId, { date, count }]) => ({
+  const topicReads = Object.entries(val.topicRead).map(
+    ([topicId, { date, count }]): StorageCollectionTypeOf<
+      typeof TopicReads
+    > => ({
       topicId,
       resCreatedAt: new Date(date).getTime(),
       resCount: count,
-    }));
+    })
+  );
 
-  const writeResConfigs: StorageCollectionTypeOf<typeof WriteResConfigs>[] =
-    Object.entries(val.topicWrite).map(([topicId, { name, profile, age }]) => ({
+  const writeResConfigs = Object.entries(val.topicWrite).map(
+    ([topicId, { name, profile, age }]): StorageCollectionTypeOf<
+      typeof WriteResConfigs
+    > => ({
       topicId,
       name,
-      profile,
+      profileId: profile ?? undefined,
       age,
-    }));
+    })
+  );
 
-  const resDraftsNonReply: StorageCollectionTypeOf<typeof ResDrafts>[] =
-    Object.entries(val.topicWrite).map(([topicId, { text }]) => ({
+  const resDraftsNonReply = Object.entries(val.topicWrite).map(
+    ([topicId, { text }]): StorageCollectionTypeOf<typeof ResDrafts> => ({
       topicId,
       text,
-      replyResId: null,
-    }));
+    })
+  );
 
-  const resDraftsReply: StorageCollectionTypeOf<typeof ResDrafts>[] =
-    Object.entries(val.topicWrite)
-      .map(([topicId, { replyText }]) =>
-        Object.entries(replyText).map(([replyResId, text]) => ({
+  const resDraftsReply = Object.entries(val.topicWrite)
+    .map(([topicId, { replyText }]) =>
+      Object.entries(replyText).map(
+        ([replyResId, text]): StorageCollectionTypeOf<typeof ResDrafts> => ({
           topicId,
           text,
           replyResId,
-        }))
+        })
       )
-      .flat();
+    )
+    .flat();
 
   const resDrafts = [...resDraftsNonReply, ...resDraftsReply];
 
@@ -79,16 +88,17 @@ export async function convert9To10(
       id: uuid.v4(),
       name,
       expirationDate: expirationDate
-        ? new Date(expirationDate).getTime()
-        : null,
-      topicId: topic,
+        ? new Date(expirationDate).toISOString()
+        : undefined,
+      topicId: topic ?? undefined,
       createdAt: new Date(date).getTime(),
       condition: {
-        profileId: node.type === "profile" ? node.profile : null,
-        hash: node.type === "hash" ? node.hash : null,
-        content: node.type === "text" ? convertMatcher(node.matcher) : null,
-        name: node.type === "name" ? convertMatcher(node.matcher) : null,
-        vote: node.type === "vote" ? node.value : null,
+        profileId: node.type === "profile" ? node.profile : undefined,
+        hash: node.type === "hash" ? node.hash : undefined,
+        content:
+          node.type === "text" ? convertMatcher(node.matcher) : undefined,
+        name: node.type === "name" ? convertMatcher(node.matcher) : undefined,
+        vote: node.type === "vote" ? node.value : undefined,
       },
     })
   );

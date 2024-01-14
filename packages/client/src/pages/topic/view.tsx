@@ -9,6 +9,7 @@ import {
   MenuItem,
   Menu,
   ToggleButton,
+  CircularProgress,
 } from "@mui/material";
 import moment from "moment";
 import * as React from "react";
@@ -114,12 +115,9 @@ export const TopicPage = (_props: {}) => {
               onRequestClose={() => dispatch({ type: "CLICK_CLOSE_NG_MODAL" })}
             >
               <h1>NG</h1>
-              <NG
-                userData={state.userData}
-                onChangeStorage={(v) => {
-                  dispatch({ type: "UPDATE_NG", storage: v });
-                }}
-              />
+              <React.Suspense fallback={<CircularProgress />}>
+                <NG />
+              </React.Suspense>
             </Modal>
           ) : null}
           <Modal

@@ -30,7 +30,6 @@ export type Action =
   | { type: "CHANGE_AUTO_SCROLL_SPEED"; value: number }
   | { type: "CLICK_OPEN_NG_MODAL" }
   | { type: "CLICK_CLOSE_NG_MODAL" }
-  | { type: "UPDATE_NG"; storage: Sto.Storage }
   | { type: "CLICK_OPEN_JUMP_MODAL" }
   | { type: "CLICK_CLOSE_JUMP_MODAL" }
   | { type: "CHANGE_JUMP_VALUE"; value: number }
