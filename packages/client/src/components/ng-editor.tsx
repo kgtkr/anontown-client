@@ -1,4 +1,11 @@
-import { Button, Checkbox, Slider, TextField } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  Slider,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { NG, NGs } from "../domains/entities/storage/NGs";
 import React from "react";
 import { useSetStorage } from "../domains/entities/storage/StorageCollectionHooks";
@@ -16,13 +23,22 @@ export function NGEditor(props: NGEditorProps) {
   const [setNGStorage] = useSetStorage(NGs);
 
   return (
-    <div>
+    <Stack
+      spacing={2}
+      component="form"
+      onSubmit={(e) => {
+        setNGStorage(ng);
+        e.preventDefault();
+      }}
+    >
       <TextField
         placeholder="名前"
         value={ng.name}
         onChange={(evt) => setNG({ ...ng, name: evt.target.value })}
       />
-      topic: {ng.topicId}
+      {ng.topicId !== undefined ? (
+        <Typography variant="caption">topic: {ng.topicId}</Typography>
+      ) : undefined}
       <TextField
         placeholder="プロフィールID"
         value={ng.condition.profileId ?? ""}
@@ -91,42 +107,40 @@ export function NGEditor(props: NGEditorProps) {
           })
         }
       />
-      投票値が一定以下:
-      <Checkbox
-        checked={ng.condition.vote !== undefined}
-        onChange={(evt) =>
-          setNG({
-            ...ng,
-            condition: {
-              ...ng.condition,
-              vote: evt.target.checked ? 0 : undefined,
-            },
-          })
-        }
-      />
-      <Slider
-        value={ng.condition.vote ?? 0}
-        disabled={ng.condition.vote === undefined}
-        min={-10}
-        max={10}
-        step={1}
-        onChange={(_evt, value) =>
-          setNG({
-            ...ng,
-            condition: {
-              ...ng.condition,
-              vote: value as number,
-            },
-          })
-        }
-      />
-      <Button
-        onClick={() => {
-          setNGStorage(ng);
-        }}
-      >
+      <div>
+        投票値が{ng.condition.vote ?? 0}以下:
+        <Checkbox
+          checked={ng.condition.vote !== undefined}
+          onChange={(evt) =>
+            setNG({
+              ...ng,
+              condition: {
+                ...ng.condition,
+                vote: evt.target.checked ? 0 : undefined,
+              },
+            })
+          }
+        />
+        <Slider
+          value={ng.condition.vote ?? 0}
+          disabled={ng.condition.vote === undefined}
+          min={-10}
+          max={10}
+          step={1}
+          onChange={(_evt, value) =>
+            setNG({
+              ...ng,
+              condition: {
+                ...ng.condition,
+                vote: value as number,
+              },
+            })
+          }
+        />
+      </div>
+      <Button type="submit" variant="contained">
         保存
       </Button>
-    </div>
+    </Stack>
   );
 }

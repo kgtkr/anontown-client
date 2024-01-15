@@ -25,6 +25,7 @@ export const NG: React.FC<NGProps> = () => {
   const ngs = usePrefixedStorageCollection(NGs);
   const [addNG] = useSetStorage(NGs);
   const [deleteNG] = useDeleteStorage(NGs);
+  const dialogNG = ngs.find((ng) => ng.id === dialog);
 
   return (
     <div>
@@ -42,14 +43,12 @@ export const NG: React.FC<NGProps> = () => {
       </IconButton>
       <List>
         {ngs.map((ng) => (
-          <ListItem onClick={() => setDialog(ng.id)} key={ng.id}>
-            <Modal
-              isOpen={dialog === ng.id}
-              onRequestClose={() => setDialog(null)}
-            >
-              <h1>{ng.name}</h1>
-              <NGEditor initNG={ng} />
-            </Modal>
+          <ListItem
+            onClick={() => {
+              setDialog(ng.id);
+            }}
+            key={ng.id}
+          >
             <ListItemText>{ng.name}</ListItemText>
             <ListItemSecondaryAction>
               <IconButton onClick={() => deleteNG(ng)}>
@@ -59,6 +58,19 @@ export const NG: React.FC<NGProps> = () => {
           </ListItem>
         ))}
       </List>
+      <Modal
+        isOpen={dialogNG !== undefined}
+        onRequestClose={() => {
+          setDialog(null);
+        }}
+      >
+        {dialogNG && (
+          <>
+            <h1>{dialogNG.name}</h1>
+            <NGEditor initNG={dialogNG} />
+          </>
+        )}
+      </Modal>
     </div>
   );
 };
