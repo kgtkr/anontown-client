@@ -5,7 +5,7 @@ import { Snack } from "./snack";
 import {
   useDeleteStorage,
   useSetStorage,
-  useStorageCollection,
+  usePrefixedStorageCollection,
 } from "../domains/entities/storage/StorageCollectionHooks";
 import { FavoriteTags } from "../domains/entities/storage/FavoriteTags";
 
@@ -16,7 +16,7 @@ export interface TagsInputProps {
 }
 
 export function TagsInput({ value, onChange, fullWidth }: TagsInputProps) {
-  const favoTags = useStorageCollection(FavoriteTags);
+  const favoTags = usePrefixedStorageCollection(FavoriteTags);
   const tagsSet = React.useMemo(() => {
     return new Set<string>([...favoTags.map((t) => t.tag)]);
   }, [favoTags]);

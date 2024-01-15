@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import { TextTitle } from "../styled/text";
 import { TagsLink } from "./tags-link";
 import { Paper } from "@mui/material";
-import { useStorageCollection } from "../domains/entities/storage/StorageCollectionHooks";
+import { usePrefixedStorageCollection } from "../domains/entities/storage/StorageCollectionHooks";
 import { FavoriteTags } from "../domains/entities/storage/FavoriteTags";
 
 interface TagFavoProps {}
 
 export function TagFavo(_props: TagFavoProps) {
-  const favoTags = useStorageCollection(FavoriteTags);
+  const favoTags = usePrefixedStorageCollection(FavoriteTags);
 
   return favoTags.length !== 0 ? (
     <>

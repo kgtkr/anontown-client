@@ -15,6 +15,8 @@ import * as GA from "../generated/graphql-apollo";
 import { useUserContext } from "../hooks";
 import { useDebouncedCallback } from "use-debounce";
 import { useOnChnageUrlSearch } from "../hooks/use-on-change-url-search";
+import { useStorage } from "../domains/entities/storage/StorageCollectionHooks";
+import { TopicReads } from "../domains/entities/storage/TopicReads";
 
 interface Query {
   title: string;
@@ -125,6 +127,12 @@ export const TopicSearchPage = (_props: {}) => {
     },
   });
 
+  const topicReads = useStorage(
+    TopicReads,
+    topics.data?.topics.map((t) => ({ topicId: t.id })) ?? [],
+    null
+  );
+
   return (
     <Page>
       <Helmet title="検索" />
@@ -170,7 +178,12 @@ export const TopicSearchPage = (_props: {}) => {
       <div>
         {topics.data !== undefined
           ? topics.data.topics.map((t) => (
-              <TopicListItem key={t.id} topic={t} detail={true} />
+              <TopicListItem
+                key={t.id}
+                topic={t}
+                detail={true}
+                topicRead={topicReads({ topicId: t.id })}
+              />
             ))
           : null}
       </div>

@@ -5,15 +5,24 @@ import * as GA from "../generated/graphql-apollo";
 import { Snack } from "./snack";
 import { TopicListItem } from "./topic-list-item";
 import { RA, pipe, OrdT } from "../prelude";
-import { useStorageCollection } from "../domains/entities/storage/StorageCollectionHooks";
+import {
+  usePrefixedStorageCollection,
+  useStorage,
+} from "../domains/entities/storage/StorageCollectionHooks";
 import { FavoriteTopics } from "../domains/entities/storage/FavoriteTopics";
+import { TopicReads } from "../domains/entities/storage/TopicReads";
 
 interface TopicFavoProps {
   detail: boolean;
 }
 
 export function TopicFavo({ detail }: TopicFavoProps) {
-  const favoTopics = useStorageCollection(FavoriteTopics);
+  const favoTopics = usePrefixedStorageCollection(FavoriteTopics);
+  const topicReads = useStorage(
+    TopicReads,
+    favoTopics.map((topic) => ({ topicId: topic.topicId })),
+    null
+  );
 
   const { loading, error, data, refetch } = GA.useFindTopicsQuery({
     variables: {
@@ -43,7 +52,12 @@ export function TopicFavo({ detail }: TopicFavoProps) {
               ]),
               RA.reverse
             ).map((topic) => (
-              <TopicListItem key={topic.id} topic={topic} detail={detail} />
+              <TopicListItem
+                key={topic.id}
+                topic={topic}
+                detail={detail}
+                topicRead={topicReads({ topicId: topic.id })}
+              />
             ))
           ) : (
             <Paper>

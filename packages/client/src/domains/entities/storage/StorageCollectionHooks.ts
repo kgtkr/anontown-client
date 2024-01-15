@@ -19,8 +19,8 @@ const PrefixedStorageQueryDocument = graphql(/* GraphQL */ `
 `);
 
 const StorageQueryDocument = graphql(/* GraphQL */ `
-  query StorageCollectionHooks_storageQuery($key: String!) {
-    storages(query: { key: [$key] }) {
+  query StorageCollectionHooks_storageQuery($keys: [String!]!) {
+    storages(query: { key: $keys }) {
       key
       value
     }
@@ -44,7 +44,7 @@ const DeleteStorageMutationDocument = graphql(/* GraphQL */ `
   }
 `);
 
-export function useStorageCollection<T>(
+export function usePrefixedStorageCollection<T>(
   storageCollection: StorageCollection<T>,
   additionalPrefix?: string
 ): T[] {
@@ -76,33 +76,47 @@ export function useStorageCollection<T>(
   return result;
 }
 
-export function useSingleStorage<T, K extends keyof T, D>(
+export function useStorage<T, K extends keyof T, D>(
   storageCollection: StorageCollection<T, K>,
-  key: Pick<T, K>,
+  keys: Pick<T, K>[],
   defaultValue: D | T // `| T` は不要だが補完のため
-): T | D {
+): (key: Pick<T, K>) => T | D {
   const { value: userData } = useUserContext();
   const { data } = useSuspenseQuery(StorageQueryDocument, {
     variables: {
-      key: getKey(storageCollection, key),
+      keys: keys.map((key) => getKey(storageCollection, key)),
     },
-    skip: !userData,
+    skip: !userData || keys.length === 0,
   });
+  const map = new Map<string, T>();
+  if (data !== undefined) {
+    for (const storage of data.storages) {
+      try {
+        map.set(
+          storage.key,
+          storageCollection.validator.parse(JSON.parse(storage.value))
+        );
+      } catch (e) {
+        // ignore
+      }
+    }
+  }
+  return (key: Pick<T, K>) => {
+    const value = map.get(getKey(storageCollection, key));
+    if (value === undefined) {
+      return defaultValue;
+    }
+    return value;
+  };
+}
 
-  if (data === undefined) {
-    return defaultValue;
-  }
-  if (data.storages.length === 0) {
-    return defaultValue;
-  }
-
-  try {
-    return storageCollection.validator.parse(
-      JSON.parse(data.storages[0].value)
-    );
-  } catch (e) {
-    return defaultValue;
-  }
+export function useSingleStorage<T, K extends keyof T, D>(
+  storageCollection: StorageCollection<T, K>,
+  key: Pick<T, K>,
+  defaultValue: D | T
+): T | D {
+  const storages = useStorage(storageCollection, [key], defaultValue);
+  return storages(key);
 }
 
 function typedQuery<TVariables extends OperationVariables>(
@@ -119,22 +133,14 @@ function refetchQueries(key: string): InternalRefetchQueriesInclude {
     prefixes.push(prefix);
   }
 
-  return [
+  return prefixes.map((prefix) =>
     typedQuery({
-      query: StorageQueryDocument,
+      query: PrefixedStorageQueryDocument,
       variables: {
-        key,
+        prefix,
       },
-    }),
-    ...prefixes.map((prefix) =>
-      typedQuery({
-        query: PrefixedStorageQueryDocument,
-        variables: {
-          prefix,
-        },
-      })
-    ),
-  ];
+    })
+  );
 }
 
 export function useSetStorage<T>(storageCollection: StorageCollection<T>) {
@@ -161,12 +167,21 @@ export function useDeleteStorage<T, K extends keyof T>(
   const [mutation, result] = useMutation(DeleteStorageMutationDocument);
 
   return [
-    async (key: Pick<T, K>) => {
+    async (keyObject: Pick<T, K>) => {
+      const key = getKey(storageCollection, keyObject);
       await mutation({
         variables: {
-          key: getKey(storageCollection, key),
+          key,
         },
-        refetchQueries: refetchQueries(getKey(storageCollection, key)),
+        refetchQueries: refetchQueries(key),
+        update: (cache) => {
+          cache.evict({
+            id: cache.identify({
+              __typename: "Storage",
+              key,
+            }),
+          });
+        },
       });
     },
     result,

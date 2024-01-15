@@ -15,7 +15,7 @@ import { useBackground } from "../hooks/useBackground";
 import { NG, NGs, TextMatcher } from "../domains/entities/storage/NGs";
 import {
   useSetStorage,
-  useStorageCollection,
+  usePrefixedStorageCollection,
 } from "../domains/entities/storage/StorageCollectionHooks";
 
 function textMatcher(matcher: TextMatcher, text: string): boolean {
@@ -122,7 +122,7 @@ export const Res = React.memo(function Res(props: ResProps) {
   };
 
   const [submitVote] = GA.useVoteResMutation();
-  const ngs = useStorageCollection(NGs);
+  const ngs = usePrefixedStorageCollection(NGs);
   const [addNG] = useSetStorage(NGs);
 
   return user.value !== null &&

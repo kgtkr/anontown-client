@@ -6,25 +6,17 @@ import { dateFormat } from "../utils";
 import { Icon, Paper } from "@mui/material";
 import { TagsLink } from "./tags-link";
 import { O, pipe } from "../prelude";
-import { useSingleStorage } from "../domains/entities/storage/StorageCollectionHooks";
-import { TopicReads } from "../domains/entities/storage/TopicReads";
+import { TopicRead } from "../domains/entities/storage/TopicReads";
 
 interface TopicListItemProps {
   topic: GA.TopicFragment;
   detail: boolean;
+  topicRead: TopicRead | null;
 }
 
 export const TopicListItem = (props: TopicListItemProps) => {
-  // TODO: リクエスト数を減らす
-  const topicRead = useSingleStorage(
-    TopicReads,
-    {
-      topicId: props.topic.id,
-    },
-    null
-  );
   const newRes = pipe(
-    O.fromNullable(topicRead?.resCount),
+    O.fromNullable(props.topicRead?.resCount),
     O.map((count) => Math.max(0, props.topic.resCount - count)),
     O.toNullable
   );

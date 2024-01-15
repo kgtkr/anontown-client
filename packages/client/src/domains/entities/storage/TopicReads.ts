@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { StorageCollection } from "./StorageCollection";
+import {
+  StorageCollection,
+  StorageCollectionTypeOf,
+} from "./StorageCollection";
 
 export const TopicReads = StorageCollection(
   {
@@ -13,3 +16,5 @@ export const TopicReads = StorageCollection(
   },
   ["topicId"]
 );
+
+export type TopicRead = StorageCollectionTypeOf<typeof TopicReads>;

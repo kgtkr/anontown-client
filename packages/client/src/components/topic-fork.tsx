@@ -5,6 +5,8 @@ import { useUserContext } from "../hooks";
 import { ErrorAlert } from "./error-alert";
 import { Snack } from "./snack";
 import { TopicListItem } from "./topic-list-item";
+import { useStorage } from "../domains/entities/storage/StorageCollectionHooks";
+import { TopicReads } from "../domains/entities/storage/TopicReads";
 
 interface TopicForkProps {
   topic: GA.TopicNormalFragment;
@@ -14,6 +16,14 @@ interface TopicForkProps {
 export const TopicFork = (props: TopicForkProps) => {
   const [title, setTitle] = React.useState("");
   const user = useUserContext();
+  const { loading, error, data } = GA.useFindTopicsQuery({
+    variables: { query: { parent: props.topic.id } },
+  });
+  const topicReads = useStorage(
+    TopicReads,
+    data?.topics.map((t) => ({ topicId: t.id })) ?? [],
+    null
+  );
 
   return (
     <div>
@@ -45,23 +55,23 @@ export const TopicFork = (props: TopicForkProps) => {
         </GA.CreateTopicForkComponent>
       ) : null}
       <hr />
-      <GA.FindTopicsComponent variables={{ query: { parent: props.topic.id } }}>
-        {({ loading, error, data }) => {
-          if (loading) {
-            return <span>Loading...</span>;
-          }
-          if (error || !data) {
-            return <Snack msg="派生トピック取得に失敗しました" />;
-          }
-          return (
-            <div>
-              {data.topics.map((t) => (
-                <TopicListItem key={t.id} topic={t} detail={false} />
-              ))}
-            </div>
-          );
-        }}
-      </GA.FindTopicsComponent>
+      {loading && <span>Loading...</span>}
+      {error || !data ? (
+        <Snack msg="派生トピック取得に失敗しました" />
+      ) : (
+        <div>
+          {data.topics.map((t) => (
+            <TopicListItem
+              key={t.id}
+              topic={t}
+              detail={false}
+              topicRead={topicReads({
+                topicId: t.id,
+              })}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

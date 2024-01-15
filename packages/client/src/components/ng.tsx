@@ -12,7 +12,7 @@ import { NGEditor } from "./ng-editor";
 import {
   useDeleteStorage,
   useSetStorage,
-  useStorageCollection,
+  usePrefixedStorageCollection,
 } from "../domains/entities/storage/StorageCollectionHooks";
 import { NGs } from "../domains/entities/storage/NGs";
 import * as uuid from "uuid";
@@ -22,7 +22,7 @@ interface NGProps {}
 // TODO: topicIdによるフィルタリング
 export const NG: React.FC<NGProps> = () => {
   const [dialog, setDialog] = React.useState<string | null>(null);
-  const ngs = useStorageCollection(NGs);
+  const ngs = usePrefixedStorageCollection(NGs);
   const [addNG] = useSetStorage(NGs);
   const [deleteNG] = useDeleteStorage(NGs);
 
