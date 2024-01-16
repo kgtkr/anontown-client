@@ -73,4 +73,5 @@ export const gqlClient = new ApolloClient({
   cache: new InMemoryCache({
     possibleTypes: generatedIntrospection.possibleTypes,
   }),
+  connectToDevTools: process.env.NODE_ENV === "development",
 });
