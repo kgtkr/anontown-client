@@ -78,7 +78,7 @@ export const ResWrite = (props: ResWriteProps) => {
   const [mutation, { error }] = GA.useCreateResMutation({
     variables: {
       topic: props.topic,
-      name,
+      name: name.length === 0 ? null : name,
       text,
       reply: props.reply,
       profile: profileId,
