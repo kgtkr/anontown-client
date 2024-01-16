@@ -176,30 +176,33 @@ export function App(): JSX.Element {
                     onClose={() => setAnchorEl(null)}
                   >
                     {user.value !== null ? (
-                      <>
+                      [
                         <MenuItem
                           to={routes.profiles.to({})}
                           component={Link}
                           onClick={() => setAnchorEl(null)}
+                          key="profile"
                         >
                           プロフ管理
-                        </MenuItem>
+                        </MenuItem>,
                         <MenuItem
                           to={routes.settings.to({})}
                           component={Link}
                           onClick={() => setAnchorEl(null)}
+                          key="settings"
                         >
                           設定
-                        </MenuItem>
+                        </MenuItem>,
                         <MenuItem
                           onClick={() => {
                             setAnchorEl(null);
                             user.update(null);
                           }}
+                          key="logout"
                         >
                           ログアウト
-                        </MenuItem>
-                      </>
+                        </MenuItem>,
+                      ]
                     ) : (
                       <MenuItem
                         onClick={() => setAnchorEl(null)}
