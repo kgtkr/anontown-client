@@ -4,6 +4,12 @@ import { graphql } from "../../../generated/graphql/gql";
 import { useUserContext } from "../../../hooks";
 import React from "react";
 
+/**
+ * あるStorageをset/deleteしたときにキャッシュを更新するべきクエリを保持する
+ * 例えば key="a:b:c" を持つStorageをset/deleteした時、更新対象のクエリは
+ * - keyPrefixが "a:" や "a:b:" であるクエリ
+ * - keysに "a:b:c" を含むクエリ
+ */
 export interface StorageCache {
   // あるprefixのクエリ
   prefixedQueries: Set<string>;
