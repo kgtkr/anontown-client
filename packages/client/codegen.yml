@@ -1,6 +1,7 @@
 overwrite: true
 schema: "./schema.json"
-documents: ["./src/**/*.gql", "./src/**/*.ts", "./src/**/*.tsx"]
+documents:
+  ["./src/**/*.gql", "./src/**/*.ts", "./src/**/*.tsx", "!./src/generated/**/*"]
 generates:
   src/generated/graphql/:
     preset: "client"

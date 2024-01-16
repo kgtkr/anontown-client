@@ -45,16 +45,18 @@ export async function migration(token: GA.TokenMasterFragment) {
     sto !== undefined ? JSON.parse(sto.value) : Sto.initStorage
   );
 
-  await gqlClient.mutate<GA.SetStorageMutation, GA.SetStorageMutationVariables>(
-    {
-      mutation: GA.SetStorageDocument,
-      variables: {
-        key: Sto.verArray[0],
-        value: JSON.stringify(storage),
+  await gqlClient.mutate<
+    GA.SetStoragesMutation,
+    GA.SetStoragesMutationVariables
+  >({
+    mutation: GA.SetStoragesDocument,
+    variables: {
+      input: {
+        storages: [{ key: Sto.verArray[0], value: JSON.stringify(storage) }],
       },
-      context: {
-        headers: createHeaders(token.id, token.key),
-      },
-    }
-  );
+    },
+    context: {
+      headers: createHeaders(token.id, token.key),
+    },
+  });
 }

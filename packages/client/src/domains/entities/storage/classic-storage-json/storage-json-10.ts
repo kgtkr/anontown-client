@@ -129,26 +129,24 @@ export async function convert9To10(
       value: JSON.stringify(x),
     })),
   ];
-  await Promise.all(
-    keyValues.map(async ({ key, value }) => {
-      const result = await gqlClient.mutate<
-        GA.SetStorageMutation,
-        GA.SetStorageMutationVariables
-      >({
-        mutation: GA.SetStorageDocument,
-        variables: {
-          key,
-          value,
-        },
-        context: {
-          headers: createHeaders(token.id, token.key),
-        },
-      });
-      if (result.errors !== undefined && result.errors.length > 0) {
-        throw new Error(result.errors[0].message);
-      }
-    })
-  );
+
+  const result = await gqlClient.mutate<
+    GA.SetStoragesMutation,
+    GA.SetStoragesMutationVariables
+  >({
+    mutation: GA.SetStoragesDocument,
+    variables: {
+      input: {
+        storages: keyValues,
+      },
+    },
+    context: {
+      headers: createHeaders(token.id, token.key),
+    },
+  });
+  if (result.errors !== undefined && result.errors.length > 0) {
+    throw new Error(result.errors[0].message);
+  }
 
   return {
     ver: "10",

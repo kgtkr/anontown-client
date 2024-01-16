@@ -27,12 +27,11 @@ const StorageQueryDocument = graphql(/* GraphQL */ `
   }
 `);
 
-const SetStorageMutationDocument = graphql(/* GraphQL */ `
-  mutation StorageCollectionHooks_setStorageMutation(
-    $key: String!
-    $value: String!
+const SetStoragesMutationDocument = graphql(/* GraphQL */ `
+  mutation StorageCollectionHooks_setStoragesMutation(
+    $input: SetStoragesInput!
   ) {
-    setStorage(key: $key, value: $value) {
+    setStorages(input: $input) {
       __typename
     }
   }
@@ -144,15 +143,16 @@ function refetchQueries(key: string): InternalRefetchQueriesInclude {
 }
 
 export function useSetStorage<T>(storageCollection: StorageCollection<T>) {
-  const [mutation, result] = useMutation(SetStorageMutationDocument);
+  const [mutation, result] = useMutation(SetStoragesMutationDocument);
 
   return [
     async (value: T) => {
       const key = getKey(storageCollection, value);
       await mutation({
         variables: {
-          key,
-          value: JSON.stringify(value),
+          input: {
+            storages: [{ key, value: JSON.stringify(value) }],
+          },
         },
         refetchQueries: refetchQueries(key),
       });

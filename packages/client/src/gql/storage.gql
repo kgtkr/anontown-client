@@ -1,16 +1,18 @@
-fragment storage on Storage{
-    key
-    value
+fragment storage on Storage {
+  key
+  value
 }
 
-query findStorages($query:StorageQuery!){
-    storages(query:$query){
-        ...storage
-    }
+query findStorages($query: StorageQuery!) {
+  storages(query: $query) {
+    ...storage
+  }
 }
 
-mutation setStorage($key:String!,$value:String!){
-    setStorage(key:$key,value:$value){
-        ...storage
+mutation setStorages($input: SetStoragesInput!) {
+  setStorages(input: $input) {
+    storages {
+      ...storage
     }
+  }
 }
