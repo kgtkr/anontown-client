@@ -55,8 +55,8 @@ export const LoginPage = (_props: LoginPageProps) => {
                   if (token.data) {
                     userContext.update(
                       await createUserData(
-                        token.data.createTokenMaster as GA.TokenMasterFragment
-                      )
+                        token.data.createTokenMaster as GA.TokenMasterFragment,
+                      ),
                     );
                   }
                 }}

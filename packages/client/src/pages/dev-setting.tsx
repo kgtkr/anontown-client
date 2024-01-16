@@ -27,16 +27,17 @@ export const DevSettingPage = userSwitch((props: DevSettingPageProps) => {
               variables,
             });
             if (cs !== null && !isNullish(data.data)) {
-              cache.writeQuery<GA.FindClientsQuery, GA.FindClientsQueryVariables>(
-                {
-                  query: GA.FindClientsDocument,
-                  variables,
-                  data: {
-                    __typename: "Query",
-                    clients: cs.clients.concat([data.data.createClient]),
-                  },
-                }
-              );
+              cache.writeQuery<
+                GA.FindClientsQuery,
+                GA.FindClientsQueryVariables
+              >({
+                query: GA.FindClientsDocument,
+                variables,
+                data: {
+                  __typename: "Query",
+                  clients: cs.clients.concat([data.data.createClient]),
+                },
+              });
             }
           }}
           userData={props.userData}

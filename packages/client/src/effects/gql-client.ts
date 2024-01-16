@@ -53,7 +53,7 @@ const wsLink = new GraphQLWsLink(
       const auth = getAuth();
       return auth !== null ? createConnectionParams(auth.id, auth.key) : {};
     },
-  })
+  }),
 );
 
 const splitLink = split(
@@ -65,7 +65,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  from([authMiddleware, httpLink])
+  from([authMiddleware, httpLink]),
 );
 
 export const gqlClient = new ApolloClient({

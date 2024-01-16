@@ -88,8 +88,8 @@ export const NotificationsPage = userSwitch(
             {typeof Notification === "undefined" || registration === undefined
               ? "このブラウザは通知をサポートしていません"
               : Notification.permission === "granted"
-              ? "既に通知が有効です"
-              : "通知を有効にする"}
+                ? "既に通知が有効です"
+                : "通知を有効にする"}
           </Button>
           <div>
             <Button
@@ -173,5 +173,5 @@ export const NotificationsPage = userSwitch(
         </div>
       </Page>
     );
-  }
+  },
 );

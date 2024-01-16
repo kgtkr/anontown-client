@@ -21,7 +21,7 @@ export function TopicFavo({ detail }: TopicFavoProps) {
   const topicReads = useStorage(
     TopicReads,
     favoTopics.map((topic) => ({ topicId: topic.topicId })),
-    null
+    null,
   );
 
   const { loading, error, data, refetch } = GA.useFindTopicsQuery({
@@ -47,10 +47,10 @@ export function TopicFavo({ detail }: TopicFavoProps) {
               data.topics,
               RA.sortBy([
                 OrdT.contramap((x: GA.TopicFragment) =>
-                  new Date(x.update).valueOf()
+                  new Date(x.update).valueOf(),
                 )(OrdT.ordNumber),
               ]),
-              RA.reverse
+              RA.reverse,
             ).map((topic) => (
               <TopicListItem
                 key={topic.id}

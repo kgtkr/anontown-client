@@ -34,7 +34,7 @@ export const User = (props: UserProps): JSX.Element => {
         JSON.stringify({
           id: userData.token.id,
           key: userData.token.key,
-        })
+        }),
       );
     } else {
       localStorage.removeItem("token");

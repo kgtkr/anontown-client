@@ -23,7 +23,7 @@ export type StorageJSON10 = t.TypeOf<typeof storageJSON10>;
 // ver: 10が存在するのがマイグレーション済みのキーになっている
 export async function convert9To10(
   token: GA.TokenMasterFragment,
-  val: StorageJSON9
+  val: StorageJSON9,
 ): Promise<StorageJSON10> {
   const now = Date.now();
 
@@ -31,14 +31,14 @@ export async function convert9To10(
     (topicId, i): StorageCollectionTypeOf<typeof FavoriteTopics> => ({
       topicId,
       createdAt: now - i,
-    })
+    }),
   );
 
   const favoriteTags = Array.from(new Set(val.tagsFavo.flat())).map(
     (tag, i): StorageCollectionTypeOf<typeof FavoriteTags> => ({
       tag,
       createdAt: now - i,
-    })
+    }),
   );
 
   const topicReads = Object.entries(val.topicRead).map(
@@ -48,7 +48,7 @@ export async function convert9To10(
       topicId,
       resCreatedAt: date,
       resCount: count,
-    })
+    }),
   );
 
   const writeResConfigs = Object.entries(val.topicWrite).map(
@@ -59,14 +59,14 @@ export async function convert9To10(
       name,
       profileId: profile ?? undefined,
       age,
-    })
+    }),
   );
 
   const resDraftsNonReply = Object.entries(val.topicWrite).map(
     ([topicId, { text }]): StorageCollectionTypeOf<typeof ResDrafts> => ({
       topicId,
       text,
-    })
+    }),
   );
 
   const resDraftsReply = Object.entries(val.topicWrite)
@@ -76,8 +76,8 @@ export async function convert9To10(
           topicId,
           text,
           replyResId,
-        })
-      )
+        }),
+      ),
     )
     .flat();
 
@@ -100,7 +100,7 @@ export async function convert9To10(
         name: node.type === "name" ? convertMatcher(node.matcher) : undefined,
         vote: node.type === "vote" ? node.value : undefined,
       },
-    })
+    }),
   );
 
   const keyValues = [
@@ -154,7 +154,7 @@ export async function convert9To10(
 }
 
 function convertMatcher(
-  matcher: NGNodeTextMatcherJson
+  matcher: NGNodeTextMatcherJson,
 ): TypeOf<typeof TextMatcher> {
   return {
     text: matcher.source,

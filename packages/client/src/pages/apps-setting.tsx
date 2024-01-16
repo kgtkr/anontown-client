@@ -19,10 +19,10 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
                 tokens.data.tokens
                   .filter(
                     (x): x is GA.TokenGeneralFragment =>
-                      x.__typename === "TokenGeneral"
+                      x.__typename === "TokenGeneral",
                   )
-                  .map((x) => x.client.id)
-              )
+                  .map((x) => x.client.id),
+              ),
             )
           : [],
     },
@@ -70,7 +70,7 @@ export const AppsSettingPage = userSwitch((_props: AppsSettingPageProps) => {
                               data: {
                                 __typename: "Query",
                                 clients: cs.clients.filter(
-                                  (x) => x.id !== c.id
+                                  (x) => x.id !== c.id,
                                 ),
                               },
                             });

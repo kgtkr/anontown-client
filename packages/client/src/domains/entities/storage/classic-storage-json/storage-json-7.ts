@@ -11,7 +11,7 @@ export const storageJSON7 = t.strict({
     t.strict({
       res: t.string,
       count: t.number,
-    })
+    }),
   ),
   ng: t.array(ngJson),
 });

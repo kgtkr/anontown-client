@@ -6,6 +6,6 @@ export function update<T extends { id: string }>(item: T) {
       list,
       RA.findIndex((x) => x.id === item.id),
       O.chain((i) => RA.updateAt(i, item)(list)),
-      O.getOrElse(() => list)
+      O.getOrElse(() => list),
     );
 }

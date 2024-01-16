@@ -25,12 +25,12 @@ export const ResWrite = (props: ResWriteProps) => {
   const resDraft = useSingleStorage(
     ResDrafts,
     { topicId: props.topic, replyResId: props.reply ?? undefined },
-    null
+    null,
   );
   const writeResConfig = useSingleStorage(
     WriteResConfigs,
     { topicId: props.topic },
-    null
+    null,
   );
 
   const [setResDraft] = useSetStorage(ResDrafts);
@@ -39,7 +39,7 @@ export const ResWrite = (props: ResWriteProps) => {
   const [text, setText] = React.useState(resDraft?.text ?? "");
   const [name, setName] = React.useState(writeResConfig?.name ?? "");
   const [profileId, setProfileId] = React.useState(
-    writeResConfig?.profileId ?? null
+    writeResConfig?.profileId ?? null,
   );
   const [age, setAge] = React.useState(writeResConfig?.age ?? true);
 
@@ -52,7 +52,7 @@ export const ResWrite = (props: ResWriteProps) => {
       });
     },
     5000,
-    [text]
+    [text],
   );
   useDebounce(
     () => {
@@ -64,7 +64,7 @@ export const ResWrite = (props: ResWriteProps) => {
       });
     },
     5000,
-    [name, profileId, age]
+    [name, profileId, age],
   );
 
   const profiles = GA.useFindProfilesQuery({

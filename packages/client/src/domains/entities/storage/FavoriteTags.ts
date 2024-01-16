@@ -12,5 +12,5 @@ export const FavoriteTags = StorageCollection(
     keyPayload: (value) => CryptoJS.SHA256(value.tag).toString(),
     compare: (a, b) => b.createdAt - a.createdAt,
   },
-  ["tag"]
+  ["tag"],
 );

@@ -11,5 +11,5 @@ export const FavoriteTopics = StorageCollection(
     keyPayload: (value) => value.topicId,
     compare: (a, b) => b.createdAt - a.createdAt,
   },
-  ["topicId"]
+  ["topicId"],
 );

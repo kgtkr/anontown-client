@@ -129,8 +129,8 @@ export function App(): JSX.Element {
         }
         setInitUserData(
           await createUserData(
-            res.data.token as GA.TokenMasterFragment // TODO: ここのキャストおかしい
-          )
+            res.data.token as GA.TokenMasterFragment, // TODO: ここのキャストおかしい
+          ),
         );
       } catch {
         setInitUserData(null);

@@ -33,7 +33,7 @@ export const NGs = StorageCollection(
     keyPayload: (value) => `${value.topicId ?? ""}:${value.id}`,
     compare: (a, b) => b.createdAt - a.createdAt,
   },
-  ["id", "topicId"]
+  ["id", "topicId"],
 );
 
 export type NG = StorageCollectionTypeOf<typeof NGs>;

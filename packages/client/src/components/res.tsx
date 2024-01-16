@@ -26,7 +26,7 @@ function textMatcher(matcher: TextMatcher, text: string): boolean {
     try {
       return new RegExp(
         matcher.text,
-        [matcher.ignoreCase ? "i" : ""].join("")
+        [matcher.ignoreCase ? "i" : ""].join(""),
       ).test(text);
     } catch {
       return false;
@@ -246,7 +246,7 @@ export const Res = React.memo(function Res(props: ResProps) {
                     state: {
                       background,
                     },
-                  }
+                  },
                 )}
               >
                 @{props.res.profile.sn}
@@ -256,7 +256,7 @@ export const Res = React.memo(function Res(props: ResProps) {
             <Link
               to={routes.res.to(
                 { id: props.res.id, topic: props.res.topic.id },
-                { state: { background } }
+                { state: { background } },
               )}
             >
               {dateFormat.format(props.res.date)}
@@ -269,7 +269,7 @@ export const Res = React.memo(function Res(props: ResProps) {
                   state: {
                     background,
                   },
-                }
+                },
               )}
             >
               #{props.res.hash.substr(0, 6)}
@@ -357,7 +357,7 @@ export const Res = React.memo(function Res(props: ResProps) {
                   component={Link}
                   to={routes.res.to(
                     { id: props.res.reply.id, topic: props.res.topic.id },
-                    { state: { background } }
+                    { state: { background } },
                   )}
                   style={small}
                   size="small"
@@ -371,7 +371,7 @@ export const Res = React.memo(function Res(props: ResProps) {
                     component={Link}
                     to={routes.resReply.to(
                       { id: props.res.id, topic: props.res.topic.id },
-                      { state: { background } }
+                      { state: { background } },
                     )}
                     style={small}
                     size="small"

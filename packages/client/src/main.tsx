@@ -24,5 +24,5 @@ createRoot(document.querySelector("#root")!).render(
         </StorageCacheContext.Provider>
       </BrowserRouter>
     </HelmetProvider>
-  </ApolloProvider>
+  </ApolloProvider>,
 );

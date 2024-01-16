@@ -47,5 +47,5 @@ export function TopicForkPage() {
 
 export const TopicForkModal = withModal(
   () => <TopicForkBase zDepth={0} />,
-  "派生トピック"
+  "派生トピック",
 );

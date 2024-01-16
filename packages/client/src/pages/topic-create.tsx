@@ -13,7 +13,7 @@ export const TopicCreatePage = userSwitch(() => {
   const [tags, setTags] = React.useState<ReadonlyArray<string>>([]);
   const [text, setText] = React.useState("");
   const [type, setType] = React.useState<"TopicNormal" | "TopicOne">(
-    "TopicOne"
+    "TopicOne",
   );
   const [openDialog, setOpenDialog] = React.useState(false);
   const history = useHistory();
@@ -37,10 +37,10 @@ export const TopicCreatePage = userSwitch(() => {
               ? x.createTopicNormal
               : x.createTopicOne
             ).id,
-          })
+          }),
         );
       },
-    }
+    },
   );
 
   return (

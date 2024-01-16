@@ -48,7 +48,7 @@ export const verArray: Array<StorageJSON["ver"]> = [
 
 export async function convert(
   token: GA.TokenMasterFragment,
-  storage: unknown
+  storage: unknown,
 ): Promise<StorageJSONLatest> {
   if (storageJSON.is(storage)) {
     const s1 = storage;

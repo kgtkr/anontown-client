@@ -5,7 +5,7 @@ import ReactModal from "react-modal";
  * @deprecated
  */
 export const Modal = (
-  props: ReactModal.Props & { children?: React.ReactNode }
+  props: ReactModal.Props & { children?: React.ReactNode },
 ) => {
   return (
     <ReactModal

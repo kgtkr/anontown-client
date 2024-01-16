@@ -33,7 +33,7 @@ export function History(props: HistoryProps) {
               state: {
                 background,
               },
-            }
+            },
           )}
         >
           HASH:{props.history.hash.substring(0, 6)}

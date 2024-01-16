@@ -41,7 +41,7 @@ export function Oekaki({ onSubmit, size }: OekakiProps) {
   const [pictureStack, setPictureStack] = React.useState<HistoryStack<Picture>>(
     HS.of({
       lines: [],
-    })
+    }),
   );
   const [drawingLine, setDrawingLine] = React.useState<Line | null>(null);
   const [color, setColor] = React.useState<RGBColor>({ r: 0, g: 0, b: 0 });
@@ -72,8 +72,8 @@ export function Oekaki({ onSubmit, size }: OekakiProps) {
       setPictureStack((prevStack) =>
         pipe(
           prevStack,
-          HS.modifyPush((picture) => ({ lines: RA.snoc(picture.lines, line) }))
-        )
+          HS.modifyPush((picture) => ({ lines: RA.snoc(picture.lines, line) })),
+        ),
       );
       setDrawingLine(null);
     }
@@ -97,7 +97,7 @@ export function Oekaki({ onSubmit, size }: OekakiProps) {
         lines: RA.snoc(picture.lines, line),
       })),
       O.getOrElse<Endomorphism<Picture>>(() => identity),
-      (updater) => pipe(pictureStack, HS.getCurrentValue, updater)
+      (updater) => pipe(pictureStack, HS.getCurrentValue, updater),
     );
 
     return `
@@ -112,7 +112,7 @@ export function Oekaki({ onSubmit, size }: OekakiProps) {
         stroke="${toColorString(p.color)}"
         fill="${p.fill ? toColorString(p.color) : "none"}">
         <path d="M ${p.dots.map((l) => `L ${l.x} ${l.y}`).join(" ")}"/>
-      </g>`
+      </g>`,
     )
     .join("\n")}
 </svg>

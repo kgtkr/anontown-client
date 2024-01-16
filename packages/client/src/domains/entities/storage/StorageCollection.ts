@@ -10,14 +10,14 @@ export type StorageCollection<T, K extends keyof T = keyof T> = {
 // 型推論のためのヘルパー
 export function StorageCollection<T, K extends keyof T>(
   value: StorageCollection<T, K>,
-  _keys?: K[]
+  _keys?: K[],
 ): StorageCollection<T, K> {
   return value;
 }
 
 export function getKey<T, K extends keyof T>(
   collection: StorageCollection<T, K>,
-  value: Pick<T, K>
+  value: Pick<T, K>,
 ): string {
   return `${collection.keyPrefix}${collection.keyPayload(value)}`;
 }

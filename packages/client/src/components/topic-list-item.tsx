@@ -18,7 +18,7 @@ export const TopicListItem = (props: TopicListItemProps) => {
   const newRes = pipe(
     O.fromNullable(props.topicRead?.resCount),
     O.map((count) => Math.max(0, props.topic.resCount - count)),
-    O.toNullable
+    O.toNullable,
   );
 
   return (

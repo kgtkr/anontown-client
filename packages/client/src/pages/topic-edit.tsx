@@ -40,5 +40,5 @@ export function TopicEditPage() {
 
 export const TopicEditModal = withModal(
   () => <TopicEditBase zDepth={0} />,
-  "トピック編集"
+  "トピック編集",
 );

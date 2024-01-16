@@ -7,7 +7,7 @@ export const storageJSON1 = t.strict({
     t.strict({
       topic: t.string,
       res: t.string,
-    })
+    }),
   ),
 });
 

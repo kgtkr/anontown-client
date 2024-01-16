@@ -11,5 +11,5 @@ export const ResDrafts = StorageCollection(
     }),
     keyPayload: (value) => `${value.topicId}:${value.replyResId ?? ""}`,
   },
-  ["topicId", "replyResId"]
+  ["topicId", "replyResId"],
 );

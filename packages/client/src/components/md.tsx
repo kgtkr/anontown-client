@@ -33,7 +33,7 @@ function reactProcessor() {
 export function Md(props: MdProps): JSX.Element {
   const node = React.useMemo(
     () => reactProcessor().processSync(props.text).result,
-    [props.text]
+    [props.text],
   );
 
   return (

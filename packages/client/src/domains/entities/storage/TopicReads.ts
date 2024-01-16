@@ -14,7 +14,7 @@ export const TopicReads = StorageCollection(
     }),
     keyPayload: (value) => value.topicId,
   },
-  ["topicId"]
+  ["topicId"],
 );
 
 export type TopicRead = StorageCollectionTypeOf<typeof TopicReads>;

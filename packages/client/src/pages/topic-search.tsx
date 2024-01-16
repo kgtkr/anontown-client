@@ -43,7 +43,7 @@ export const TopicSearchPage = (_props: {}) => {
     (query) => routes.topicSearch.parseQuery(query),
     (query) => {
       dispatch({ type: "UPDATE_URL_QUERY", query: query });
-    }
+    },
   );
 
   const [state, dispatch] = React.useReducer(
@@ -94,7 +94,7 @@ export const TopicSearchPage = (_props: {}) => {
     {
       input: init,
       query: init,
-    }
+    },
   );
 
   const onInput = useDebouncedCallback(() => {
@@ -108,8 +108,8 @@ export const TopicSearchPage = (_props: {}) => {
             dead: state.input.dead,
             tags: state.input.tags,
           },
-        }
-      )
+        },
+      ),
     );
   }, 500);
 
@@ -130,7 +130,7 @@ export const TopicSearchPage = (_props: {}) => {
   const topicReads = useStorage(
     TopicReads,
     topics.data?.topics.map((t) => ({ topicId: t.id })) ?? [],
-    null
+    null,
   );
 
   return (

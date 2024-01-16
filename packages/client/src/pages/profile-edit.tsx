@@ -20,7 +20,7 @@ export const ProfileEditPage = userSwitch((props: ProfileEditPageProps) => {
     O.fromNullable(profiles.data),
     O.map((x) => x.profiles),
     O.chain(RA.head),
-    O.toUndefined
+    O.toUndefined,
   );
 
   return (

@@ -22,7 +22,7 @@ export const TopicFork = (props: TopicForkProps) => {
   const topicReads = useStorage(
     TopicReads,
     data?.topics.map((t) => ({ topicId: t.id })) ?? [],
-    null
+    null,
   );
 
   const [submit, { error: createTopicForkError }] =

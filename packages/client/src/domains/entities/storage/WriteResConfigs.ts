@@ -12,5 +12,5 @@ export const WriteResConfigs = StorageCollection(
     }),
     keyPayload: (value) => value.topicId,
   },
-  ["topicId"]
+  ["topicId"],
 );

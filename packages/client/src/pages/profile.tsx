@@ -24,8 +24,8 @@ function ProfileBase(props: ProfileBaseProps) {
       option.map((x) => x.profiles),
       option.chain(RA.head),
       option.map((x) => `@${x.sn}`),
-      option.getOrElse(() => "プロフィール")
-    )
+      option.getOrElse(() => "プロフィール"),
+    ),
   );
 
   return (
@@ -43,7 +43,7 @@ function ProfileBase(props: ProfileBaseProps) {
                 <Profile profile={p} />
               </Paper>
             )),
-            option.getOrElse(() => <Snack msg="プロフィールが存在しません" />)
+            option.getOrElse(() => <Snack msg="プロフィールが存在しません" />),
           )
         : undefined}
     </div>
@@ -60,5 +60,5 @@ export function ProfilePage() {
 
 export const ProfileModal = withModal(
   () => <ProfileBase zDepth={0} />,
-  "プロフィール"
+  "プロフィール",
 );

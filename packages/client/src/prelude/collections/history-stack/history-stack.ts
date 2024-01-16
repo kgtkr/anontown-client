@@ -30,7 +30,7 @@ export function push<A>(x: A): (hs: HistoryStack<A>) => HistoryStack<A> {
 }
 
 export function modifyPush<A>(
-  f: (x: A) => A
+  f: (x: A) => A,
 ): (hs: HistoryStack<A>) => HistoryStack<A> {
   return (hs) => push(f(getCurrentValue(hs)))(hs);
 }
@@ -47,9 +47,9 @@ export function undo<A>(hs: HistoryStack<A>): Option<HistoryStack<A>> {
             prev: prevInit,
             currentValue: prevLast,
             post: RA.cons(currentValue, post),
-          })
-        )
-    )
+          }),
+        ),
+    ),
   );
 }
 
@@ -61,7 +61,7 @@ export function uncheckedUndo<A>(hs: HistoryStack<A>): HistoryStack<A> {
   return pipe(
     hs,
     undo,
-    O.getOrElse(() => hs)
+    O.getOrElse(() => hs),
   );
 }
 
@@ -77,9 +77,9 @@ export function redo<A>(hs: HistoryStack<A>): Option<HistoryStack<A>> {
             prev: RA.snoc(prev, currentValue),
             currentValue: postHead,
             post: postTail,
-          })
-        )
-    )
+          }),
+        ),
+    ),
   );
 }
 
@@ -91,7 +91,7 @@ export function uncheckedRedo<A>(hs: HistoryStack<A>): HistoryStack<A> {
   return pipe(
     hs,
     redo,
-    O.getOrElse(() => hs)
+    O.getOrElse(() => hs),
   );
 }
 

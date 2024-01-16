@@ -25,7 +25,7 @@ export function StorageCache(): StorageCache {
 }
 
 export const StorageCacheContext = React.createContext<StorageCache>(
-  undefined!
+  undefined!,
 );
 
 function splitKey(key: string): string[] {
@@ -120,7 +120,7 @@ const DeleteStorageMutationDocument = graphql(/* GraphQL */ `
 export function usePrefixedStorageCollection<T>(
   storageCollection: StorageCollection<T>,
   // `:`で区切られ`:`で終わる
-  additionalPrefix?: string
+  additionalPrefix?: string,
 ): T[] {
   const { value: userData } = useUserContext();
   const cache = React.useContext(StorageCacheContext);
@@ -145,7 +145,7 @@ export function usePrefixedStorageCollection<T>(
     for (const storage of data.storages) {
       try {
         result.push(
-          storageCollection.validator.parse(JSON.parse(storage.value))
+          storageCollection.validator.parse(JSON.parse(storage.value)),
         );
       } catch (e) {
         // ignore
@@ -164,13 +164,13 @@ export function usePrefixedStorageCollection<T>(
 export function useStorage<T, K extends keyof T, D>(
   storageCollection: StorageCollection<T, K>,
   keyObjects: Pick<T, K>[],
-  defaultValue: D | T // `| T` は不要だが補完のため
+  defaultValue: D | T, // `| T` は不要だが補完のため
 ): (key: Pick<T, K>) => T | D {
   const { value: userData } = useUserContext();
   const cache = React.useContext(StorageCacheContext);
   const keys = React.useMemo(
     () => keyObjects.map((key) => getKey(storageCollection, key)).sort(),
-    [storageCollection, keyObjects]
+    [storageCollection, keyObjects],
   );
   // TODO: 既に cache に対象の key が全てあるならリクエストしないようにする。また、 cache にあるキーを除いてリクエストする
   const { data } = useSuspenseQuery(StorageQueryDocument, {
@@ -194,7 +194,7 @@ export function useStorage<T, K extends keyof T, D>(
         try {
           map.set(
             storage.key,
-            storageCollection.validator.parse(JSON.parse(storage.value))
+            storageCollection.validator.parse(JSON.parse(storage.value)),
           );
         } catch (e) {
           // ignore
@@ -215,7 +215,7 @@ export function useStorage<T, K extends keyof T, D>(
 export function useSingleStorage<T, K extends keyof T, D>(
   storageCollection: StorageCollection<T, K>,
   key: Pick<T, K>,
-  defaultValue: D | T
+  defaultValue: D | T,
 ): T | D {
   const storages = useStorage(storageCollection, [key], defaultValue);
   return storages(key);
@@ -264,7 +264,7 @@ export function useSetStorage<T>(storageCollection: StorageCollection<T>) {
                         ...prev,
                         storages: updateCacheSetStorage(prev.storages, storage),
                       };
-                    }
+                    },
                   );
                 }
               }
@@ -289,7 +289,7 @@ export function useSetStorage<T>(storageCollection: StorageCollection<T>) {
                       ...prev,
                       storages: updateCacheSetStorage(prev.storages, storage),
                     };
-                  }
+                  },
                 );
               }
             },
@@ -297,12 +297,12 @@ export function useSetStorage<T>(storageCollection: StorageCollection<T>) {
         },
         result,
       ] as const,
-    [storageCollection, mutation, result]
+    [storageCollection, mutation, result],
   );
 }
 
 export function useDeleteStorage<T, K extends keyof T>(
-  storageCollection: StorageCollection<T, K>
+  storageCollection: StorageCollection<T, K>,
 ) {
   const [mutation, result] = useMutation(DeleteStorageMutationDocument);
   const storageCache = React.useContext(StorageCacheContext);
@@ -342,7 +342,7 @@ export function useDeleteStorage<T, K extends keyof T>(
                         ...prev,
                         storages: deleteCacheSetStorage(prev.storages, key),
                       };
-                    }
+                    },
                   );
                 }
               }
@@ -367,7 +367,7 @@ export function useDeleteStorage<T, K extends keyof T>(
                       ...prev,
                       storages: deleteCacheSetStorage(prev.storages, key),
                     };
-                  }
+                  },
                 );
               }
             },
@@ -375,6 +375,6 @@ export function useDeleteStorage<T, K extends keyof T>(
         },
         result,
       ] as const,
-    [mutation, result, storageCollection]
+    [mutation, result, storageCollection],
   );
 }
