@@ -1,7 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import React from "react";
 import * as GA from "../generated/graphql-apollo";
-import { UserData } from "../domains/entities";
 import { ErrorAlert } from "./error-alert";
 import { MdEditor } from "./md-editor";
 import { TagsInput } from "./tags-input";

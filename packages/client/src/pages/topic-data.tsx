@@ -1,5 +1,4 @@
 import { Paper } from "@mui/material";
-import * as React from "react";
 import { useParams } from "react-router-dom";
 import { Page, Snack, TopicData } from "../components";
 import * as GA from "../generated/graphql-apollo";

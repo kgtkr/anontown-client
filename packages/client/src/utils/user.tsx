@@ -1,13 +1,8 @@
 import * as React from "react";
-import { rx, rxOps } from "../prelude";
+import { rx } from "../prelude";
 import { UserData } from "../domains/entities";
 import * as GA from "../generated/graphql-apollo";
-import {
-  useEffectRef,
-  useEffectSkipN,
-  UserContext,
-  UserContextType,
-} from "../hooks";
+import { useEffectSkipN, UserContext, UserContextType } from "../hooks";
 
 // TODO: 最悪な実装なのであとで何とかする
 let _auth: GA.TokenMasterFragment | null = null;

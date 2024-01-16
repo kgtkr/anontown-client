@@ -9,7 +9,7 @@ interface ResBaseProps {
 }
 
 // TODO: zDepthが使われていない
-function ResBase({ zDepth }: ResBaseProps) {
+function ResBase({ zDepth: _zDepth }: ResBaseProps) {
   const { id } = useParams<{ id: string }>();
   const { loading, error, data } = GA.useFindResesQuery({
     variables: { query: { id: [id] } },
