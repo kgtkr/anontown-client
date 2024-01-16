@@ -26,6 +26,6 @@
   "dependencies": {
     "fp-ts": "^2.12.3",
     "history": "^4.9.0",
-    "query-string": "^6.8.2"
+    "query-string": "^7.1.1"
   }
 }
