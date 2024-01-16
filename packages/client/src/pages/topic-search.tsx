@@ -200,7 +200,7 @@ export const TopicSearchPage = (_props: {}) => {
                 }
                 return {
                   ...prev,
-                  msgs: [...prev.topics, ...fetchMoreResult.topics],
+                  topics: [...prev.topics, ...fetchMoreResult.topics],
                 };
               },
             });
