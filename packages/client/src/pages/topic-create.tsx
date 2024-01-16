@@ -1,154 +1,113 @@
 import * as routes from "@anontown-frontend/routes";
-import { Mutation } from "@apollo/client/react/components";
 import { MenuItem, Select, Paper, Button, TextField } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { ErrorAlert, MdEditor, Modal, Page, TagsInput } from "../components";
 import * as GA from "../generated/graphql-apollo";
-import { userSwitch, UserSwitchProps } from "../utils";
+import { userSwitch } from "../utils";
+import { useMutation } from "@apollo/client";
 
-type TopicCreatePageProps = RouteComponentProps<{}> & UserSwitchProps;
-
-export interface TopicCreatePageState {
-  title: string;
-  tags: ReadonlyArray<string>;
-  text: string;
-  type: "TopicNormal" | "TopicOne";
-  openDialog: boolean;
-}
-
-export const TopicCreatePage = userSwitch(
-  withRouter(
-    class extends React.Component<TopicCreatePageProps, TopicCreatePageState> {
-      constructor(props: TopicCreatePageProps) {
-        super(props);
-        this.state = {
-          title: "",
-          tags: [],
-          text: "",
-          type: "TopicOne",
-          openDialog: false,
-        };
-      }
-
-      render() {
-        return (
-          <Page>
-            <Helmet title="トピック作成" />
-            <Paper>
-              <Mutation<
-                GA.CreateTopicNormalMutation | GA.CreateTopicOneMutation,
-                | GA.CreateTopicNormalMutationVariables
-                | GA.CreateTopicOneMutationVariables
-              >
-                mutation={
-                  this.state.type === "TopicNormal"
-                    ? GA.CreateTopicNormalDocument
-                    : GA.CreateTopicOneDocument
-                }
-                variables={{
-                  title: this.state.title,
-                  tags: this.state.tags,
-                  text: this.state.text,
-                }}
-                onCompleted={(x) => {
-                  this.props.history.push(
-                    routes.topic.to({
-                      id: ("createTopicNormal" in x
-                        ? x.createTopicNormal
-                        : x.createTopicOne
-                      ).id,
-                    })
-                  );
-                }}
-              >
-                {(submit, { error }) => {
-                  return (
-                    <form>
-                      <Modal
-                        isOpen={this.state.openDialog}
-                        onRequestClose={() =>
-                          this.setState({ openDialog: false })
-                        }
-                      >
-                        <h1>確認</h1>
-                        ニュース・ネタ・実況などは単発トピックで建てて下さい。
-                        <br />
-                        本当に建てますか？
-                        <Button
-                          onClick={() => {
-                            this.setState({ openDialog: false });
-                            submit();
-                          }}
-                          variant="contained"
-                        >
-                          はい
-                        </Button>
-                        <Button
-                          onClick={() => this.setState({ openDialog: false })}
-                          variant="contained"
-                        >
-                          いいえ
-                        </Button>
-                      </Modal>
-                      <ErrorAlert error={error} />
-                      <div>
-                        <Select
-                          label="種類"
-                          value={this.state.type}
-                          onChange={(evt) =>
-                            this.setState({
-                              type: evt.target.value as
-                                | "TopicNormal"
-                                | "TopicOne",
-                            })
-                          }
-                        >
-                          <MenuItem value="TopicOne">単発</MenuItem>
-                          <MenuItem value="TopicNormal">通常</MenuItem>
-                        </Select>
-                      </div>
-                      <div>
-                        <TextField
-                          placeholder="タイトル"
-                          value={this.state.title}
-                          onChange={(evt) =>
-                            this.setState({ title: evt.target.value })
-                          }
-                        />
-                      </div>
-                      <div>
-                        <TagsInput
-                          value={this.state.tags}
-                          onChange={(v) => this.setState({ tags: v })}
-                        />
-                      </div>
-                      <MdEditor
-                        value={this.state.text}
-                        onChange={(v) => this.setState({ text: v })}
-                      />
-                      <div>
-                        <Button
-                          onClick={() => {
-                            if (this.state.type === "TopicNormal") {
-                              this.setState({ openDialog: true });
-                            } else {
-                              submit();
-                            }
-                          }}
-                        >
-                          トピック作成
-                        </Button>
-                      </div>
-                    </form>
-                  );
-                }}
-              </Mutation>
-            </Paper>
-          </Page>
+export const TopicCreatePage = userSwitch(() => {
+  const [title, setTitle] = React.useState("");
+  const [tags, setTags] = React.useState<ReadonlyArray<string>>([]);
+  const [text, setText] = React.useState("");
+  const [type, setType] = React.useState<"TopicNormal" | "TopicOne">(
+    "TopicOne"
+  );
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const history = useHistory();
+  const [submit, { error }] = useMutation<
+    GA.CreateTopicNormalMutation | GA.CreateTopicOneMutation,
+    GA.CreateTopicNormalMutationVariables | GA.CreateTopicOneMutationVariables
+  >(
+    type === "TopicNormal"
+      ? GA.CreateTopicNormalDocument
+      : GA.CreateTopicOneDocument,
+    {
+      variables: {
+        title: title,
+        tags: tags,
+        text: text,
+      },
+      onCompleted: (x) => {
+        history.push(
+          routes.topic.to({
+            id: ("createTopicNormal" in x
+              ? x.createTopicNormal
+              : x.createTopicOne
+            ).id,
+          })
         );
-      }
+      },
     }
-  )
-);
+  );
+
+  return (
+    <Page>
+      <Helmet title="トピック作成" />
+      <Paper>
+        <form>
+          <Modal
+            isOpen={openDialog}
+            onRequestClose={() => setOpenDialog(false)}
+          >
+            <h1>確認</h1>
+            ニュース・ネタ・実況などは単発トピックで建てて下さい。
+            <br />
+            本当に建てますか？
+            <Button
+              onClick={() => {
+                setOpenDialog(false);
+                submit();
+              }}
+              variant="contained"
+            >
+              はい
+            </Button>
+            <Button onClick={() => setOpenDialog(false)} variant="contained">
+              いいえ
+            </Button>
+          </Modal>
+          <ErrorAlert error={error} />
+          <div>
+            <Select
+              label="種類"
+              value={type}
+              onChange={(evt) =>
+                setType(evt.target.value as "TopicNormal" | "TopicOne")
+              }
+            >
+              <MenuItem value="TopicOne">単発</MenuItem>
+              <MenuItem value="TopicNormal">通常</MenuItem>
+            </Select>
+          </div>
+          <div>
+            <TextField
+              placeholder="タイトル"
+              value={title}
+              onChange={(evt) => setTitle(evt.target.value)}
+            />
+          </div>
+          <div>
+            <TagsInput value={tags} onChange={(v) => setTags(v)} />
+          </div>
+          <MdEditor value={text} onChange={(v) => setText(v)} />
+          <div>
+            <Button
+              onClick={() => {
+                if (type === "TopicNormal") {
+                  setOpenDialog(true);
+                } else {
+                  submit();
+                }
+              }}
+            >
+              トピック作成
+            </Button>
+          </div>
+        </form>
+      </Paper>
+    </Page>
+  );
+});

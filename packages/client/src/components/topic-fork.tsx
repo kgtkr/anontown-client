@@ -25,34 +25,31 @@ export const TopicFork = (props: TopicForkProps) => {
     null
   );
 
+  const [submit, { error: createTopicForkError }] =
+    GA.useCreateTopicForkMutation({
+      onCompleted: (data) => {
+        props.onCreate?.(data.createTopicFork);
+      },
+      variables: {
+        title,
+        parent: props.topic.id,
+      },
+    });
+
   return (
     <div>
       {user.value !== null ? (
-        <GA.CreateTopicForkComponent
-          variables={{
-            title,
-            parent: props.topic.id,
-          }}
-          onCompleted={(data) => {
-            props.onCreate?.(data.createTopicFork);
-          }}
-        >
-          {(submit, { error }) => {
-            return (
-              <form>
-                <ErrorAlert error={error} />
-                <TextField
-                  placeholder="タイトル"
-                  value={title}
-                  onChange={(evt) => setTitle(evt.target.value)}
-                />
-                <Button onClick={() => submit()} variant="contained">
-                  新規作成
-                </Button>
-              </form>
-            );
-          }}
-        </GA.CreateTopicForkComponent>
+        <form>
+          <ErrorAlert error={createTopicForkError} />
+          <TextField
+            placeholder="タイトル"
+            value={title}
+            onChange={(evt) => setTitle(evt.target.value)}
+          />
+          <Button onClick={() => submit()} variant="contained">
+            新規作成
+          </Button>
+        </form>
       ) : null}
       <hr />
       {loading && <span>Loading...</span>}

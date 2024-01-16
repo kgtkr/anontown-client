@@ -22,58 +22,47 @@ export function TagsInput({ value, onChange, fullWidth }: TagsInputProps) {
   }, [favoTags]);
   const [deleteTag] = useDeleteStorage(FavoriteTags);
   const [setTag] = useSetStorage(FavoriteTags);
+  const { data, loading, error } = GA.useFindTopicTagsQuery();
+
+  if (loading) {
+    return <span>Loading...</span>;
+  }
+  if (error || !data) {
+    return <Snack msg="タグ候補取得に失敗しました" />;
+  }
 
   return (
-    <GA.FindTopicTagsComponent>
-      {({ loading, error, data }) => {
-        if (loading) {
-          return <span>Loading...</span>;
-        }
-        if (error || !data) {
-          return <Snack msg="タグ候補取得に失敗しました" />;
-        }
-
-        return (
-          <Autocomplete<string, true, undefined, true>
-            fullWidth={fullWidth}
-            placeholder="タグ"
-            freeSolo
-            multiple
-            options={data.topicTags.map((t) => t.name)}
-            renderInput={(params) => (
-              <TextField {...params} placeholder="tag" />
-            )}
-            renderTags={(value: string[], getTagProps) =>
-              value.map((option: string, index: number) => (
-                <Chip
-                  variant="outlined"
-                  label={option}
-                  {...getTagProps({ index })}
-                  key={option}
-                  icon={
-                    tagsSet.has(option) ? (
-                      <Icon>star</Icon>
-                    ) : (
-                      <Icon>star_border</Icon>
-                    )
-                  }
-                  onClick={() => {
-                    if (tagsSet.has(option)) {
-                      deleteTag({ tag: option });
-                    } else {
-                      setTag({ tag: option, createdAt: Date.now() });
-                    }
-                  }}
-                />
-              ))
+    <Autocomplete<string, true, undefined, true>
+      fullWidth={fullWidth}
+      placeholder="タグ"
+      freeSolo
+      multiple
+      options={data.topicTags.map((t) => t.name)}
+      renderInput={(params) => <TextField {...params} placeholder="tag" />}
+      renderTags={(value: string[], getTagProps) =>
+        value.map((option: string, index: number) => (
+          <Chip
+            variant="outlined"
+            label={option}
+            {...getTagProps({ index })}
+            key={option}
+            icon={
+              tagsSet.has(option) ? <Icon>star</Icon> : <Icon>star_border</Icon>
             }
-            value={[...value]}
-            onChange={(_e, v) => {
-              onChange?.(v);
+            onClick={() => {
+              if (tagsSet.has(option)) {
+                deleteTag({ tag: option });
+              } else {
+                setTag({ tag: option, createdAt: Date.now() });
+              }
             }}
           />
-        );
+        ))
+      }
+      value={[...value]}
+      onChange={(_e, v) => {
+        onChange?.(v);
       }}
-    </GA.FindTopicTagsComponent>
+    />
   );
 }

@@ -24,7 +24,7 @@ const TopicEditBase = userSwitch((props: TopicEditBaseProps) => {
     <Paper elevation={props.zDepth}>
       <Helmet title="トピック編集" />
       {topic !== null && topic.__typename === "TopicNormal" ? (
-        <TopicEditor topic={topic} userData={props.userData} />
+        <TopicEditor topic={topic} />
       ) : null}
     </Paper>
   );

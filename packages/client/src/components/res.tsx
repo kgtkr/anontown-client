@@ -114,6 +114,13 @@ export const Res = React.memo(function Res(props: ResProps) {
   const user = useUserContext();
   const background = useBackground();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [delResSubmit, delResResult] = GA.useDelResMutation({
+    onCompleted: (data) => {
+      if (props.update) {
+        props.update(data.delRes);
+      }
+    },
+  });
 
   const small = {
     width: 36,
@@ -283,30 +290,19 @@ export const Res = React.memo(function Res(props: ResProps) {
                   onClose={() => setAnchorEl(null)}
                 >
                   {props.res.self && props.res.__typename === "ResNormal" ? (
-                    <GA.DelResComponent
-                      variables={{ res: props.res.id }}
-                      onCompleted={(data) => {
-                        if (props.update) {
-                          props.update(data.delRes);
-                        }
-                      }}
-                    >
-                      {(submit, { error }) => {
-                        return (
-                          <>
-                            {error && <Snack msg={"削除に失敗しました"} />}
-                            <MenuItem
-                              onClick={() => {
-                                setAnchorEl(null);
-                                submit();
-                              }}
-                            >
-                              削除
-                            </MenuItem>
-                          </>
-                        );
-                      }}
-                    </GA.DelResComponent>
+                    <>
+                      {delResResult.error && (
+                        <Snack msg={"削除に失敗しました"} />
+                      )}
+                      <MenuItem
+                        onClick={() => {
+                          setAnchorEl(null);
+                          delResSubmit({ variables: { res: props.res.id } });
+                        }}
+                      >
+                        削除
+                      </MenuItem>
+                    </>
                   ) : null}
                   <MenuItem
                     onClick={() => {

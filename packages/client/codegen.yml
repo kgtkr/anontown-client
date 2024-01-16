@@ -19,5 +19,4 @@ config:
   nonOptionalTypename: true
   scalars:
     DateTime: string
-  withComponent: true
   enumsAsTypes: true

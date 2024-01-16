@@ -1,48 +1,32 @@
 import { Paper } from "@mui/material";
 import * as React from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Page, Snack, TopicData } from "../components";
 import * as GA from "../generated/graphql-apollo";
 import { withModal } from "../utils";
 
-interface TopicDataBaseProps extends RouteComponentProps<{ id: string }> {
+interface TopicDataBaseProps {
   zDepth?: number;
 }
 
-interface TopicDataBaseState {}
+function TopicDataBase({ zDepth }: TopicDataBaseProps) {
+  const { id } = useParams<{ id: string }>();
 
-const TopicDataBase = withRouter(
-  class extends React.Component<TopicDataBaseProps, TopicDataBaseState> {
-    constructor(props: TopicDataBaseProps) {
-      super(props);
-    }
+  const { loading, error, data } = GA.useFindTopicsQuery({
+    variables: { query: { id: [id] } },
+  });
 
-    render() {
-      return (
-        <Paper elevation={this.props.zDepth}>
-          <GA.FindTopicsComponent
-            variables={{ query: { id: [this.props.match.params.id] } }}
-          >
-            {({ loading, error, data }) => {
-              if (loading) {
-                return <span>Loading...</span>;
-              }
-              if (error || !data || data.topics.length === 0) {
-                return <Snack msg="トピック取得に失敗しました" />;
-              }
-
-              return (
-                <Paper elevation={this.props.zDepth}>
-                  <TopicData topic={data.topics[0]} />
-                </Paper>
-              );
-            }}
-          </GA.FindTopicsComponent>
-        </Paper>
-      );
-    }
-  }
-);
+  return (
+    <Paper elevation={zDepth}>
+      {loading && <span>Loading...</span>}
+      {error || !data || data.topics.length === 0 ? (
+        <Snack msg="トピック取得に失敗しました" />
+      ) : (
+        <TopicData topic={data.topics[0]} />
+      )}
+    </Paper>
+  );
+}
 
 export function TopicDataPage() {
   return (
