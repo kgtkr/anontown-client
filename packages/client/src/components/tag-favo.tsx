@@ -1,42 +1,33 @@
 import * as routes from "@anontown-frontend/routes";
-import * as React from "react";
 import { Link } from "react-router-dom";
-import { UserData, Sto } from "../domains/entities";
 import { TextTitle } from "../styled/text";
 import { TagsLink } from "./tags-link";
-import { RA, OrdT } from "../prelude";
 import { Paper } from "@mui/material";
+import { usePrefixedStorageCollection } from "../domains/entities/storage/StorageCollectionHooks";
+import { FavoriteTags } from "../domains/entities/storage/FavoriteTags";
 
-interface TagFavoProps {
-  userData: UserData;
-}
+interface TagFavoProps {}
 
-interface TagFavoState {}
+export function TagFavo(_props: TagFavoProps) {
+  const favoTags = usePrefixedStorageCollection(FavoriteTags);
 
-export class TagFavo extends React.Component<TagFavoProps, TagFavoState> {
-  constructor(props: TagFavoProps) {
-    super(props);
-  }
-
-  render() {
-    const tagsFavo = Sto.getTagsFavo(this.props.userData.storage);
-    return tagsFavo.length !== 0 ? (
-      tagsFavo.map((tags) => {
-        const sortedTags = RA.sort(OrdT.ordString)(tags);
+  return favoTags.length !== 0 ? (
+    <>
+      {favoTags.map((tags) => {
         return (
-          <Paper sx={{ p: 1 }} key={sortedTags.join(",")}>
+          <Paper sx={{ p: 1 }} key={tags.tag}>
             <TextTitle>
-              <TagsLink tags={sortedTags} />
+              <TagsLink tags={[tags.tag]} />
             </TextTitle>
           </Paper>
         );
-      })
-    ) : (
-      <Paper sx={{ p: 1 }}>
-        お気に入りタグがありません。
-        <br />
-        <Link to={routes.topicSearch.to({})}>検索</Link>
-      </Paper>
-    );
-  }
+      })}
+    </>
+  ) : (
+    <Paper sx={{ p: 1 }}>
+      お気に入りタグがありません。
+      <br />
+      <Link to={routes.topicSearch.to({})}>検索</Link>
+    </Paper>
+  );
 }

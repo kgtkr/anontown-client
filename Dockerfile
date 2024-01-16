@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM node:16.17.0-slim as build
+FROM --platform=$BUILDPLATFORM node:20.11.0-slim as build
 
 WORKDIR /workdir
 
@@ -8,7 +8,7 @@ RUN npm ci
 # viteのバグ回避のため2回ビルド
 RUN npx lerna run build && npx lerna run build
 
-FROM node:16.17.0-alpine
+FROM node:20.11.0-alpine
 
 WORKDIR /workdir
 

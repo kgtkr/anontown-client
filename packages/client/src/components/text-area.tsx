@@ -28,7 +28,7 @@ export function TextArea(props: TextAreaProps) {
       onKeyPress={props.onKeyPress}
       rows={Math.max(
         props.rows ?? 1,
-        Math.min(props.value.split("\n").length, props.rowsMax ?? Infinity)
+        Math.min(props.value.split("\n").length, props.rowsMax ?? Infinity),
       )}
       onFocus={props.onFocus}
       onBlur={props.onBlur}

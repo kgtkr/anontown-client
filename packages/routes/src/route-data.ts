@@ -17,7 +17,7 @@ export type PathData<T extends string> = ReadonlyArray<PathDataElement<T>>;
 
 function pathDataToString<T extends string>(
   pathData: PathData<T>,
-  variableNameToString: (x: T) => string
+  variableNameToString: (x: T) => string,
 ): string {
   return pathData
     .map((x) => {
@@ -33,7 +33,7 @@ function pathDataToString<T extends string>(
 
 function pathDataToPath<T extends string>(
   pathData: PathData<T>,
-  params: ReadonlyRecord<T, string>
+  params: ReadonlyRecord<T, string>,
 ): string {
   return pathDataToString(pathData, (name) => encodeURIComponent(params[name]));
 }
@@ -102,31 +102,31 @@ export class RouteData<P extends string, Q extends object> {
   constructor(
     public pathData: PathData<P>,
     public encodeQuery: (
-      query: ReadonlyRecord<string, string | ReadonlyArray<string>>
+      query: ReadonlyRecord<string, string | ReadonlyArray<string>>,
     ) => Q,
     public decodeQuery: (
-      query: Partial<Q>
-    ) => ReadonlyRecord<string, string | ReadonlyArray<string>>
+      query: Partial<Q>,
+    ) => ReadonlyRecord<string, string | ReadonlyArray<string>>,
   ) {}
 
   static create<P extends string>(
-    pathDataBuilder: PathDataBuilder<P>
+    pathDataBuilder: PathDataBuilder<P>,
   ): RouteData<P, {}> {
     return new RouteData(
       pathDataBuilder.value,
       () => ({}),
-      () => ({})
+      () => ({}),
     );
   }
 
   static createWithQuery<P extends string, Q extends object>(
     pathDataBuilder: PathDataBuilder<P>,
     encodeQuery: (
-      query: ReadonlyRecord<string, string | ReadonlyArray<string>>
+      query: ReadonlyRecord<string, string | ReadonlyArray<string>>,
     ) => Q,
     decodeQuery: (
-      query: Partial<Q>
-    ) => ReadonlyRecord<string, string | ReadonlyArray<string>>
+      query: Partial<Q>,
+    ) => ReadonlyRecord<string, string | ReadonlyArray<string>>,
   ): RouteData<P, Q> {
     return new RouteData(pathDataBuilder.value, encodeQuery, decodeQuery);
   }
@@ -143,7 +143,7 @@ export class RouteData<P extends string, Q extends object> {
     }: {
       query?: Partial<Q>;
       state?: any;
-    } = {}
+    } = {},
   ): LocationDescriptorObject {
     return {
       pathname: pathDataToPath(this.pathData, params),
@@ -157,8 +157,8 @@ export class RouteData<P extends string, Q extends object> {
     return this.encodeQuery(
       RA.filter(
         (x): x is ReadonlyArray<string> | string =>
-          Array.isArray(x) || typeof x === "string"
-      )(qs.parse(query))
+          Array.isArray(x) || typeof x === "string",
+      )(qs.parse(query)),
     );
   }
 

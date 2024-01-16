@@ -5,8 +5,8 @@ export function format(value: Date | string | number): string {
     typeof value === "string"
       ? new Date(value)
       : typeof value === "number"
-      ? new Date(value)
-      : value;
+        ? new Date(value)
+        : value;
 
   const timespan = now.valueOf() - date.valueOf();
 

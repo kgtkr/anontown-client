@@ -12,6 +12,7 @@ import {
 } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 import generatedIntrospection from "../generated/introspection-result";
+import { Kind, OperationTypeNode } from "graphql";
 
 export function createHeaders(id: string, key: string): {} {
   return {
@@ -52,19 +53,19 @@ const wsLink = new GraphQLWsLink(
       const auth = getAuth();
       return auth !== null ? createConnectionParams(auth.id, auth.key) : {};
     },
-  })
+  }),
 );
 
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
+      definition.kind === Kind.OPERATION_DEFINITION &&
+      definition.operation === OperationTypeNode.SUBSCRIPTION
     );
   },
   wsLink,
-  from([authMiddleware, httpLink])
+  from([authMiddleware, httpLink]),
 );
 
 export const gqlClient = new ApolloClient({
@@ -72,4 +73,5 @@ export const gqlClient = new ApolloClient({
   cache: new InMemoryCache({
     possibleTypes: generatedIntrospection.possibleTypes,
   }),
+  connectToDevTools: process.env.NODE_ENV === "development",
 });

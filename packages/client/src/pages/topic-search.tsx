@@ -11,11 +11,12 @@ import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useHistory } from "react-router-dom";
 import { Page, TagsInput, TopicListItem } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { useUserContext } from "../hooks";
-import { Sto } from "../domains/entities";
 import { useDebouncedCallback } from "use-debounce";
 import { useOnChnageUrlSearch } from "../hooks/use-on-change-url-search";
+import { useStorage } from "../domains/entities/storage/StorageCollectionHooks";
+import { TopicReads } from "../domains/entities/storage/TopicReads";
 
 interface Query {
   title: string;
@@ -42,7 +43,7 @@ export const TopicSearchPage = (_props: {}) => {
     (query) => routes.topicSearch.parseQuery(query),
     (query) => {
       dispatch({ type: "UPDATE_URL_QUERY", query: query });
-    }
+    },
   );
 
   const [state, dispatch] = React.useReducer(
@@ -93,7 +94,7 @@ export const TopicSearchPage = (_props: {}) => {
     {
       input: init,
       query: init,
-    }
+    },
   );
 
   const onInput = useDebouncedCallback(() => {
@@ -107,15 +108,15 @@ export const TopicSearchPage = (_props: {}) => {
             dead: state.input.dead,
             tags: state.input.tags,
           },
-        }
-      )
+        },
+      ),
     );
   }, 500);
 
   const user = useUserContext();
   const limit = 100;
 
-  const topics = G.useFindTopicsQuery({
+  const topics = GA.useFindTopicsQuery({
     variables: {
       query: {
         title: state.query.title,
@@ -126,32 +127,16 @@ export const TopicSearchPage = (_props: {}) => {
     },
   });
 
+  const topicReads = useStorage(
+    TopicReads,
+    topics.data?.topics.map((t) => ({ topicId: t.id })) ?? [],
+    null,
+  );
+
   return (
     <Page>
       <Helmet title="検索" />
       <Paper sx={{ p: 1 }}>
-        {user.value !== null ? (
-          <IconButton
-            onClick={() => {
-              if (user.value === null) {
-                return;
-              }
-              const storage = user.value.storage;
-              user.update({
-                ...user.value,
-                storage: (Sto.isTagsFavo(state.query.tags)(storage)
-                  ? Sto.unfavoTags
-                  : Sto.favoTags)(state.query.tags)(storage),
-              });
-            }}
-          >
-            {Sto.isTagsFavo(state.query.tags)(user.value.storage) ? (
-              <Icon>star</Icon>
-            ) : (
-              <Icon>star_border</Icon>
-            )}
-          </IconButton>
-        ) : null}
         <div>
           <TagsInput
             fullWidth={true}
@@ -193,7 +178,12 @@ export const TopicSearchPage = (_props: {}) => {
       <div>
         {topics.data !== undefined
           ? topics.data.topics.map((t) => (
-              <TopicListItem key={t.id} topic={t} detail={true} />
+              <TopicListItem
+                key={t.id}
+                topic={t}
+                detail={true}
+                topicRead={topicReads({ topicId: t.id })}
+              />
             ))
           : null}
       </div>
@@ -210,7 +200,7 @@ export const TopicSearchPage = (_props: {}) => {
                 }
                 return {
                   ...prev,
-                  msgs: [...prev.topics, ...fetchMoreResult.topics],
+                  topics: [...prev.topics, ...fetchMoreResult.topics],
                 };
               },
             });

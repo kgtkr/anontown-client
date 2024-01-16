@@ -1,12 +1,12 @@
 import { Button, TextField, Paper } from "@mui/material";
 import * as React from "react";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { UserData } from "../domains/entities";
 import { ErrorAlert } from "./error-alert";
 import { MdEditor } from "./md-editor";
 
 interface ProfileAddProps {
-  onAdd?: (profile: G.ProfileFragment) => void;
+  onAdd?: (profile: GA.ProfileFragment) => void;
   userData: UserData;
   style?: React.CSSProperties;
 }
@@ -16,7 +16,7 @@ export function ProfileAdd(props: ProfileAddProps) {
   const [name, setName] = React.useState("");
   const [text, setText] = React.useState("");
 
-  const [submit, { error }] = G.useCreateProfileMutation();
+  const [submit, { error }] = GA.useCreateProfileMutation();
   return (
     <Paper sx={{ p: 1 }} style={props.style}>
       <form>

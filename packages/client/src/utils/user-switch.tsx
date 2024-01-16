@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Omit } from "type-zoo";
 import { UserContext } from "../hooks";
 import { UserData } from "../domains/entities";
 
@@ -9,7 +8,7 @@ export interface UserSwitchProps {
 }
 
 export function userSwitch<P extends UserSwitchProps>(
-  Children: React.ComponentType<P>
+  Children: React.ComponentType<P>,
 ) {
   return (props: Omit<P, keyof UserSwitchProps>): JSX.Element => {
     return (

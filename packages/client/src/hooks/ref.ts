@@ -3,7 +3,7 @@ import * as React from "react";
 export function useEffectSkipN(
   effect: React.EffectCallback,
   deps?: React.DependencyList,
-  n = 1
+  n = 1,
 ) {
   const countRef = React.useRef(0);
 
@@ -25,7 +25,7 @@ export function useValueRef<T>(val: T) {
 }
 
 export function useFunctionRef<T extends Array<any>, R>(
-  f: (...args: T) => R
+  f: (...args: T) => R,
 ): (...args: T) => R {
   const ref = useValueRef(f);
   return (...args: T): R => {
@@ -36,7 +36,7 @@ export function useFunctionRef<T extends Array<any>, R>(
 export function useEffectRef<T>(
   effect: (ref: React.MutableRefObject<T>) => void | (() => void | undefined),
   val: T,
-  deps?: React.DependencyList
+  deps?: React.DependencyList,
 ) {
   const ref = useValueRef(val);
   React.useEffect(() => effect(ref), deps);

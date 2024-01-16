@@ -9,7 +9,7 @@ export interface ScrollRef<_T> {
   setDiff: (
     containerPositionSelector: ContainerPositionSelector,
     itemsPositionSelector: ItemsPositionSelector,
-    diff: number
+    diff: number,
   ) => Option<null>;
 
   /**
@@ -19,11 +19,11 @@ export interface ScrollRef<_T> {
    */
   getDiff: (
     containerPositionSelector: ContainerPositionSelector,
-    itemsPositionSelector: ItemsPositionSelector
+    itemsPositionSelector: ItemsPositionSelector,
   ) => Option<number>;
 
   modifyScrollTop(
-    f: (_: { scrollTop: number; scrollHeight: number }) => number
+    f: (_: { scrollTop: number; scrollHeight: number }) => number,
   ): void;
 }
 
@@ -39,13 +39,13 @@ function useKeyToElementMap<T>({
   onSet: (
     key: string,
     prev: HTMLDivElement | undefined,
-    el: HTMLDivElement
+    el: HTMLDivElement,
   ) => void;
   onDelete: (key: string, el: HTMLDivElement) => void;
 }): [Map<string, HTMLDivElement>, (item: T, element: HTMLDivElement) => void] {
   const keyToElementMap = React.useMemo(
     () => new Map<string, HTMLDivElement>(),
-    []
+    [],
   );
   React.useEffect(() => {
     const activeKeys = new Set(items.map((item) => itemToKey(item)));
@@ -134,7 +134,7 @@ function _Scroll<T>() {
       const showKeys = React.useMemo(() => new Set<string>(), []);
 
       const intersectionObserverRef = React.useRef<IntersectionObserver | null>(
-        null
+        null,
       );
 
       const intersectionObserverCallback = useFunctionRef(
@@ -148,9 +148,9 @@ function _Scroll<T>() {
             }
           }
           props.changeShowItems(
-            props.items.filter((item) => showKeys.has(props.itemToKey(item)))
+            props.items.filter((item) => showKeys.has(props.itemToKey(item))),
           );
-        }
+        },
       );
 
       React.useEffect(() => {
@@ -163,7 +163,7 @@ function _Scroll<T>() {
             intersectionObserverCallback,
             {
               root: containerElementRef.current,
-            }
+            },
           );
           for (const el of Array.from(keyToElementMap.values())) {
             intersectionObserverRef.current.observe(el);
@@ -174,7 +174,7 @@ function _Scroll<T>() {
       const getDiff = React.useCallback(
         (
           containerPositionSelector: ContainerPositionSelector,
-          itemsPositionSelector: ItemsPositionSelector
+          itemsPositionSelector: ItemsPositionSelector,
         ): Option<number> => {
           const containerElement = containerElementRef.current;
           const itemElement = keyToElementMap.get(itemsPositionSelector.key);
@@ -194,18 +194,18 @@ function _Scroll<T>() {
 
           return O.some(itemPosition - containerPosition);
         },
-        []
+        [],
       );
 
       const setDiff = React.useCallback(
         (
           containerPositionSelector: ContainerPositionSelector,
           itemsPositionSelector: ItemsPositionSelector,
-          diff: number
+          diff: number,
         ): Option<null> => {
           const curDiff = getDiff(
             containerPositionSelector,
-            itemsPositionSelector
+            itemsPositionSelector,
           );
 
           const containerElement = containerElementRef.current;
@@ -216,7 +216,7 @@ function _Scroll<T>() {
           containerElement.scrollTop += curDiff.value - diff;
           return O.some(null);
         },
-        []
+        [],
       );
 
       const modifyScrollTop = React.useCallback(
@@ -228,7 +228,7 @@ function _Scroll<T>() {
             });
           }
         },
-        []
+        [],
       );
 
       React.useImperativeHandle(
@@ -238,7 +238,7 @@ function _Scroll<T>() {
           getDiff,
           modifyScrollTop,
         }),
-        [setDiff, getDiff, modifyScrollTop]
+        [setDiff, getDiff, modifyScrollTop],
       );
 
       return (
@@ -262,7 +262,7 @@ function _Scroll<T>() {
           ))}
         </div>
       );
-    }
+    },
   );
 }
 

@@ -1,21 +1,22 @@
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { UserData } from "../domains/entities";
 import { createHeaders, gqlClient } from "./gql-client";
-import * as storageAPI from "./storage-api";
+import { migration } from "../domains/entities/storage/migration";
 
 export async function createUserData(
-  token: G.TokenMasterFragment
+  token: GA.TokenMasterFragment,
 ): Promise<UserData> {
-  const storage = await storageAPI.load(token);
-  const user = await gqlClient.query<G.FindUserQuery, G.FindUserQueryVariables>(
-    {
-      query: G.FindUserDocument,
-      variables: {},
-      context: {
-        headers: createHeaders(token.id, token.key),
-      },
-    }
-  );
+  await migration(token);
+  const user = await gqlClient.query<
+    GA.FindUserQuery,
+    GA.FindUserQueryVariables
+  >({
+    query: GA.FindUserDocument,
+    variables: {},
+    context: {
+      headers: createHeaders(token.id, token.key),
+    },
+  });
 
-  return { storage, token, id: user.data.user.id };
+  return { token, id: user.data.user.id };
 }

@@ -1,29 +1,24 @@
 import * as routes from "@anontown-frontend/routes";
 import { Link } from "react-router-dom";
-import * as G from "../generated/graphql";
-import { useUserContext } from "../hooks";
+import * as GA from "../generated/graphql-apollo";
 import { TextTitle } from "../styled/text";
 import { dateFormat } from "../utils";
 import { Icon, Paper } from "@mui/material";
 import { TagsLink } from "./tags-link";
-import { Sto } from "../domains/entities";
 import { O, pipe } from "../prelude";
+import { TopicRead } from "../domains/entities/storage/TopicReads";
 
 interface TopicListItemProps {
-  topic: G.TopicFragment;
+  topic: GA.TopicFragment;
   detail: boolean;
+  topicRead: TopicRead | null;
 }
 
 export const TopicListItem = (props: TopicListItemProps) => {
-  const user = useUserContext();
-
   const newRes = pipe(
-    O.fromNullable(user.value),
-    O.chain((userData) => Sto.getTopicRead(props.topic.id)(userData.storage)),
-    O.map((topicData) =>
-      Math.max(0, props.topic.resCount - Sto.topicReadCountLens.get(topicData))
-    ),
-    O.toNullable
+    O.fromNullable(props.topicRead?.resCount),
+    O.map((count) => Math.max(0, props.topic.resCount - count)),
+    O.toNullable,
   );
 
   return (

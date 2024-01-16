@@ -7,75 +7,70 @@ import {
   ListItemText,
 } from "@mui/material";
 import * as React from "react";
-import { ng, Storage, UserData, Sto } from "../domains/entities";
 import { Modal } from "./modal";
 import { NGEditor } from "./ng-editor";
+import {
+  useDeleteStorage,
+  useSetStorage,
+  usePrefixedStorageCollection,
+} from "../domains/entities/storage/StorageCollectionHooks";
+import { NGs } from "../domains/entities/storage/NGs";
+import * as uuid from "uuid";
 
-interface NGProps {
-  userData: UserData;
-  onChangeStorage: (user: Storage) => void;
-}
+interface NGProps {}
 
-interface NGState {
-  dialog: string | null;
-}
+// TODO: topicIdによるフィルタリング
+export const NG: React.FC<NGProps> = () => {
+  const [dialog, setDialog] = React.useState<string | null>(null);
+  const ngs = usePrefixedStorageCollection(NGs);
+  const [addNG] = useSetStorage(NGs);
+  const [deleteNG] = useDeleteStorage(NGs);
+  const dialogNG = ngs.find((ng) => ng.id === dialog);
 
-export class NG extends React.Component<NGProps, NGState> {
-  constructor(props: NGProps) {
-    super(props);
-    this.state = {
-      dialog: null,
-    };
-  }
-
-  render() {
-    return (
-      <div>
-        <IconButton
-          onClick={() =>
-            this.props.onChangeStorage(
-              Sto.addNG(ng.createDefaultNG())(this.props.userData.storage)
-            )
-          }
-        >
-          <Icon>add_circle</Icon>
-        </IconButton>
-        <List>
-          {Sto.getNG(this.props.userData.storage).map((node) => (
-            <ListItem
-              onClick={() => this.setState({ dialog: node.id })}
-              key={node.id}
-            >
-              <Modal
-                isOpen={this.state.dialog === node.id}
-                onRequestClose={() => this.setState({ dialog: null })}
-              >
-                <h1>{node.name}</h1>
-                <NGEditor
-                  ng={node}
-                  onUpdate={(v) =>
-                    this.props.onChangeStorage(
-                      Sto.updateNG(v)(this.props.userData.storage)
-                    )
-                  }
-                />
-              </Modal>
-              <ListItemText>{node.name}</ListItemText>
-              <ListItemSecondaryAction>
-                <IconButton
-                  onClick={() =>
-                    this.props.onChangeStorage(
-                      Sto.removeNG(node.id)(this.props.userData.storage)
-                    )
-                  }
-                >
-                  <Icon>close</Icon>
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <IconButton
+        onClick={() =>
+          addNG({
+            id: uuid.v4(),
+            name: "無名のNG",
+            createdAt: Date.now(),
+            condition: {},
+          })
+        }
+      >
+        <Icon>add_circle</Icon>
+      </IconButton>
+      <List>
+        {ngs.map((ng) => (
+          <ListItem
+            onClick={() => {
+              setDialog(ng.id);
+            }}
+            key={ng.id}
+          >
+            <ListItemText>{ng.name}</ListItemText>
+            <ListItemSecondaryAction>
+              <IconButton onClick={() => deleteNG(ng)}>
+                <Icon>close</Icon>
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
+      </List>
+      <Modal
+        isOpen={dialogNG !== undefined}
+        onRequestClose={() => {
+          setDialog(null);
+        }}
+      >
+        {dialogNG && (
+          <>
+            <h1>{dialogNG.name}</h1>
+            <NGEditor initNG={dialogNG} />
+          </>
+        )}
+      </Modal>
+    </div>
+  );
+};

@@ -1,8 +1,6 @@
-import * as G from "../../generated/graphql";
-import { Storage } from "./storage";
+import * as GA from "../../generated/graphql-apollo";
 
 export interface UserData {
-  token: G.TokenMasterFragment;
-  storage: Storage;
+  token: GA.TokenMasterFragment;
   id: string;
 }

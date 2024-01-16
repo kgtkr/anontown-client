@@ -1,25 +1,25 @@
-import * as G from "../../generated/graphql";
+import * as GA from "../../generated/graphql-apollo";
 import { pipe, O, RA, Monoid_, ArrayExtra, Ord, OrdT } from "../../prelude";
 
 import { Action } from "./action";
 import { State } from "./state";
 
-function getKeyFromRes(x: G.ResFragment): ResKey {
+function getKeyFromRes(x: GA.ResFragment): ResKey {
   return [-new Date(x.date).valueOf(), x.id];
 }
 
 type ResKey = [number, string];
 const ordListItemKey: Ord<ResKey> = OrdT.getTupleOrd(
   OrdT.ordNumber,
-  OrdT.ordString
+  OrdT.ordString,
 );
 
 function mergeReses(
-  xs: ReadonlyArray<G.ResFragment>,
-  ys: ReadonlyArray<G.ResFragment>
-): ReadonlyArray<G.ResFragment> {
+  xs: ReadonlyArray<GA.ResFragment>,
+  ys: ReadonlyArray<GA.ResFragment>,
+): ReadonlyArray<GA.ResFragment> {
   return ArrayExtra.mergeAndUniqSortedArray(ordListItemKey)(getKeyFromRes, ys)(
-    xs
+    xs,
   );
 }
 
@@ -27,7 +27,7 @@ export function reducer(prevState: State, action: Action): State {
   switch (action.type) {
     case "INIT": {
       return {
-        ...State({ userData: prevState.userData, topicId: action.topicId }),
+        ...State({ topicId: action.topicId }),
         now: action.now,
         jumpValue: action.now.valueOf(),
       };
@@ -56,7 +56,7 @@ export function reducer(prevState: State, action: Action): State {
           [RA.last(action.afterReses), RA.head(action.beforeReses)],
           Monoid_.fold(O.getFirstMonoid()),
           O.map((res) => res.id),
-          O.toNullable
+          O.toNullable,
         ),
       };
     }
@@ -146,9 +146,6 @@ export function reducer(prevState: State, action: Action): State {
         isNGDialog: false,
       };
     }
-    case "UPDATE_NG": {
-      return prevState;
-    }
     case "CLICK_OPEN_JUMP_MODAL": {
       return {
         ...prevState,
@@ -170,20 +167,8 @@ export function reducer(prevState: State, action: Action): State {
     case "CLICK_JUMP": {
       return prevState;
     }
-    case "TOGGLE_FAVO": {
-      return prevState;
-    }
     case "CHANGE_CURRENT_RES": {
       return prevState;
-    }
-    case "SUBMIT_RES": {
-      return prevState;
-    }
-    case "UPDATE_USER_DATA": {
-      return {
-        ...prevState,
-        userData: action.userData,
-      };
     }
     case "RECEIVE_NEW_RES": {
       return {

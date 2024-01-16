@@ -11,7 +11,7 @@ export const storageJSON9 = t.strict({
     t.strict({
       date: t.string,
       count: t.number,
-    })
+    }),
   ),
   topicWrite: t.record(
     t.string,
@@ -21,7 +21,7 @@ export const storageJSON9 = t.strict({
       text: t.string,
       age: t.boolean,
       replyText: t.record(t.string, t.string),
-    })
+    }),
   ),
   ng: t.array(ngJson),
 });

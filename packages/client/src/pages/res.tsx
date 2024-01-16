@@ -1,45 +1,32 @@
-import * as React from "react";
 import { Helmet } from "react-helmet-async";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Page, Res, Snack } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { withModal } from "../utils";
 
-interface ResBaseProps extends RouteComponentProps<{ id: string }> {
+interface ResBaseProps {
   zDepth?: number;
 }
 
-interface ResBaseState {}
+// TODO: zDepthが使われていない
+function ResBase({ zDepth: _zDepth }: ResBaseProps) {
+  const { id } = useParams<{ id: string }>();
+  const { loading, error, data } = GA.useFindResesQuery({
+    variables: { query: { id: [id] } },
+  });
 
-const ResBase = withRouter(
-  class extends React.Component<ResBaseProps, ResBaseState> {
-    constructor(props: ResBaseProps) {
-      super(props);
-    }
-
-    render() {
-      return (
-        <div>
-          <Helmet title="レス" />
-          <G.FindResesComponent
-            variables={{ query: { id: [this.props.match.params.id] } }}
-          >
-            {({ loading, error, data }) => {
-              if (loading) {
-                return <span>Loading...</span>;
-              }
-              if (error || !data || data.reses.length === 0) {
-                return <Snack msg="レス取得に失敗しました" />;
-              }
-
-              return <Res res={data.reses[0]} />;
-            }}
-          </G.FindResesComponent>
-        </div>
-      );
-    }
-  }
-);
+  return (
+    <div>
+      <Helmet title="レス" />
+      {loading && <span>Loading...</span>}
+      {error || !data || data.reses.length === 0 ? (
+        <Snack msg="レス取得に失敗しました" />
+      ) : (
+        <Res res={data.reses[0]} />
+      )}
+    </div>
+  );
+}
 
 export function ResPage() {
   return (

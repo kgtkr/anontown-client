@@ -2,7 +2,7 @@ import { Paper } from "@mui/material";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
 import { Page, TopicEditor } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { userSwitch, UserSwitchProps, withModal } from "../utils";
 
 type TopicEditBaseProps = UserSwitchProps & {
@@ -11,7 +11,7 @@ type TopicEditBaseProps = UserSwitchProps & {
 
 const TopicEditBase = userSwitch((props: TopicEditBaseProps) => {
   const params = useParams<{ id: string }>();
-  const topics = G.useFindTopicsQuery({
+  const topics = GA.useFindTopicsQuery({
     variables: {
       query: {
         id: [params.id],
@@ -24,7 +24,7 @@ const TopicEditBase = userSwitch((props: TopicEditBaseProps) => {
     <Paper elevation={props.zDepth}>
       <Helmet title="トピック編集" />
       {topic !== null && topic.__typename === "TopicNormal" ? (
-        <TopicEditor topic={topic} userData={props.userData} />
+        <TopicEditor topic={topic} />
       ) : null}
     </Paper>
   );
@@ -40,5 +40,5 @@ export function TopicEditPage() {
 
 export const TopicEditModal = withModal(
   () => <TopicEditBase zDepth={0} />,
-  "トピック編集"
+  "トピック編集",
 );

@@ -17,7 +17,7 @@ export function TagsLink(props: TagsLinkProps) {
           query: {
             tags: props.tags,
           },
-        }
+        },
       )}
     >
       {props.tags.length !== 0 ? props.tags.join(",") : "(なし)"}

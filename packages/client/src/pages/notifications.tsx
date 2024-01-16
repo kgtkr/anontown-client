@@ -3,7 +3,7 @@ import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { RouteComponentProps } from "react-router-dom";
 import { Page, Res } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { userSwitch, UserSwitchProps } from "../utils";
 import { RA, O } from "../prelude";
 import { useRegisterSW } from "virtual:pwa-register/react";
@@ -25,7 +25,7 @@ export const NotificationsPage = userSwitch(
     });
 
     const now = React.useRef(new Date().toISOString());
-    const reses = G.useFindResesQuery({
+    const reses = GA.useFindResesQuery({
       variables: {
         query: {
           date: {
@@ -39,7 +39,7 @@ export const NotificationsPage = userSwitch(
 
     const [snackMsg, setSnackMsg] = React.useState<string | null>(null);
 
-    const [resisterPushSubscription] = G.useResisterPushSubscriptionMutation();
+    const [resisterPushSubscription] = GA.useResisterPushSubscriptionMutation();
 
     return (
       <Page>
@@ -88,8 +88,8 @@ export const NotificationsPage = userSwitch(
             {typeof Notification === "undefined" || registration === undefined
               ? "このブラウザは通知をサポートしていません"
               : Notification.permission === "granted"
-              ? "既に通知が有効です"
-              : "通知を有効にする"}
+                ? "既に通知が有効です"
+                : "通知を有効にする"}
           </Button>
           <div>
             <Button
@@ -173,5 +173,5 @@ export const NotificationsPage = userSwitch(
         </div>
       </Page>
     );
-  }
+  },
 );

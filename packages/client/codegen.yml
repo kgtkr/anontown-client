@@ -1,15 +1,17 @@
 overwrite: true
 schema: "./schema.json"
-documents: "./src/**/*.gql"
+documents:
+  ["./src/**/*.gql", "./src/**/*.ts", "./src/**/*.tsx", "!./src/generated/**/*"]
 generates:
-  src/generated/graphql.tsx:
+  src/generated/graphql/:
+    preset: "client"
+    plugins: []
+  # deprecated
+  src/generated/graphql-apollo.tsx:
     plugins:
       - "typescript"
       - "typescript-react-apollo"
       - "typescript-operations"
-  src/generated/graphql.d.ts:
-    plugins:
-      - "typescript-graphql-files-modules"
   src/generated/introspection-result.ts:
     plugins:
       - "fragment-matcher"
@@ -18,5 +20,4 @@ config:
   nonOptionalTypename: true
   scalars:
     DateTime: string
-  withComponent: true
   enumsAsTypes: true

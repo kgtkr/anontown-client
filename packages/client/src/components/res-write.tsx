@@ -1,41 +1,73 @@
 import { Icon, IconButton } from "@mui/material";
 
-import { useCounter } from "react-use";
-import * as G from "../generated/graphql";
-import { useInputCache } from "../hooks";
-import { Storage, UserData, Sto } from "../domains/entities";
+import { useCounter, useDebounce } from "react-use";
+import * as GA from "../generated/graphql-apollo";
 import { CheckBox } from "./check-box";
 import { ErrorAlert } from "./error-alert";
 import { MdEditor } from "./md-editor";
 import { Select } from "./select";
 import { TextField } from "./text-field";
-import { pipe } from "../prelude";
+import {
+  useSetStorage,
+  useSingleStorage,
+} from "../domains/entities/storage/StorageCollectionHooks";
+import { WriteResConfigs } from "../domains/entities/storage/WriteResConfigs";
+import { ResDrafts } from "../domains/entities/storage/ResDrafts";
+import React from "react";
 
 interface ResWriteProps {
-  onSubmit?: (value: G.ResNormalFragment) => void;
+  onSubmit?: (value: GA.ResNormalFragment) => void;
   topic: string;
   reply: string | null;
-  userData: UserData;
-  changeStorage: (data: Storage) => void;
 }
 
 export const ResWrite = (props: ResWriteProps) => {
-  function updateTopicWrite(f: (topicWrite: Sto.TopicWrite) => Sto.TopicWrite) {
-    props.changeStorage(
-      Sto.modifyTopicWrite(props.topic, f)(props.userData.storage)
-    );
-  }
-
-  const data = Sto.getTopicWrite(props.topic)(props.userData.storage);
-
-  const [textCache, setTextCache] = useInputCache(
-    Sto.getTopicWriteTextLens(props.reply).get(data),
-    (value) => {
-      updateTopicWrite(Sto.getTopicWriteTextLens(props.reply).set(value));
-    }
+  const resDraft = useSingleStorage(
+    ResDrafts,
+    { topicId: props.topic, replyResId: props.reply ?? undefined },
+    null,
+  );
+  const writeResConfig = useSingleStorage(
+    WriteResConfigs,
+    { topicId: props.topic },
+    null,
   );
 
-  const profiles = G.useFindProfilesQuery({
+  const [setResDraft] = useSetStorage(ResDrafts);
+  const [setWriteResConfig] = useSetStorage(WriteResConfigs);
+
+  const [text, setText] = React.useState(resDraft?.text ?? "");
+  const [name, setName] = React.useState(writeResConfig?.name ?? "");
+  const [profileId, setProfileId] = React.useState(
+    writeResConfig?.profileId ?? null,
+  );
+  const [age, setAge] = React.useState(writeResConfig?.age ?? true);
+
+  useDebounce(
+    () => {
+      setResDraft({
+        topicId: props.topic,
+        replyResId: props.reply ?? undefined,
+        text,
+      });
+    },
+    5000,
+    [text],
+  );
+  useDebounce(
+    () => {
+      setWriteResConfig({
+        topicId: props.topic,
+        name,
+        profileId: profileId ?? undefined,
+        age,
+      });
+    },
+    5000,
+    [name, profileId, age],
+  );
+
+  const profiles = GA.useFindProfilesQuery({
     variables: {
       query: {
         self: true,
@@ -43,16 +75,14 @@ export const ResWrite = (props: ResWriteProps) => {
     },
   });
 
-  const [mutation, { error }] = G.useCreateResMutation({
+  const [mutation, { error }] = GA.useCreateResMutation({
     variables: {
       topic: props.topic,
-      name: pipe(data, Sto.topicWriteNameLens.get, (name) =>
-        name.length !== 0 ? name : null
-      ),
-      text: textCache,
+      name: name.length === 0 ? null : name,
+      text,
       reply: props.reply,
-      profile: Sto.topicWriteProfileLens.get(data),
-      age: Sto.topicWriteAgeLens.get(data),
+      profile: profileId,
+      age,
     },
   });
 
@@ -61,7 +91,7 @@ export const ResWrite = (props: ResWriteProps) => {
       if (x.data) {
         props.onSubmit?.(x.data.createRes);
       }
-      setTextCache("");
+      setText("");
     });
   };
 
@@ -80,15 +110,15 @@ export const ResWrite = (props: ResWriteProps) => {
       }}
     >
       <ErrorAlert error={error} />
-      {focusCounter !== 0 || textCache.length !== 0 ? (
+      {focusCounter !== 0 || text.length !== 0 ? (
         <>
           <TextField
             style={{
               marginRight: "3px",
             }}
             placeholder="名前"
-            value={Sto.topicWriteNameLens.get(data)}
-            onChange={(v) => updateTopicWrite(Sto.topicWriteNameLens.set(v))}
+            value={name}
+            onChange={(v) => setName(v)}
           />
           {profiles.data !== undefined ? (
             <Select
@@ -96,11 +126,9 @@ export const ResWrite = (props: ResWriteProps) => {
                 marginRight: "3px",
                 backgroundColor: "#fff",
               }}
-              value={pipe(Sto.topicWriteProfileLens.get(data), (x) => x ?? "")}
+              value={profileId ?? ""}
               onChange={(v) => {
-                updateTopicWrite(
-                  Sto.topicWriteProfileLens.set(v.length === 0 ? null : v)
-                );
+                setProfileId(v.length === 0 ? null : v);
               }}
               options={[
                 { value: "", text: "(プロフなし)" },
@@ -111,17 +139,13 @@ export const ResWrite = (props: ResWriteProps) => {
               ]}
             />
           ) : null}
-          <CheckBox
-            value={Sto.topicWriteAgeLens.get(data)}
-            onChange={(v) => updateTopicWrite(Sto.topicWriteAgeLens.set(v))}
-            label="Age"
-          />
+          <CheckBox value={age} onChange={(v) => setAge(v)} label="Age" />
         </>
       ) : null}
 
       <MdEditor
-        value={textCache}
-        onChange={(v) => setTextCache(v)}
+        value={text}
+        onChange={(v) => setText(v)}
         maxRows={5}
         minRows={1}
         onKeyDown={(e) => {

@@ -13,18 +13,18 @@ function main() {
         if (path.startsWith("/assets/")) {
           res.setHeader(
             "cache-control",
-            `public, max-age=${60 * 60 * 24 * 30}, immutable`
+            `public, max-age=${60 * 60 * 24 * 30}, immutable`,
           );
         }
       },
       index: false,
-    })
+    }),
   );
 
   app.use(async (ctx) => {
     const body = await fs.readFile(
       path.join(env.staticRootDir, ".index.html"),
-      "utf8"
+      "utf8",
     );
 
     ctx.body = htmlInject(env.jsEnv, body);

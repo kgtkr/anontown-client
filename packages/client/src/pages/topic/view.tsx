@@ -9,73 +9,89 @@ import {
   MenuItem,
   Menu,
   ToggleButton,
+  CircularProgress,
 } from "@mui/material";
 import moment from "moment";
 import * as React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTitle } from "react-use";
 import { Modal, NG, Page, Res, ResWrite, TopicFavo } from "../../components";
-import * as G from "../../generated/graphql";
+import * as GA from "../../generated/graphql-apollo";
 import { useUserContext } from "../../hooks";
 import * as style from "./style.module.scss";
 import { RA } from "../../prelude";
-import { Sto } from "../../domains/entities";
 import { InfiniteScroll } from "../../components/infinite-scroll";
 import { useReducerWithObservable } from "../../hooks/use-reducer-with-observable";
 import { reducer } from "./reducer";
 import { State } from "./state";
 import { epic } from "./epic";
 import { useBackground } from "../../hooks/useBackground";
-
-// TODO:NGのtransparent
+import {
+  useDeleteStorage,
+  useSetStorage,
+  useSingleStorage,
+} from "../../domains/entities/storage/StorageCollectionHooks";
+import { FavoriteTopics } from "../../domains/entities/storage/FavoriteTopics";
+import { TopicReads } from "../../domains/entities/storage/TopicReads";
 
 export const TopicPage = (_props: {}) => {
   const params = useParams<{ id: string }>();
+
+  const topicRead = useSingleStorage(
+    TopicReads,
+    {
+      topicId: params.id,
+    },
+    null,
+  );
+  const [setTopicRead] = useSetStorage(TopicReads);
   const user = useUserContext();
   const apolloClient = useApolloClient();
   const background = useBackground();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [subscribeTopic] = G.useSubscribeTopicMutation();
-  const [unsubscribeTopic] = G.useUnsubscribeTopicMutation();
+  const [subscribeTopic] = GA.useSubscribeTopicMutation();
+  const [unsubscribeTopic] = GA.useUnsubscribeTopicMutation();
 
   const [state, dispatch] = useReducerWithObservable(
     reducer,
-    State({ userData: user.value, topicId: params.id }),
+    State({ topicId: params.id }),
     epic,
-    { apolloClient: apolloClient, updateUserData: (ud) => user.update(ud) }
+    {
+      apolloClient: apolloClient,
+      setTopicRead,
+      initTopicDate: topicRead?.resCreatedAt,
+    },
   );
 
   React.useEffect(() => {
-    dispatch({ type: "UPDATE_USER_DATA", userData: user.value });
-  }, [user.value]);
-
-  React.useEffect(() => {
-    dispatch({ type: "INIT", topicId: params.id, now: new Date() });
+    dispatch({
+      type: "INIT",
+      topicId: params.id,
+      now: new Date(),
+      date: topicRead?.resCreatedAt ? new Date(topicRead.resCreatedAt) : null,
+    });
   }, [params.id]);
 
-  const isFavo =
-    state.userData !== null &&
-    Sto.isTopicFavo(state.topicId)(state.userData.storage);
+  const favo = useSingleStorage(FavoriteTopics, { topicId: params.id }, null);
+  const isFavo = favo !== null;
+  const [setFavo] = useSetStorage(FavoriteTopics);
+  const [deleteFavo] = useDeleteStorage(FavoriteTopics);
 
   useTitle(state.topic?.title ?? "トピック");
 
   const reversedReses = React.useMemo(
     () => (state.reses !== null ? RA.reverse(state.reses) : null),
-    [state.reses]
+    [state.reses],
   );
 
-  const handleUpdateRes = React.useCallback((res: G.ResFragment) => {
+  const handleUpdateRes = React.useCallback((res: GA.ResFragment) => {
     dispatch({ type: "UPDATE_RES", res });
   }, []);
 
   return (
     <Page
       disableScroll={true}
-      sidebar={
-        state.userData !== null ? (
-          <TopicFavo detail={false} userData={state.userData} />
-        ) : undefined
-      }
+      sidebar={user.value !== null ? <TopicFavo detail={false} /> : undefined}
     >
       {state.topic !== null &&
       reversedReses !== null &&
@@ -111,18 +127,15 @@ export const TopicPage = (_props: {}) => {
               }}
             />
           </Modal>
-          {state.userData !== null ? (
+          {user.value !== null ? (
             <Modal
               isOpen={state.isNGDialog}
               onRequestClose={() => dispatch({ type: "CLICK_CLOSE_NG_MODAL" })}
             >
               <h1>NG</h1>
-              <NG
-                userData={state.userData}
-                onChangeStorage={(v) => {
-                  dispatch({ type: "UPDATE_NG", storage: v });
-                }}
-              />
+              <React.Suspense fallback={<CircularProgress />}>
+                <NG />
+              </React.Suspense>
             </Modal>
           ) : null}
           <Modal
@@ -163,10 +176,14 @@ export const TopicPage = (_props: {}) => {
                 {state.topic.title}
               </div>
               <div className={style.toolbar}>
-                {state.userData !== null ? (
+                {user.value !== null ? (
                   <IconButton
                     onClick={() => {
-                      dispatch({ type: "TOGGLE_FAVO" });
+                      if (isFavo) {
+                        deleteFavo({ topicId: params.id });
+                      } else {
+                        setFavo({ topicId: params.id, createdAt: Date.now() });
+                      }
                     }}
                   >
                     <Icon>{isFavo ? "star" : "star_border"}</Icon>
@@ -187,13 +204,13 @@ export const TopicPage = (_props: {}) => {
                       {
                         id: state.topicId,
                       },
-                      { state: { background } }
+                      { state: { background } },
                     )}
                   >
                     詳細データ
                   </MenuItem>
                   {state.topic.__typename === "TopicNormal" &&
-                  state.userData !== null ? (
+                  user.value !== null ? (
                     <MenuItem
                       component={Link}
                       onClick={() => setAnchorEl(null)}
@@ -201,7 +218,7 @@ export const TopicPage = (_props: {}) => {
                         {
                           id: state.topicId,
                         },
-                        { state: { background } }
+                        { state: { background } },
                       )}
                     >
                       トピック編集
@@ -215,13 +232,13 @@ export const TopicPage = (_props: {}) => {
                         {
                           id: state.topicId,
                         },
-                        { state: { background } }
+                        { state: { background } },
                       )}
                     >
                       派生トピック
                     </MenuItem>
                   ) : null}
-                  {state.userData !== null ? (
+                  {user.value !== null ? (
                     typeof Notification !== "undefined" &&
                     Notification.permission === "granted" ? (
                       <MenuItem
@@ -297,7 +314,7 @@ export const TopicPage = (_props: {}) => {
                 </Menu>
               </div>
             </Paper>
-            <InfiniteScroll<G.ResFragment>
+            <InfiniteScroll<GA.ResFragment>
               itemToKey={(res) => res.id}
               renderItem={(res) => <Res res={res} update={handleUpdateRes} />}
               className={style.reses}
@@ -326,16 +343,9 @@ export const TopicPage = (_props: {}) => {
                 }}
               />
             ) : null}
-            {state.userData !== null ? (
+            {user.value !== null ? (
               <Paper className={style.resWrite}>
-                <ResWrite
-                  topic={state.topic.id}
-                  reply={null}
-                  userData={state.userData}
-                  changeStorage={(storage) => {
-                    dispatch({ type: "SUBMIT_RES", storage });
-                  }}
-                />
+                <ResWrite topic={state.topic.id} reply={null} />
               </Paper>
             ) : null}
           </div>

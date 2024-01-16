@@ -4,7 +4,7 @@ import { Modal } from "../components";
 
 export const withModal = <P extends {}>(
   Page: React.ComponentType<P>,
-  title: string
+  title: string,
 ) => {
   return (props: P): JSX.Element => {
     const history = useHistory();
@@ -12,7 +12,7 @@ export const withModal = <P extends {}>(
       () => () => {
         history.goBack();
       },
-      [history]
+      [history],
     );
 
     return (

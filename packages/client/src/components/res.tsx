@@ -3,29 +3,124 @@ import { Icon, IconButton, Paper, MenuItem, Menu } from "@mui/material";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import * as uuid from "uuid";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { useUserContext } from "../hooks";
-import { ng, Sto } from "../domains/entities";
 import { color, fontSize } from "../styled/constant";
 import { dateFormat } from "../utils";
 import { Md } from "./md";
 import { ResWrite } from "./res-write";
 import { Snack } from "./snack";
-import { isNullish } from "@kgtkr/utils";
+import { isNullish } from "../utils/isNullish";
 import { useBackground } from "../hooks/useBackground";
+import { NG, NGs, TextMatcher } from "../domains/entities/storage/NGs";
+import {
+  useSetStorage,
+  usePrefixedStorageCollection,
+} from "../domains/entities/storage/StorageCollectionHooks";
 
-interface ResProps {
-  res: G.ResFragment;
-  update?: (res: G.ResFragment) => void;
+function textMatcher(matcher: TextMatcher, text: string): boolean {
+  if (matcher.text.length === 0) {
+    return false;
+  }
+  if (matcher.regExp) {
+    try {
+      return new RegExp(
+        matcher.text,
+        [matcher.ignoreCase ? "i" : ""].join(""),
+      ).test(text);
+    } catch {
+      return false;
+    }
+  } else {
+    if (matcher.ignoreCase) {
+      return text.toLowerCase().includes(matcher.text.toLowerCase());
+    }
+    return text.includes(matcher.text);
+  }
 }
 
-export const Res = React.memo((props: ResProps) => {
+function isNG(ng: NG, res: GA.ResFragment): boolean {
+  if (ng.topicId !== undefined && ng.topicId !== res.topic.id) {
+    return false;
+  }
+
+  if (
+    ng.expirationDate !== undefined &&
+    new Date(ng.expirationDate).valueOf() < new Date(res.date).valueOf()
+  ) {
+    return false;
+  }
+
+  // 空のandは数学的にはtrueになるが全部NGは混乱の元なのでfalseとして扱う
+  if (
+    Object.entries(ng.condition).filter(([, v]) => v !== undefined).length === 0
+  ) {
+    return false;
+  }
+
+  if (ng.condition.profileId !== undefined) {
+    if (
+      res.__typename !== "ResNormal" ||
+      isNullish(res.profile) ||
+      res.profile.id !== ng.condition.profileId
+    ) {
+      return false;
+    }
+  }
+
+  if (ng.condition.hash !== undefined) {
+    if (res.hash !== ng.condition.hash) {
+      return false;
+    }
+  }
+
+  if (ng.condition.name !== undefined) {
+    if (
+      res.__typename !== "ResNormal" ||
+      isNullish(res.name) ||
+      !textMatcher(ng.condition.name, res.name)
+    ) {
+      return false;
+    }
+  }
+
+  if (ng.condition.content !== undefined) {
+    if (
+      res.__typename !== "ResNormal" ||
+      !textMatcher(ng.condition.content, res.text)
+    ) {
+      return false;
+    }
+  }
+
+  if (ng.condition.vote !== undefined) {
+    if (res.uv - res.dv < ng.condition.vote) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+interface ResProps {
+  res: GA.ResFragment;
+  update?: (res: GA.ResFragment) => void;
+}
+
+export const Res = React.memo(function Res(props: ResProps) {
   const [isReply, setIsReply] = React.useState(false);
   const [snackMsg, setSnackMsg] = React.useState<string | null>(null);
   const [disableNG, setDisableNG] = React.useState(false);
   const user = useUserContext();
   const background = useBackground();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [delResSubmit, delResResult] = GA.useDelResMutation({
+    onCompleted: (data) => {
+      if (props.update) {
+        props.update(data.delRes);
+      }
+    },
+  });
 
   const small = {
     width: 36,
@@ -33,12 +128,14 @@ export const Res = React.memo((props: ResProps) => {
     padding: 8,
   };
 
-  const [submitVote] = G.useVoteResMutation();
+  const [submitVote] = GA.useVoteResMutation();
+  const ngs = usePrefixedStorageCollection(NGs);
+  const [addNG] = useSetStorage(NGs);
 
   return user.value !== null &&
     !props.res.self &&
     !disableNG &&
-    Sto.getNG(user.value.storage).some((x) => ng.isNG(x, props.res)) ? (
+    ngs.some((ng) => isNG(ng, props.res)) ? (
     <Paper>
       あぼーん<a onClick={() => setDisableNG(true)}>[見る]</a>
     </Paper>
@@ -115,8 +212,8 @@ export const Res = React.memo((props: ResProps) => {
               backgroundColor: props.res.self
                 ? color.primary
                 : props.res.__typename === "ResNormal" && props.res.isReply
-                ? color.secondary
-                : undefined,
+                  ? color.secondary
+                  : undefined,
               fontSize: fontSize.sub,
             }}
           >
@@ -149,7 +246,7 @@ export const Res = React.memo((props: ResProps) => {
                     state: {
                       background,
                     },
-                  }
+                  },
                 )}
               >
                 @{props.res.profile.sn}
@@ -159,7 +256,7 @@ export const Res = React.memo((props: ResProps) => {
             <Link
               to={routes.res.to(
                 { id: props.res.id, topic: props.res.topic.id },
-                { state: { background } }
+                { state: { background } },
               )}
             >
               {dateFormat.format(props.res.date)}
@@ -172,7 +269,7 @@ export const Res = React.memo((props: ResProps) => {
                   state: {
                     background,
                   },
-                }
+                },
               )}
             >
               #{props.res.hash.substr(0, 6)}
@@ -193,49 +290,31 @@ export const Res = React.memo((props: ResProps) => {
                   onClose={() => setAnchorEl(null)}
                 >
                   {props.res.self && props.res.__typename === "ResNormal" ? (
-                    <G.DelResComponent
-                      variables={{ res: props.res.id }}
-                      onCompleted={(data) => {
-                        if (props.update) {
-                          props.update(data.delRes);
-                        }
-                      }}
-                    >
-                      {(submit, { error }) => {
-                        return (
-                          <>
-                            {error && <Snack msg={"削除に失敗しました"} />}
-                            <MenuItem
-                              onClick={() => {
-                                setAnchorEl(null);
-                                submit();
-                              }}
-                            >
-                              削除
-                            </MenuItem>
-                          </>
-                        );
-                      }}
-                    </G.DelResComponent>
+                    <>
+                      {delResResult.error && (
+                        <Snack msg={"削除に失敗しました"} />
+                      )}
+                      <MenuItem
+                        onClick={() => {
+                          setAnchorEl(null);
+                          delResSubmit({ variables: { res: props.res.id } });
+                        }}
+                      >
+                        削除
+                      </MenuItem>
+                    </>
                   ) : null}
                   <MenuItem
                     onClick={() => {
                       setAnchorEl(null);
                       if (user.value !== null) {
-                        user.update({
-                          ...user.value,
-                          storage: Sto.addNG({
-                            id: uuid.v4(),
-                            name: `HASH:${props.res.hash}`,
-                            topic: props.res.topic.id,
-                            date: new Date(),
-                            expirationDate: null,
-                            node: {
-                              type: "hash",
-                              id: uuid.v4(),
-                              hash: props.res.hash,
-                            },
-                          })(user.value.storage),
+                        addNG({
+                          id: uuid.v4(),
+                          name: `HASH:@${props.res.hash}`,
+                          createdAt: Date.now(),
+                          condition: {
+                            hash: props.res.hash,
+                          },
                         });
                       }
                     }}
@@ -252,20 +331,13 @@ export const Res = React.memo((props: ResProps) => {
                           props.res.__typename === "ResNormal" &&
                           !isNullish(props.res.profile)
                         ) {
-                          user.update({
-                            ...user.value,
-                            storage: Sto.addNG({
-                              id: uuid.v4(),
-                              name: `Profile:${props.res.profile.id}`,
-                              topic: null,
-                              date: new Date(),
-                              expirationDate: null,
-                              node: {
-                                type: "profile",
-                                id: uuid.v4(),
-                                profile: props.res.profile.id,
-                              },
-                            })(user.value.storage),
+                          addNG({
+                            id: uuid.v4(),
+                            name: `Profile:@${props.res.profile.sn}`,
+                            createdAt: Date.now(),
+                            condition: {
+                              profileId: props.res.profile.id,
+                            },
                           });
                         }
                       }}
@@ -285,7 +357,7 @@ export const Res = React.memo((props: ResProps) => {
                   component={Link}
                   to={routes.res.to(
                     { id: props.res.reply.id, topic: props.res.topic.id },
-                    { state: { background } }
+                    { state: { background } },
                   )}
                   style={small}
                   size="small"
@@ -299,7 +371,7 @@ export const Res = React.memo((props: ResProps) => {
                     component={Link}
                     to={routes.resReply.to(
                       { id: props.res.id, topic: props.res.topic.id },
-                      { state: { background } }
+                      { state: { background } },
                     )}
                     style={small}
                     size="small"
@@ -346,19 +418,7 @@ export const Res = React.memo((props: ResProps) => {
             ) : null}
             {isReply && user.value !== null ? (
               <Paper>
-                <ResWrite
-                  topic={props.res.topic.id}
-                  reply={props.res.id}
-                  userData={user.value}
-                  changeStorage={(x) => {
-                    if (user.value !== null) {
-                      user.update({
-                        ...user.value,
-                        storage: x,
-                      });
-                    }
-                  }}
-                />
+                <ResWrite topic={props.res.topic.id} reply={props.res.id} />
               </Paper>
             ) : null}
           </div>

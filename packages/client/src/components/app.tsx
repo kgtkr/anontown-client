@@ -8,6 +8,7 @@ import {
   AppBar,
   Typography,
   Menu,
+  CircularProgress,
 } from "@mui/material";
 
 import * as React from "react";
@@ -15,7 +16,7 @@ import { Link, Route, Switch, useLocation } from "react-router-dom";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import { UserData } from "../domains/entities";
 import { Env } from "../env";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import * as pages from "../pages";
 import {
   createHeaders,
@@ -38,7 +39,7 @@ export function App(): JSX.Element {
     UserData | undefined | null
   >(undefined);
   const [serverStatus, setServerStatus] = React.useState(true);
-  const [resisterPushSubscription] = G.useResisterPushSubscriptionMutation();
+  const [resisterPushSubscription] = GA.useResisterPushSubscriptionMutation();
 
   const [registration, setRegistration] = React.useState<
     ServiceWorkerRegistration | undefined
@@ -117,8 +118,8 @@ export function App(): JSX.Element {
         } else {
           throw Error();
         }
-        const res = await gqlClient.query<G.FindTokenQuery>({
-          query: G.FindTokenDocument,
+        const res = await gqlClient.query<GA.FindTokenQuery>({
+          query: GA.FindTokenDocument,
           context: {
             headers: createHeaders(token.id, token.key),
           },
@@ -128,8 +129,8 @@ export function App(): JSX.Element {
         }
         setInitUserData(
           await createUserData(
-            res.data.token as G.TokenMasterFragment // TODO: ここのキャストおかしい
-          )
+            res.data.token as GA.TokenMasterFragment, // TODO: ここのキャストおかしい
+          ),
         );
       } catch {
         setInitUserData(null);
@@ -175,30 +176,33 @@ export function App(): JSX.Element {
                     onClose={() => setAnchorEl(null)}
                   >
                     {user.value !== null ? (
-                      <>
+                      [
                         <MenuItem
                           to={routes.profiles.to({})}
                           component={Link}
                           onClick={() => setAnchorEl(null)}
+                          key="profile"
                         >
                           プロフ管理
-                        </MenuItem>
+                        </MenuItem>,
                         <MenuItem
                           to={routes.settings.to({})}
                           component={Link}
                           onClick={() => setAnchorEl(null)}
+                          key="settings"
                         >
                           設定
-                        </MenuItem>
+                        </MenuItem>,
                         <MenuItem
                           onClick={() => {
                             setAnchorEl(null);
                             user.update(null);
                           }}
+                          key="logout"
                         >
                           ログアウト
-                        </MenuItem>
-                      </>
+                        </MenuItem>,
+                      ]
                     ) : (
                       <MenuItem
                         onClick={() => setAnchorEl(null)}
@@ -222,161 +226,164 @@ export function App(): JSX.Element {
                 </Toolbar>
               </AppBar>
               <div className={style.main}>
-                <Switch location={location.state?.background ?? location}>
-                  <Route
-                    exact={true}
-                    path={routes.home.matcher()}
-                    component={pages.HomePage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.res.matcher()}
-                    component={pages.ResPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.resReply.matcher()}
-                    component={pages.ResReplyPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.hash.matcher()}
-                    component={pages.ResHashPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.topicSearch.matcher()}
-                    component={pages.TopicSearchPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.topicCreate.matcher()}
-                    component={pages.TopicCreatePage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.topic.matcher()}
-                    component={pages.TopicPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.topicData.matcher()}
-                    component={pages.TopicDataPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.topicFork.matcher()}
-                    component={pages.TopicForkPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.topicEdit.matcher()}
-                    component={pages.TopicEditPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.profiles.matcher()}
-                    component={pages.ProfilesPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.profileEdit.matcher()}
-                    component={pages.ProfileEditPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.profileCreate.matcher()}
-                    component={pages.ProfileCreatePage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.notifications.matcher()}
-                    component={pages.NotificationsPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.signup.matcher()}
-                    component={pages.SignupPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.login.matcher()}
-                    component={pages.LoginPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.auth.matcher()}
-                    component={pages.AuthPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.settings.matcher()}
-                    component={pages.SettingsPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.accountSetting.matcher()}
-                    component={pages.AccountSettingPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.appsSetting.matcher()}
-                    component={pages.AppsSettingPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.devSetting.matcher()}
-                    component={pages.DevSettingPage}
-                  />
-                  <Route
-                    exact={true}
-                    path={routes.profile.matcher()}
-                    component={pages.ProfilePage}
-                  />
-                  <Route component={pages.NotFoundPage} />
-                </Switch>
-                {location.state?.background ? (
-                  <Route
-                    path={routes.res.matcher()}
-                    component={pages.ResModal}
-                  />
-                ) : null}
-                {location.state?.background ? (
-                  <Route
-                    path={routes.resReply.matcher()}
-                    component={pages.ResReplyModal}
-                  />
-                ) : null}
-                {location.state?.background ? (
-                  <Route
-                    path={routes.profile.matcher()}
-                    component={pages.ProfileModal}
-                  />
-                ) : null}
-                {location.state?.background ? (
-                  <Route
-                    path={routes.topicData.matcher()}
-                    component={pages.TopicDataModal}
-                  />
-                ) : null}
-                {location.state?.background ? (
-                  <Route
-                    path={routes.topicFork.matcher()}
-                    component={pages.TopicForkModal}
-                  />
-                ) : null}
-                {location.state?.background ? (
-                  <Route
-                    path={routes.topicEdit.matcher()}
-                    component={pages.TopicEditModal}
-                  />
-                ) : null}
-                {location.state?.background ? (
-                  <Route
-                    path={routes.hash.matcher()}
-                    component={pages.ResHashModal}
-                  />
-                ) : null}
+                <React.Suspense fallback={<CircularProgress />}>
+                  <Switch location={location.state?.background ?? location}>
+                    <Route
+                      exact={true}
+                      path={routes.home.matcher()}
+                      component={pages.HomePage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.res.matcher()}
+                      component={pages.ResPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.resReply.matcher()}
+                      component={pages.ResReplyPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.hash.matcher()}
+                      component={pages.ResHashPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.topicSearch.matcher()}
+                      component={pages.TopicSearchPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.topicCreate.matcher()}
+                      component={pages.TopicCreatePage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.topic.matcher()}
+                      component={pages.TopicPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.topicData.matcher()}
+                      component={pages.TopicDataPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.topicFork.matcher()}
+                      component={pages.TopicForkPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.topicEdit.matcher()}
+                      component={pages.TopicEditPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.profiles.matcher()}
+                      component={pages.ProfilesPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.profileEdit.matcher()}
+                      component={pages.ProfileEditPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.profileCreate.matcher()}
+                      component={pages.ProfileCreatePage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.notifications.matcher()}
+                      component={pages.NotificationsPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.signup.matcher()}
+                      component={pages.SignupPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.login.matcher()}
+                      component={pages.LoginPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.auth.matcher()}
+                      component={pages.AuthPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.settings.matcher()}
+                      component={pages.SettingsPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.accountSetting.matcher()}
+                      component={pages.AccountSettingPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.appsSetting.matcher()}
+                      component={pages.AppsSettingPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.devSetting.matcher()}
+                      component={pages.DevSettingPage}
+                    />
+                    <Route
+                      exact={true}
+                      path={routes.profile.matcher()}
+                      component={pages.ProfilePage}
+                    />
+                    <Route component={pages.NotFoundPage} />
+                  </Switch>
+
+                  {location.state?.background ? (
+                    <Route
+                      path={routes.res.matcher()}
+                      component={pages.ResModal}
+                    />
+                  ) : null}
+                  {location.state?.background ? (
+                    <Route
+                      path={routes.resReply.matcher()}
+                      component={pages.ResReplyModal}
+                    />
+                  ) : null}
+                  {location.state?.background ? (
+                    <Route
+                      path={routes.profile.matcher()}
+                      component={pages.ProfileModal}
+                    />
+                  ) : null}
+                  {location.state?.background ? (
+                    <Route
+                      path={routes.topicData.matcher()}
+                      component={pages.TopicDataModal}
+                    />
+                  ) : null}
+                  {location.state?.background ? (
+                    <Route
+                      path={routes.topicFork.matcher()}
+                      component={pages.TopicForkModal}
+                    />
+                  ) : null}
+                  {location.state?.background ? (
+                    <Route
+                      path={routes.topicEdit.matcher()}
+                      component={pages.TopicEditModal}
+                    />
+                  ) : null}
+                  {location.state?.background ? (
+                    <Route
+                      path={routes.hash.matcher()}
+                      component={pages.ResHashModal}
+                    />
+                  ) : null}
+                </React.Suspense>
               </div>
             </div>
           );

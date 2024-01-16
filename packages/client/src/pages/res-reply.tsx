@@ -1,48 +1,31 @@
-import * as React from "react";
 import { Helmet } from "react-helmet-async";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Page, Res, Snack } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { withModal } from "../utils";
 
-type ResReplyBaseProps = RouteComponentProps<{ id: string }>;
+function ResReplyBase() {
+  const { id } = useParams<{ id: string }>();
+  const { loading, error, data } = GA.useFindResesQuery({
+    variables: { query: { reply: id } },
+  });
 
-interface ResReplyBaseState {}
-
-const ResReplyBase = withRouter(
-  class extends React.Component<ResReplyBaseProps, ResReplyBaseState> {
-    constructor(props: ResReplyBaseProps) {
-      super(props);
-    }
-
-    render() {
-      return (
-        <div>
-          <Helmet title="リプライ" />
-          <G.FindResesComponent
-            variables={{ query: { reply: this.props.match.params.id } }}
-          >
-            {({ loading, error, data }) => {
-              if (loading) {
-                return <span>Loading...</span>;
-              }
-              if (error || !data) {
-                return <Snack msg="レス取得に失敗しました" />;
-              }
-              return (
-                <>
-                  {data.reses.map((res) => (
-                    <Res res={res} key={res.id} />
-                  ))}
-                </>
-              );
-            }}
-          </G.FindResesComponent>
-        </div>
-      );
-    }
-  }
-);
+  return (
+    <div>
+      <Helmet title="リプライ" />
+      {loading && <span>Loading...</span>}
+      {error || !data ? (
+        <Snack msg="レス取得に失敗しました" />
+      ) : (
+        <>
+          {data.reses.map((res) => (
+            <Res res={res} key={res.id} />
+          ))}
+        </>
+      )}
+    </div>
+  );
+}
 
 export function ResReplyPage() {
   return (

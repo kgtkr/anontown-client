@@ -10,7 +10,7 @@ export const storageJSON6 = t.strict({
     t.strict({
       res: t.string,
       count: t.number,
-    })
+    }),
   ),
 });
 

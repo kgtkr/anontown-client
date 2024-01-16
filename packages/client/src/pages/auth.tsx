@@ -4,7 +4,7 @@ import * as React from "react";
 import { useLocation } from "react-router";
 import { useTitle } from "react-use";
 import { ErrorAlert, Page, Snack } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { userSwitch, UserSwitchProps } from "../utils";
 
 type AuthPageProps = UserSwitchProps;
@@ -13,11 +13,11 @@ export const AuthPage = userSwitch((_props: AuthPageProps) => {
   const location = useLocation();
   const [snackMsg, setSnackMsg] = React.useState<string | null>(null);
   const query = routes.auth.parseQuery(location.search);
-  const clients = G.useFindClientsQuery({
+  const clients = GA.useFindClientsQuery({
     skip: query.id === undefined,
     variables: { query: { id: query.id !== undefined ? [query.id] : [] } },
   });
-  const [submit, { error }] = G.useCreateTokenGeneralMutation();
+  const [submit, { error }] = GA.useCreateTokenGeneralMutation();
 
   useTitle("アプリ認証");
 

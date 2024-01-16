@@ -9,7 +9,7 @@ export const storageJSON2 = t.strict({
       topic: t.string,
       res: t.string,
       count: t.number,
-    })
+    }),
   ),
 });
 

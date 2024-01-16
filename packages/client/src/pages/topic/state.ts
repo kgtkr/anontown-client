@@ -1,5 +1,4 @@
-import * as G from "../../generated/graphql";
-import { UserData } from "../../domains/entities";
+import * as GA from "../../generated/graphql-apollo";
 
 export interface State {
   topicId: string;
@@ -7,26 +6,19 @@ export interface State {
   isJumpDialog: boolean;
   isAutoScrollDialog: boolean;
   isNGDialog: boolean;
-  userData: UserData | null;
   autoScrollSpeed: number;
   isAutoScroll: boolean;
   jumpResId: string | null;
   // 以下の値が全てnullでなくなれば準備完了
-  topic: (G.TopicFragment & { subscribe?: boolean | null }) | null;
+  topic: (GA.TopicFragment & { subscribe?: boolean | null }) | null;
   now: Date | null;
-  reses: ReadonlyArray<G.ResFragment> | null;
+  reses: ReadonlyArray<GA.ResFragment> | null;
   jumpValue: number | null;
   fetchingOld: boolean;
   fetchingNew: boolean;
 }
 
-export function State({
-  userData,
-  topicId,
-}: {
-  userData: UserData | null;
-  topicId: string;
-}): State {
+export function State({ topicId }: { topicId: string }): State {
   return {
     topicId,
     now: null,
@@ -34,7 +26,6 @@ export function State({
     isJumpDialog: false,
     isAutoScrollDialog: false,
     isNGDialog: false,
-    userData,
     topic: null,
     reses: null,
     autoScrollSpeed: 15,

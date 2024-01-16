@@ -2,14 +2,14 @@ import * as routes from "@anontown-frontend/routes";
 import { Icon, IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useToggle } from "react-use";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { useBackground } from "../hooks/useBackground";
 import { dateFormat } from "../utils";
 import { Md } from "./md";
 import { TagsLink } from "./tags-link";
 
 interface HistoryProps {
-  history: G.HistoryFragment;
+  history: GA.HistoryFragment;
 }
 
 export function History(props: HistoryProps) {
@@ -33,7 +33,7 @@ export function History(props: HistoryProps) {
               state: {
                 background,
               },
-            }
+            },
           )}
         >
           HASH:{props.history.hash.substring(0, 6)}

@@ -4,7 +4,7 @@ import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, Redirect } from "react-router-dom";
 import { ErrorAlert, Page } from "../components";
-import * as G from "../generated/graphql";
+import * as GA from "../generated/graphql-apollo";
 import { useUserContext } from "../hooks";
 import { createUserData } from "../effects";
 
@@ -15,7 +15,7 @@ export const LoginPage = (_props: LoginPageProps) => {
   const [pass, setPass] = React.useState("");
 
   const userContext = useUserContext();
-  const [submit, { error }] = G.useCreateTokenMasterMutation();
+  const [submit, { error }] = GA.useCreateTokenMasterMutation();
 
   return (
     <Page>
@@ -55,8 +55,8 @@ export const LoginPage = (_props: LoginPageProps) => {
                   if (token.data) {
                     userContext.update(
                       await createUserData(
-                        token.data.createTokenMaster as G.TokenMasterFragment
-                      )
+                        token.data.createTokenMaster as GA.TokenMasterFragment,
+                      ),
                     );
                   }
                 }}

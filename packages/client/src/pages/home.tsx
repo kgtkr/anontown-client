@@ -20,10 +20,8 @@ export const HomePage = (_props: HomePageProps) => {
             <Tab label="トピック" />
             <Tab label="タグ" />
           </Tabs>
-          {tabIndex === 0 ? (
-            <TopicFavo detail={true} userData={userContext.value} />
-          ) : null}
-          {tabIndex === 1 ? <TagFavo userData={userContext.value} /> : null}
+          {tabIndex === 0 ? <TopicFavo detail={true} /> : null}
+          {tabIndex === 1 ? <TagFavo /> : null}
         </div>
       ) : (
         <Paper sx={{ p: 1 }}>

@@ -1,22 +1,16 @@
 import * as React from "react";
-import { rx, rxOps } from "../prelude";
+import { rx } from "../prelude";
 import { UserData } from "../domains/entities";
-import * as G from "../generated/graphql";
-import {
-  useEffectRef,
-  useEffectSkipN,
-  UserContext,
-  UserContextType,
-} from "../hooks";
-import { useSave } from "../effects/storage-api";
+import * as GA from "../generated/graphql-apollo";
+import { useEffectSkipN, UserContext, UserContextType } from "../hooks";
 
 // TODO: 最悪な実装なのであとで何とかする
-let _auth: G.TokenMasterFragment | null = null;
-function setAuth(auth: G.TokenMasterFragment | null) {
+let _auth: GA.TokenMasterFragment | null = null;
+function setAuth(auth: GA.TokenMasterFragment | null) {
   _auth = auth;
 }
 
-export function getAuth(): G.TokenMasterFragment | null {
+export function getAuth(): GA.TokenMasterFragment | null {
   return _auth;
 }
 
@@ -32,26 +26,6 @@ export const User = (props: UserProps): JSX.Element => {
   useEffectSkipN(() => {
     subjectRef.current.next(userData);
   }, [userData]);
-  const storageSave = useSave();
-  useEffectRef(
-    (f) => {
-      const subs = subjectRef.current
-        .pipe(rxOps.debounceTime(5000))
-        .subscribe((data) => {
-          f.current(data);
-        });
-
-      return () => {
-        subs.unsubscribe();
-      };
-    },
-    (data: UserData | null) => {
-      if (data !== null) {
-        storageSave(data.storage);
-      }
-    },
-    []
-  );
 
   useEffectSkipN(() => {
     if (userData !== null) {
@@ -60,7 +34,7 @@ export const User = (props: UserProps): JSX.Element => {
         JSON.stringify({
           id: userData.token.id,
           key: userData.token.key,
-        })
+        }),
       );
     } else {
       localStorage.removeItem("token");

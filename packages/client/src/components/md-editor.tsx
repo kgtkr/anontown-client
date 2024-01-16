@@ -28,7 +28,7 @@ export function MdEditor(props: MdEditorProps) {
   const [showPreview, setShowPreview] = React.useState(false);
 
   const [imageError, setImageError] = React.useState<string | undefined>(
-    undefined
+    undefined,
   );
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -37,7 +37,7 @@ export function MdEditor(props: MdEditorProps) {
       .pipe(
         rxOps.mergeMap((form) => imgur.upload(form)),
         rxOps.map((url) => `![](${url})`),
-        rxOps.reduce((tags, tag) => tags + tag + "\n", "")
+        rxOps.reduce((tags, tag) => tags + tag + "\n", ""),
       )
       .subscribe(
         (tags) => {
@@ -46,7 +46,7 @@ export function MdEditor(props: MdEditorProps) {
         },
         () => {
           setImageError("アップロードに失敗しました");
-        }
+        },
       );
   };
 
