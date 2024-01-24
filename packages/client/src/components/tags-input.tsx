@@ -7,6 +7,7 @@ import {
   usePrefixedStorageCollection,
 } from "../domains/entities/storage/StorageCollectionHooks";
 import { FavoriteTags } from "../domains/entities/storage/FavoriteTags";
+import { useUserContext } from "../hooks";
 
 export interface TagsInputProps {
   value: ReadonlyArray<string>;
@@ -23,6 +24,7 @@ export function TagsInput({ value, onChange, fullWidth }: TagsInputProps) {
   const [deleteTag] = useDeleteStorage(FavoriteTags);
   const [setTag] = useSetStorage(FavoriteTags);
   const { data, loading } = GA.useFindTopicTagsQuery();
+  const userContext = useUserContext();
 
   // TODO: `useFindTopicTagsQuery` error handling
 
@@ -43,9 +45,18 @@ export function TagsInput({ value, onChange, fullWidth }: TagsInputProps) {
             {...getTagProps({ index })}
             key={option}
             icon={
-              tagsSet.has(option) ? <Icon>star</Icon> : <Icon>star_border</Icon>
+              userContext.value !== null ? (
+                tagsSet.has(option) ? (
+                  <Icon>star</Icon>
+                ) : (
+                  <Icon>star_border</Icon>
+                )
+              ) : undefined
             }
             onClick={() => {
+              if (userContext.value === null) {
+                return;
+              }
               if (tagsSet.has(option)) {
                 deleteTag({ tag: option });
               } else {

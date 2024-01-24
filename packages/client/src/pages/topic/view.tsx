@@ -306,14 +306,16 @@ export const TopicPage = (_props: {}) => {
                   >
                     ジャンプ
                   </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      setAnchorEl(null);
-                      dispatch({ type: "CLICK_OPEN_NG_MODAL" });
-                    }}
-                  >
-                    NG
-                  </MenuItem>
+                  {user.value !== null && (
+                    <MenuItem
+                      onClick={() => {
+                        setAnchorEl(null);
+                        dispatch({ type: "CLICK_OPEN_NG_MODAL" });
+                      }}
+                    >
+                      NG
+                    </MenuItem>
+                  )}
                 </Menu>
               </div>
             </Paper>
