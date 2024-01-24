@@ -1,7 +1,6 @@
 import { Chip, TextField, Autocomplete, Icon } from "@mui/material";
 import * as React from "react";
 import * as GA from "../generated/graphql-apollo";
-import { Snack } from "./snack";
 import {
   useDeleteStorage,
   useSetStorage,
@@ -16,20 +15,16 @@ export interface TagsInputProps {
 }
 
 export function TagsInput({ value, onChange, fullWidth }: TagsInputProps) {
+  // TODO: Suspenseが起きる範囲を狭くする
   const favoTags = usePrefixedStorageCollection(FavoriteTags);
   const tagsSet = React.useMemo(() => {
     return new Set<string>([...favoTags.map((t) => t.tag)]);
   }, [favoTags]);
   const [deleteTag] = useDeleteStorage(FavoriteTags);
   const [setTag] = useSetStorage(FavoriteTags);
-  const { data, loading, error } = GA.useFindTopicTagsQuery();
+  const { data, loading } = GA.useFindTopicTagsQuery();
 
-  if (loading) {
-    return <span>Loading...</span>;
-  }
-  if (error || !data) {
-    return <Snack msg="タグ候補取得に失敗しました" />;
-  }
+  // TODO: `useFindTopicTagsQuery` error handling
 
   return (
     <Autocomplete<string, true, undefined, true>
@@ -37,8 +32,9 @@ export function TagsInput({ value, onChange, fullWidth }: TagsInputProps) {
       placeholder="タグ"
       freeSolo
       multiple
-      options={data.topicTags.map((t) => t.name)}
+      options={data?.topicTags.map((t) => t.name) ?? []}
       renderInput={(params) => <TextField {...params} placeholder="tag" />}
+      loading={loading}
       renderTags={(value: string[], getTagProps) =>
         value.map((option: string, index: number) => (
           <Chip

@@ -1,5 +1,5 @@
 import * as routes from "@anontown-frontend/routes";
-import { Tab, Tabs, Paper } from "@mui/material";
+import { Tab, Tabs, Paper, CircularProgress } from "@mui/material";
 import * as React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -20,8 +20,10 @@ export const HomePage = (_props: HomePageProps) => {
             <Tab label="トピック" />
             <Tab label="タグ" />
           </Tabs>
-          {tabIndex === 0 ? <TopicFavo detail={true} /> : null}
-          {tabIndex === 1 ? <TagFavo /> : null}
+          <React.Suspense fallback={<CircularProgress />}>
+            {tabIndex === 0 ? <TopicFavo detail={true} /> : null}
+            {tabIndex === 1 ? <TagFavo /> : null}
+          </React.Suspense>
         </div>
       ) : (
         <Paper sx={{ p: 1 }}>

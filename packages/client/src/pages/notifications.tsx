@@ -9,11 +9,14 @@ import { RA, O } from "../prelude";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { Env } from "../env";
 import { Snack } from "../components/snack";
+import { usePrefixedStorageCollection } from "../domains/entities/storage/StorageCollectionHooks";
+import { NGs } from "../domains/entities/storage/NGs";
 
 type NotificationsPageProps = RouteComponentProps<{}> & UserSwitchProps;
 
 export const NotificationsPage = userSwitch(
   (_props: NotificationsPageProps) => {
+    const ngs = usePrefixedStorageCollection(NGs);
     const [registration, setRegistration] = React.useState<
       ServiceWorkerRegistration | undefined
     >(undefined);
@@ -130,7 +133,9 @@ export const NotificationsPage = userSwitch(
           </div>
           <div>
             {reses.data !== undefined
-              ? reses.data.reses.map((r) => <Res res={r} key={r.id} />)
+              ? reses.data.reses.map((r) => (
+                  <Res res={r} key={r.id} ngs={ngs} />
+                ))
               : null}
           </div>
           <div>
@@ -173,5 +178,5 @@ export const NotificationsPage = userSwitch(
         </div>
       </Page>
     );
-  },
+  }
 );

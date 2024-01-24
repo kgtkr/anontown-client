@@ -28,11 +28,13 @@ import { epic } from "./epic";
 import { useBackground } from "../../hooks/useBackground";
 import {
   useDeleteStorage,
+  usePrefixedStorageCollection,
   useSetStorage,
   useSingleStorage,
 } from "../../domains/entities/storage/StorageCollectionHooks";
 import { FavoriteTopics } from "../../domains/entities/storage/FavoriteTopics";
 import { TopicReads } from "../../domains/entities/storage/TopicReads";
+import { NGs } from "../../domains/entities/storage/NGs";
 
 export const TopicPage = (_props: {}) => {
   const params = useParams<{ id: string }>();
@@ -42,7 +44,7 @@ export const TopicPage = (_props: {}) => {
     {
       topicId: params.id,
     },
-    null,
+    null
   );
   const [setTopicRead] = useSetStorage(TopicReads);
   const user = useUserContext();
@@ -60,8 +62,9 @@ export const TopicPage = (_props: {}) => {
       apolloClient: apolloClient,
       setTopicRead,
       initTopicDate: topicRead?.resCreatedAt,
-    },
+    }
   );
+  const ngs = usePrefixedStorageCollection(NGs);
 
   React.useEffect(() => {
     dispatch({
@@ -81,7 +84,7 @@ export const TopicPage = (_props: {}) => {
 
   const reversedReses = React.useMemo(
     () => (state.reses !== null ? RA.reverse(state.reses) : null),
-    [state.reses],
+    [state.reses]
   );
 
   const handleUpdateRes = React.useCallback((res: GA.ResFragment) => {
@@ -204,7 +207,7 @@ export const TopicPage = (_props: {}) => {
                       {
                         id: state.topicId,
                       },
-                      { state: { background } },
+                      { state: { background } }
                     )}
                   >
                     詳細データ
@@ -218,7 +221,7 @@ export const TopicPage = (_props: {}) => {
                         {
                           id: state.topicId,
                         },
-                        { state: { background } },
+                        { state: { background } }
                       )}
                     >
                       トピック編集
@@ -232,7 +235,7 @@ export const TopicPage = (_props: {}) => {
                         {
                           id: state.topicId,
                         },
-                        { state: { background } },
+                        { state: { background } }
                       )}
                     >
                       派生トピック
@@ -316,7 +319,9 @@ export const TopicPage = (_props: {}) => {
             </Paper>
             <InfiniteScroll<GA.ResFragment>
               itemToKey={(res) => res.id}
-              renderItem={(res) => <Res res={res} update={handleUpdateRes} />}
+              renderItem={(res) => (
+                <Res res={res} update={handleUpdateRes} ngs={ngs} />
+              )}
               className={style.reses}
               items={reversedReses}
               jumpItemKey={state.jumpResId}

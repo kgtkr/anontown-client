@@ -1,4 +1,4 @@
-import { Icon, IconButton } from "@mui/material";
+import { CircularProgress, Icon, IconButton } from "@mui/material";
 import React, { useState } from "react";
 import * as style from "./page.module.scss";
 
@@ -33,7 +33,11 @@ export const Page: React.FC<PageProps> = ({
           <IconButton onClick={() => setIsLeft(!isLeft)}>
             <Icon>{isLeft ? "chevron_left" : "chevron_right"}</Icon>
           </IconButton>
-          {isLeft ? sidebar : null}
+          {isLeft ? (
+            <React.Suspense fallback={<CircularProgress />}>
+              {sidebar}
+            </React.Suspense>
+          ) : null}
         </aside>
       ) : null}
       <main
@@ -42,7 +46,9 @@ export const Page: React.FC<PageProps> = ({
         }}
         className={!disableScroll ? style.mainScroll : undefined}
       >
-        {children}
+        <React.Suspense fallback={<CircularProgress />}>
+          {children}
+        </React.Suspense>
       </main>
     </div>
   );

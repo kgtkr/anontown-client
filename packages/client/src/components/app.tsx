@@ -129,8 +129,8 @@ export function App(): JSX.Element {
         }
         setInitUserData(
           await createUserData(
-            res.data.token as GA.TokenMasterFragment, // TODO: ここのキャストおかしい
-          ),
+            res.data.token as GA.TokenMasterFragment // TODO: ここのキャストおかしい
+          )
         );
       } catch {
         setInitUserData(null);
@@ -340,50 +340,49 @@ export function App(): JSX.Element {
                     />
                     <Route component={pages.NotFoundPage} />
                   </Switch>
-
-                  {location.state?.background ? (
-                    <Route
-                      path={routes.res.matcher()}
-                      component={pages.ResModal}
-                    />
-                  ) : null}
-                  {location.state?.background ? (
-                    <Route
-                      path={routes.resReply.matcher()}
-                      component={pages.ResReplyModal}
-                    />
-                  ) : null}
-                  {location.state?.background ? (
-                    <Route
-                      path={routes.profile.matcher()}
-                      component={pages.ProfileModal}
-                    />
-                  ) : null}
-                  {location.state?.background ? (
-                    <Route
-                      path={routes.topicData.matcher()}
-                      component={pages.TopicDataModal}
-                    />
-                  ) : null}
-                  {location.state?.background ? (
-                    <Route
-                      path={routes.topicFork.matcher()}
-                      component={pages.TopicForkModal}
-                    />
-                  ) : null}
-                  {location.state?.background ? (
-                    <Route
-                      path={routes.topicEdit.matcher()}
-                      component={pages.TopicEditModal}
-                    />
-                  ) : null}
-                  {location.state?.background ? (
-                    <Route
-                      path={routes.hash.matcher()}
-                      component={pages.ResHashModal}
-                    />
-                  ) : null}
                 </React.Suspense>
+                {location.state?.background ? (
+                  <Route
+                    path={routes.res.matcher()}
+                    component={pages.ResModal}
+                  />
+                ) : null}
+                {location.state?.background ? (
+                  <Route
+                    path={routes.resReply.matcher()}
+                    component={pages.ResReplyModal}
+                  />
+                ) : null}
+                {location.state?.background ? (
+                  <Route
+                    path={routes.profile.matcher()}
+                    component={pages.ProfileModal}
+                  />
+                ) : null}
+                {location.state?.background ? (
+                  <Route
+                    path={routes.topicData.matcher()}
+                    component={pages.TopicDataModal}
+                  />
+                ) : null}
+                {location.state?.background ? (
+                  <Route
+                    path={routes.topicFork.matcher()}
+                    component={pages.TopicForkModal}
+                  />
+                ) : null}
+                {location.state?.background ? (
+                  <Route
+                    path={routes.topicEdit.matcher()}
+                    component={pages.TopicEditModal}
+                  />
+                ) : null}
+                {location.state?.background ? (
+                  <Route
+                    path={routes.hash.matcher()}
+                    component={pages.ResHashModal}
+                  />
+                ) : null}
               </div>
             </div>
           );

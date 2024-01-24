@@ -13,10 +13,7 @@ import { Snack } from "./snack";
 import { isNullish } from "../utils/isNullish";
 import { useBackground } from "../hooks/useBackground";
 import { NG, NGs, TextMatcher } from "../domains/entities/storage/NGs";
-import {
-  useSetStorage,
-  usePrefixedStorageCollection,
-} from "../domains/entities/storage/StorageCollectionHooks";
+import { useSetStorage } from "../domains/entities/storage/StorageCollectionHooks";
 
 function textMatcher(matcher: TextMatcher, text: string): boolean {
   if (matcher.text.length === 0) {
@@ -26,7 +23,7 @@ function textMatcher(matcher: TextMatcher, text: string): boolean {
     try {
       return new RegExp(
         matcher.text,
-        [matcher.ignoreCase ? "i" : ""].join(""),
+        [matcher.ignoreCase ? "i" : ""].join("")
       ).test(text);
     } catch {
       return false;
@@ -105,6 +102,7 @@ function isNG(ng: NG, res: GA.ResFragment): boolean {
 interface ResProps {
   res: GA.ResFragment;
   update?: (res: GA.ResFragment) => void;
+  ngs: NG[];
 }
 
 export const Res = React.memo(function Res(props: ResProps) {
@@ -129,13 +127,13 @@ export const Res = React.memo(function Res(props: ResProps) {
   };
 
   const [submitVote] = GA.useVoteResMutation();
-  const ngs = usePrefixedStorageCollection(NGs);
   const [addNG] = useSetStorage(NGs);
+  const ng = React.useMemo(
+    () => props.ngs.some((ng) => isNG(ng, props.res)),
+    [props.ngs, props.res]
+  );
 
-  return user.value !== null &&
-    !props.res.self &&
-    !disableNG &&
-    ngs.some((ng) => isNG(ng, props.res)) ? (
+  return user.value !== null && !props.res.self && !disableNG && ng ? (
     <Paper>
       あぼーん<a onClick={() => setDisableNG(true)}>[見る]</a>
     </Paper>
@@ -246,7 +244,7 @@ export const Res = React.memo(function Res(props: ResProps) {
                     state: {
                       background,
                     },
-                  },
+                  }
                 )}
               >
                 @{props.res.profile.sn}
@@ -256,7 +254,7 @@ export const Res = React.memo(function Res(props: ResProps) {
             <Link
               to={routes.res.to(
                 { id: props.res.id, topic: props.res.topic.id },
-                { state: { background } },
+                { state: { background } }
               )}
             >
               {dateFormat.format(props.res.date)}
@@ -269,7 +267,7 @@ export const Res = React.memo(function Res(props: ResProps) {
                   state: {
                     background,
                   },
-                },
+                }
               )}
             >
               #{props.res.hash.substr(0, 6)}
@@ -357,7 +355,7 @@ export const Res = React.memo(function Res(props: ResProps) {
                   component={Link}
                   to={routes.res.to(
                     { id: props.res.reply.id, topic: props.res.topic.id },
-                    { state: { background } },
+                    { state: { background } }
                   )}
                   style={small}
                   size="small"
@@ -371,7 +369,7 @@ export const Res = React.memo(function Res(props: ResProps) {
                     component={Link}
                     to={routes.resReply.to(
                       { id: props.res.id, topic: props.res.topic.id },
-                      { state: { background } },
+                      { state: { background } }
                     )}
                     style={small}
                     size="small"

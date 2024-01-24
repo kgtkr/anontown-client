@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { Page, Res, Snack } from "../components";
 import * as GA from "../generated/graphql-apollo";
 import { withModal } from "../utils";
+import { usePrefixedStorageCollection } from "../domains/entities/storage/StorageCollectionHooks";
+import { NGs } from "../domains/entities/storage/NGs";
 
 interface ResBaseProps {
   zDepth?: number;
@@ -14,6 +16,7 @@ function ResBase({ zDepth: _zDepth }: ResBaseProps) {
   const { loading, error, data } = GA.useFindResesQuery({
     variables: { query: { id: [id] } },
   });
+  const ngs = usePrefixedStorageCollection(NGs);
 
   return (
     <div>
@@ -22,7 +25,7 @@ function ResBase({ zDepth: _zDepth }: ResBaseProps) {
       {error || !data || data.reses.length === 0 ? (
         <Snack msg="レス取得に失敗しました" />
       ) : (
-        <Res res={data.reses[0]} />
+        <Res res={data.reses[0]} ngs={ngs} />
       )}
     </div>
   );
