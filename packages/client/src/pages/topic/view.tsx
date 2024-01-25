@@ -44,7 +44,7 @@ export const TopicPage = (_props: {}) => {
     {
       topicId: params.id,
     },
-    null
+    null,
   );
   const [setTopicRead] = useSetStorage(TopicReads);
   const user = useUserContext();
@@ -62,7 +62,7 @@ export const TopicPage = (_props: {}) => {
       apolloClient: apolloClient,
       setTopicRead,
       initTopicDate: topicRead?.resCreatedAt,
-    }
+    },
   );
   const ngs = usePrefixedStorageCollection(NGs);
 
@@ -84,7 +84,7 @@ export const TopicPage = (_props: {}) => {
 
   const reversedReses = React.useMemo(
     () => (state.reses !== null ? RA.reverse(state.reses) : null),
-    [state.reses]
+    [state.reses],
   );
 
   const handleUpdateRes = React.useCallback((res: GA.ResFragment) => {
@@ -207,7 +207,7 @@ export const TopicPage = (_props: {}) => {
                       {
                         id: state.topicId,
                       },
-                      { state: { background } }
+                      { state: { background } },
                     )}
                   >
                     詳細データ
@@ -221,7 +221,7 @@ export const TopicPage = (_props: {}) => {
                         {
                           id: state.topicId,
                         },
-                        { state: { background } }
+                        { state: { background } },
                       )}
                     >
                       トピック編集
@@ -235,7 +235,7 @@ export const TopicPage = (_props: {}) => {
                         {
                           id: state.topicId,
                         },
-                        { state: { background } }
+                        { state: { background } },
                       )}
                     >
                       派生トピック

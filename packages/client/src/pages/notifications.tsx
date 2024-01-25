@@ -178,5 +178,5 @@ export const NotificationsPage = userSwitch(
         </div>
       </Page>
     );
-  }
+  },
 );
