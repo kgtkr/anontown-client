@@ -7,10 +7,6 @@ import "./main.scss";
 import { HelmetProvider } from "react-helmet-async";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createRoot } from "react-dom/client";
-import {
-  StorageCacheContext,
-  StorageCache,
-} from "./domains/entities/storage/StorageCollectionHooks";
 
 Modal.setAppElement("#root");
 
@@ -18,11 +14,9 @@ createRoot(document.querySelector("#root")!).render(
   <ApolloProvider client={gqlClient}>
     <HelmetProvider>
       <BrowserRouter>
-        <StorageCacheContext.Provider value={StorageCache()}>
-          <CssBaseline />
-          <App />
-        </StorageCacheContext.Provider>
+        <CssBaseline />
+        <App />
       </BrowserRouter>
     </HelmetProvider>
-  </ApolloProvider>,
+  </ApolloProvider>
 );

@@ -1,31 +1,60 @@
-import { useMutation, useSuspenseQuery } from "@apollo/client";
+import { skipToken, useMutation, useSuspenseQuery } from "@apollo/client";
 import { StorageCollection, getKey } from "./StorageCollection";
 import { graphql } from "../../../generated/graphql/gql";
 import { useUserContext } from "../../../hooks";
 import React from "react";
+import { atom, useAtomValue, useSetAtom, useStore } from "jotai";
+import { atomFamily } from "jotai/utils";
+import { isNotUndefined } from "../../../prelude";
+import equal from "fast-deep-equal";
 
-/**
- * あるStorageをset/deleteしたときにキャッシュを更新するべきクエリを保持する
- * 例えば key="a:b:c" を持つStorageをset/deleteした時、更新対象のクエリは
- * - keyPrefixが "a:" や "a:b:" であるクエリ
- * - keysに "a:b:c" を含むクエリ
- */
-export interface StorageCache {
-  // あるprefixのクエリ
-  prefixedQueries: Set<string>;
-  // あるkeyを持つクエリ。valueはsorted keysのJSON集合
-  keysQueries: Map<string, Set<string>>;
-}
+type S = { __typename: "Storage"; key: string; value: string };
 
-export function StorageCache(): StorageCache {
-  return {
-    prefixedQueries: new Set(),
-    keysQueries: new Map(),
-  };
-}
+// クエリした結果存在しないことが分かっているもの
+const notFound = Symbol("notFound");
+const valuesCache = atomFamily((_key: string) =>
+  atom<S | typeof notFound | undefined>(undefined)
+);
+const prefixedKeysCache = atomFamily((_prefix: string) =>
+  atom<string[] | undefined>(undefined)
+);
 
-export const StorageCacheContext = React.createContext<StorageCache>(
-  undefined!,
+// hoge:foo: で検索した時に hoge:foo: がないが hoge: がある場合にそのキャッシュをフィルタリングして返す
+const prefixedKeys = atomFamily((prefix: string) =>
+  atom<string[] | undefined>((get) => {
+    const prefixes = splitKey(prefix);
+    for (const p of prefixes) {
+      const cache = get(prefixedKeysCache(p));
+      if (cache !== undefined) {
+        return cache.filter((x) => x.startsWith(prefix));
+      }
+    }
+    return undefined;
+  })
+);
+
+const prefixedStorages = atomFamily((prefix: string) =>
+  atom<S[] | undefined>((get) => {
+    const keys = get(prefixedKeys(prefix));
+    if (keys === undefined) {
+      return undefined;
+    }
+    return keys.map((key) => {
+      const storage = get(valuesCache(key));
+      if (storage === undefined || storage === notFound) {
+        throw new Error("unexpected");
+      }
+      return storage;
+    });
+  })
+);
+
+const keysStorages = atomFamily(
+  (keys: string[]) =>
+    atom<Map<string, S | undefined | typeof notFound>>((get) => {
+      return new Map(keys.map((key) => [key, get(valuesCache(key))] as const));
+    }),
+  equal
 );
 
 function splitKey(key: string): string[] {
@@ -41,13 +70,12 @@ function splitKey(key: string): string[] {
   return prefixes;
 }
 
-type S = { __typename: "Storage"; key: string; value: string };
-function lowerBoundStorages(storages: S[], key: string): number {
+function lowerBoundKeys(keys: string[], key: string): number {
   let left = 0;
-  let right = storages.length;
+  let right = keys.length;
   while (left < right) {
     const mid = Math.floor((left + right) / 2);
-    if (storages[mid].key < key) {
+    if (keys[mid] < key) {
       left = mid + 1;
     } else {
       right = mid;
@@ -55,29 +83,29 @@ function lowerBoundStorages(storages: S[], key: string): number {
   }
   return left;
 }
-function updateCacheSetStorage(prevCache: S[], s: S): S[] {
-  const cache = [...prevCache];
-  const left = lowerBoundStorages(cache, s.key);
+function updateCacheSetKey(prevKeys: string[], key: string): string[] {
+  const keys = [...prevKeys];
+  const left = lowerBoundKeys(keys, key);
 
-  if (left < cache.length && cache[left].key === s.key) {
-    cache[left] = s;
+  if (left < keys.length && keys[left] === key) {
+    keys[left] = key;
   } else {
-    cache.splice(left, 0, s);
+    keys.splice(left, 0, key);
   }
 
-  return cache;
+  return keys;
 }
 
-function deleteCacheSetStorage(prevCache: S[], key: string): S[] {
-  const left = lowerBoundStorages(prevCache, key);
+function updateCacheDeleteKey(prevKeys: string[], key: string): string[] {
+  const left = lowerBoundKeys(prevKeys, key);
 
-  if (left < prevCache.length && prevCache[left].key === key) {
-    const cache = [...prevCache];
-    cache.splice(left, 1);
-    return cache;
+  if (left < prevKeys.length && prevKeys[left] === key) {
+    const keys = [...prevKeys];
+    keys.splice(left, 1);
+    return keys;
   }
 
-  return prevCache;
+  return prevKeys;
 }
 
 const PrefixedStorageQueryDocument = graphql(/* GraphQL */ `
@@ -120,32 +148,47 @@ const DeleteStorageMutationDocument = graphql(/* GraphQL */ `
 export function usePrefixedStorageCollection<T>(
   storageCollection: StorageCollection<T>,
   // `:`で区切られ`:`で終わる
-  additionalPrefix?: string,
+  additionalPrefix?: string
 ): T[] {
   const { value: userData } = useUserContext();
-  const cache = React.useContext(StorageCacheContext);
   const prefix = `${storageCollection.keyPrefix}${additionalPrefix ?? ""}`;
-  // TODO: 既に hoge: でリクエストしているなら hoge:foo: でリクエストしないようにする
-  const { data } = useSuspenseQuery(PrefixedStorageQueryDocument, {
-    variables: {
-      prefix,
-    },
-    skip: !userData,
-  });
+  const cachedStorages = useAtomValue(prefixedStorages(prefix));
+  const setPrefixedKeysCache = useSetAtom(prefixedKeysCache(prefix));
+  const { data } = useSuspenseQuery(
+    PrefixedStorageQueryDocument,
+    userData !== null && cachedStorages === undefined
+      ? {
+          variables: {
+            prefix,
+          },
+        }
+      : skipToken
+  );
+  const store = useStore();
   React.useEffect(() => {
-    cache.prefixedQueries.add(prefix);
-  }, [cache, data, prefix]);
+    if (data === undefined) {
+      return;
+    }
+
+    for (const storage of data.storages) {
+      // atomFamily の複数の値にsetするhookがないのでstore apiを使っている
+      store.set(valuesCache(storage.key), storage);
+    }
+    setPrefixedKeysCache(data.storages.map((s) => s.key));
+  }, [store, setPrefixedKeysCache, data, prefix]);
 
   const result = React.useMemo(() => {
-    if (data === undefined) {
+    const storages = cachedStorages ?? data?.storages;
+
+    if (storages === undefined) {
       return [];
     }
 
     const result: T[] = [];
-    for (const storage of data.storages) {
+    for (const storage of storages) {
       try {
         result.push(
-          storageCollection.validator.parse(JSON.parse(storage.value)),
+          storageCollection.validator.parse(JSON.parse(storage.value))
         );
       } catch (e) {
         // ignore
@@ -156,7 +199,7 @@ export function usePrefixedStorageCollection<T>(
       result.sort(storageCollection.compare);
     }
     return result;
-  }, [data, storageCollection]);
+  }, [cachedStorages, data, storageCollection]);
 
   return result;
 }
@@ -164,41 +207,55 @@ export function usePrefixedStorageCollection<T>(
 export function useStorage<T, K extends keyof T, D>(
   storageCollection: StorageCollection<T, K>,
   keyObjects: Pick<T, K>[],
-  defaultValue: D | T, // `| T` は不要だが補完のため
+  defaultValue: D | T // `| T` は不要だが補完のため
 ): (key: Pick<T, K>) => T | D {
   const { value: userData } = useUserContext();
-  const cache = React.useContext(StorageCacheContext);
   const keys = React.useMemo(
     () => keyObjects.map((key) => getKey(storageCollection, key)).sort(),
-    [storageCollection, keyObjects],
+    [storageCollection, keyObjects]
   );
-  // TODO: 既に cache に対象の key が全てあるならリクエストしないようにする。また、 cache にあるキーを除いてリクエストする
-  const { data } = useSuspenseQuery(StorageQueryDocument, {
-    variables: {
-      keys,
-    },
-    skip: !userData || keyObjects.length === 0,
-  });
+  const cachedStorages = useAtomValue(keysStorages(keys));
+  const requestKeys = React.useMemo(() => {
+    return Array.from(cachedStorages)
+      .filter(([, value]) => value === undefined)
+      .map(([key]) => key);
+  }, [cachedStorages]);
+  const { data } = useSuspenseQuery(
+    StorageQueryDocument,
+    userData !== null && requestKeys.length > 0
+      ? {
+          variables: {
+            keys: requestKeys,
+          },
+        }
+      : skipToken
+  );
+  const store = useStore();
   React.useEffect(() => {
-    for (const key of keys) {
-      const keysQueries = cache.keysQueries.get(key) ?? new Set();
-      keysQueries.add(JSON.stringify(keys));
-      cache.keysQueries.set(key, keysQueries);
+    if (data === undefined) {
+      return;
     }
-  }, [cache, data, keys]);
+    const map = new Map(data.storages.map((s) => [s.key, s] as const));
+    for (const key of keys) {
+      store.set(valuesCache(key), map.get(key) ?? notFound);
+    }
+  }, [data, store, keys]);
 
   return React.useMemo(() => {
     const map = new Map<string, T>();
-    if (data !== undefined) {
-      for (const storage of data.storages) {
-        try {
-          map.set(
-            storage.key,
-            storageCollection.validator.parse(JSON.parse(storage.value)),
-          );
-        } catch (e) {
-          // ignore
-        }
+    for (const storage of [
+      ...Array.from(cachedStorages)
+        .map(([, v]) => (v !== notFound ? v : undefined))
+        .filter(isNotUndefined),
+      ...(data !== undefined ? data.storages : []),
+    ]) {
+      try {
+        map.set(
+          storage.key,
+          storageCollection.validator.parse(JSON.parse(storage.value))
+        );
+      } catch (e) {
+        // ignore
       }
     }
 
@@ -209,13 +266,13 @@ export function useStorage<T, K extends keyof T, D>(
       }
       return value;
     };
-  }, [data, storageCollection, defaultValue]);
+  }, [cachedStorages, data, storageCollection, defaultValue]);
 }
 
 export function useSingleStorage<T, K extends keyof T, D>(
   storageCollection: StorageCollection<T, K>,
   key: Pick<T, K>,
-  defaultValue: D | T,
+  defaultValue: D | T
 ): T | D {
   const storages = useStorage(storageCollection, [key], defaultValue);
   return storages(key);
@@ -223,7 +280,7 @@ export function useSingleStorage<T, K extends keyof T, D>(
 
 export function useSetStorage<T>(storageCollection: StorageCollection<T>) {
   const [mutation, result] = useMutation(SetStoragesMutationDocument);
-  const storageCache = React.useContext(StorageCacheContext);
+  const store = useStore();
 
   return React.useMemo(
     () =>
@@ -237,59 +294,11 @@ export function useSetStorage<T>(storageCollection: StorageCollection<T>) {
                 storages: [{ key, value }],
               },
             },
-            update: (cache, { data }) => {
-              if (data === null || data === undefined) {
-                return;
-              }
-
-              if (data.setStorages.storages.length === 0) {
-                return;
-              }
-              const storage = data.setStorages.storages[0];
+            onCompleted: (data) => {
+              store.set(valuesCache(key), data.setStorages.storages[0]);
               for (const prefix of splitKey(key)) {
-                if (storageCache.prefixedQueries.has(prefix)) {
-                  cache.updateQuery(
-                    {
-                      query: PrefixedStorageQueryDocument,
-                      variables: {
-                        prefix,
-                      },
-                    },
-                    (prev) => {
-                      if (prev === null) {
-                        return prev;
-                      }
-
-                      return {
-                        ...prev,
-                        storages: updateCacheSetStorage(prev.storages, storage),
-                      };
-                    },
-                  );
-                }
-              }
-
-              const keysQueries = storageCache.keysQueries.get(key) ?? [];
-
-              for (const keysJSON of keysQueries) {
-                const keys = JSON.parse(keysJSON) as string[];
-                cache.updateQuery(
-                  {
-                    query: StorageQueryDocument,
-                    variables: {
-                      keys,
-                    },
-                  },
-                  (prev) => {
-                    if (prev === null) {
-                      return prev;
-                    }
-
-                    return {
-                      ...prev,
-                      storages: updateCacheSetStorage(prev.storages, storage),
-                    };
-                  },
+                store.set(prefixedKeysCache(prefix), (prev) =>
+                  prev === undefined ? undefined : updateCacheSetKey(prev, key)
                 );
               }
             },
@@ -297,15 +306,15 @@ export function useSetStorage<T>(storageCollection: StorageCollection<T>) {
         },
         result,
       ] as const,
-    [storageCollection, mutation, result],
+    [store, storageCollection, mutation, result]
   );
 }
 
 export function useDeleteStorage<T, K extends keyof T>(
-  storageCollection: StorageCollection<T, K>,
+  storageCollection: StorageCollection<T, K>
 ) {
   const [mutation, result] = useMutation(DeleteStorageMutationDocument);
-  const storageCache = React.useContext(StorageCacheContext);
+  const store = useStore();
 
   return React.useMemo(
     () =>
@@ -316,58 +325,13 @@ export function useDeleteStorage<T, K extends keyof T>(
             variables: {
               key,
             },
-            update: (cache) => {
-              cache.evict({
-                id: cache.identify({
-                  __typename: "Storage",
-                  key,
-                }),
-              });
-
+            onCompleted: () => {
+              store.set(valuesCache(key), notFound);
               for (const prefix of splitKey(key)) {
-                if (storageCache.prefixedQueries.has(prefix)) {
-                  cache.updateQuery(
-                    {
-                      query: PrefixedStorageQueryDocument,
-                      variables: {
-                        prefix,
-                      },
-                    },
-                    (prev) => {
-                      if (prev === null) {
-                        return prev;
-                      }
-
-                      return {
-                        ...prev,
-                        storages: deleteCacheSetStorage(prev.storages, key),
-                      };
-                    },
-                  );
-                }
-              }
-
-              const keysQueries = storageCache.keysQueries.get(key) ?? [];
-
-              for (const keysJSON of keysQueries) {
-                const keys = JSON.parse(keysJSON) as string[];
-                cache.updateQuery(
-                  {
-                    query: StorageQueryDocument,
-                    variables: {
-                      keys,
-                    },
-                  },
-                  (prev) => {
-                    if (prev === null) {
-                      return prev;
-                    }
-
-                    return {
-                      ...prev,
-                      storages: deleteCacheSetStorage(prev.storages, key),
-                    };
-                  },
+                store.set(prefixedKeysCache(prefix), (prev) =>
+                  prev === undefined
+                    ? undefined
+                    : updateCacheDeleteKey(prev, key)
                 );
               }
             },
@@ -375,6 +339,6 @@ export function useDeleteStorage<T, K extends keyof T>(
         },
         result,
       ] as const,
-    [mutation, result, storageCollection],
+    [store, mutation, result, storageCollection]
   );
 }
