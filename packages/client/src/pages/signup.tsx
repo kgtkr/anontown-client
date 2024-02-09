@@ -1,7 +1,7 @@
 import * as routes from "@anontown-frontend/routes";
 import { Paper, Button, TextField } from "@mui/material";
 import * as React from "react";
-import Recaptcha from "react-google-recaptcha";
+import ReCAPTCHA from "react-google-recaptcha";
 import { Helmet } from "react-helmet-async";
 import { Link, Redirect } from "react-router-dom";
 import { ErrorAlert, Page } from "../components";
@@ -11,30 +11,12 @@ import { createUserData } from "../effects";
 import { useUserContext } from "../hooks";
 
 export function SignupPage() {
-  const recaptchaRef = React.useRef<any>(null);
+  const recaptchaRef = React.useRef<ReCAPTCHA | null>(null);
   const [sn, setSn] = React.useState("");
   const [pass, setPass] = React.useState("");
-  const [recaptcha, setRecaptcha] = React.useState<string | null>(null);
 
   const user = useUserContext();
-  const [submit, { error }] = GA.useCreateUserMutation({
-    onError: () => {
-      const rc = recaptchaRef.current;
-      if (rc) {
-        rc.reset();
-      }
-    },
-    onCompleted: async (x) => {
-      user.update(
-        await createUserData(x.createUser.token as GA.TokenMasterFragment),
-      );
-    },
-    variables: {
-      sn,
-      pass,
-      recaptcha: recaptcha!,
-    },
-  });
+  const [submit, { error }] = GA.useCreateUserMutation();
 
   return (
     <Page>
@@ -43,12 +25,35 @@ export function SignupPage() {
         <Redirect to={routes.home.to({})} />
       ) : (
         <Paper>
-          <form>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const recaptcha = await recaptchaRef.current!.executeAsync();
+              await submit({
+                variables: {
+                  sn,
+                  pass,
+                  recaptcha: recaptcha!,
+                },
+                onError: () => {
+                  recaptchaRef.current!.reset();
+                },
+                onCompleted: async (x) => {
+                  user.update(
+                    await createUserData(
+                      x.createUser.token as GA.TokenMasterFragment
+                    )
+                  );
+                },
+              });
+            }}
+          >
             <div>
               <TextField
                 placeholder="ID"
                 value={sn}
                 onChange={(evt) => setSn(evt.target.value)}
+                autoComplete="username"
               />
             </div>
             <div>
@@ -57,12 +62,13 @@ export function SignupPage() {
                 value={pass}
                 onChange={(evt) => setPass(evt.target.value)}
                 type="password"
+                autoComplete="new-password"
               />
             </div>
-            <Recaptcha
+            <ReCAPTCHA
               sitekey={Env.recaptcha.siteKey}
               ref={recaptchaRef}
-              onChange={(v: string) => setRecaptcha(v)}
+              size="invisible"
             />
             <div>
               <a
@@ -75,7 +81,7 @@ export function SignupPage() {
             </div>
             <div>
               <ErrorAlert error={error} />
-              <Button onClick={() => submit()} variant="contained">
+              <Button variant="contained" type="submit">
                 利用規約に同意して登録
               </Button>
             </div>
