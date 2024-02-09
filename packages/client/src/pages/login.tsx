@@ -25,12 +25,32 @@ export const LoginPage = (_props: LoginPageProps) => {
       ) : (
         <Paper>
           <ErrorAlert error={error} />
-          <form>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const token = await submit({
+                variables: {
+                  auth: {
+                    sn,
+                    pass,
+                  },
+                },
+              });
+              if (token.data) {
+                userContext.update(
+                  await createUserData(
+                    token.data.createTokenMaster as GA.TokenMasterFragment
+                  )
+                );
+              }
+            }}
+          >
             <div>
               <TextField
                 placeholder="ID"
                 value={sn}
                 onChange={(evt) => setSn(evt.target.value)}
+                autoComplete="username"
               />
             </div>
             <div>
@@ -39,29 +59,11 @@ export const LoginPage = (_props: LoginPageProps) => {
                 value={pass}
                 onChange={(evt) => setPass(evt.target.value)}
                 type="password"
+                autoComplete="current-password"
               />
             </div>
             <div>
-              <Button
-                onClick={async () => {
-                  const token = await submit({
-                    variables: {
-                      auth: {
-                        sn,
-                        pass,
-                      },
-                    },
-                  });
-                  if (token.data) {
-                    userContext.update(
-                      await createUserData(
-                        token.data.createTokenMaster as GA.TokenMasterFragment,
-                      ),
-                    );
-                  }
-                }}
-                variant="contained"
-              >
+              <Button type="submit" variant="contained">
                 ログイン
               </Button>
             </div>

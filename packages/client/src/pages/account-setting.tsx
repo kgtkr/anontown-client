@@ -16,7 +16,7 @@ export const AccountSettingPage = userSwitch(
     const user = GA.useFindUserQuery();
 
     const [sn, setSn] = React.useState(
-      user.data !== undefined ? user.data.user.sn : "",
+      user.data !== undefined ? user.data.user.sn : ""
     );
     const [updateUserSubmit] = GA.useUpdateUserMutation();
     const [createTokenMasterSubmit] = GA.useCreateTokenMasterMutation();
@@ -31,58 +31,71 @@ export const AccountSettingPage = userSwitch(
           ) : null}
           {user.loading ? <div>loading</div> : null}
           {user.data !== undefined ? (
-            <form>
-              <TextField
-                placeholder="ID"
-                value={sn}
-                onChange={(evt) => setSn(evt.target.value)}
-              />
-              <TextField
-                placeholder="新しいパスワード"
-                value={newPass}
-                onChange={(evt) => setNewPass(evt.target.value)}
-              />
-              <TextField
-                placeholder="現在のパスワード"
-                value={oldPass}
-                onChange={(evt) => setOldPass(evt.target.value)}
-              />
-              <Button
-                onClick={async () => {
-                  if (user.data !== undefined) {
-                    try {
-                      await updateUserSubmit({
-                        variables: {
-                          sn,
-                          pass: newPass,
-                          auth: { id: user.data.user.id, pass: oldPass },
-                        },
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (user.data !== undefined) {
+                  try {
+                    await updateUserSubmit({
+                      variables: {
+                        sn,
+                        pass: newPass,
+                        auth: { id: user.data.user.id, pass: oldPass },
+                      },
+                    });
+                    const token = await createTokenMasterSubmit({
+                      variables: {
+                        auth: { id: user.data.user.id, pass: newPass },
+                      },
+                    });
+                    if (token.data) {
+                      props.updateUserData({
+                        ...props.userData,
+                        token: token.data
+                          .createTokenMaster as GA.TokenMasterFragment,
                       });
-                      const token = await createTokenMasterSubmit({
-                        variables: {
-                          auth: { id: user.data.user.id, pass: newPass },
-                        },
-                      });
-                      if (token.data) {
-                        props.updateUserData({
-                          ...props.userData,
-                          token: token.data
-                            .createTokenMaster as GA.TokenMasterFragment,
-                        });
-                      }
-                    } catch (e) {
-                      setSnackMsg(String(e));
                     }
+                  } catch (e) {
+                    setSnackMsg(String(e));
                   }
-                }}
-                variant="contained"
-              >
-                OK
-              </Button>
+                }
+              }}
+            >
+              <div>
+                <TextField
+                  placeholder="ID"
+                  value={sn}
+                  onChange={(evt) => setSn(evt.target.value)}
+                  autoComplete="username"
+                />
+              </div>
+              <div>
+                <TextField
+                  placeholder="現在のパスワード"
+                  value={oldPass}
+                  onChange={(evt) => setOldPass(evt.target.value)}
+                  type="password"
+                  autoComplete="current-password"
+                />
+              </div>
+              <div>
+                <TextField
+                  placeholder="新しいパスワード"
+                  value={newPass}
+                  onChange={(evt) => setNewPass(evt.target.value)}
+                  type="password"
+                  autoComplete="new-password"
+                />
+              </div>
+              <div>
+                <Button type="submit" variant="contained">
+                  OK
+                </Button>
+              </div>
             </form>
           ) : null}
         </Paper>
       </Page>
     );
-  },
+  }
 );
