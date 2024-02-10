@@ -71,12 +71,21 @@ export function SignupPage() {
               size="invisible"
             />
             <div>
+              {/* eslint-disable-next-line react/jsx-no-target-blank */}
               <a
                 target="_blank"
                 href="https://document.anontown.com/terms.html"
-                rel="noopener noreferrer"
               >
                 利用規約(10行くらいしかないから読んでね)
+              </a>
+            </div>
+            <div>
+              {/* eslint-disable-next-line react/jsx-no-target-blank */}
+              <a
+                target="_blank"
+                href="https://document.anontown.com/privacy-policy.html"
+              >
+                プライバシーポリシー
               </a>
             </div>
             <div>
