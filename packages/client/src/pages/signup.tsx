@@ -41,8 +41,8 @@ export function SignupPage() {
                 onCompleted: async (x) => {
                   user.update(
                     await createUserData(
-                      x.createUser.token as GA.TokenMasterFragment
-                    )
+                      x.createUser.token as GA.TokenMasterFragment,
+                    ),
                   );
                 },
               });

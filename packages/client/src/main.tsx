@@ -18,5 +18,5 @@ createRoot(document.querySelector("#root")!).render(
         <App />
       </BrowserRouter>
     </HelmetProvider>
-  </ApolloProvider>
+  </ApolloProvider>,
 );

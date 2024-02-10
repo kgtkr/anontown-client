@@ -13,10 +13,10 @@ type S = { __typename: "Storage"; key: string; value: string };
 // クエリした結果存在しないことが分かっているもの
 const notFound = Symbol("notFound");
 const valuesCache = atomFamily((_key: string) =>
-  atom<S | typeof notFound | undefined>(undefined)
+  atom<S | typeof notFound | undefined>(undefined),
 );
 const prefixedKeysCache = atomFamily((_prefix: string) =>
-  atom<string[] | undefined>(undefined)
+  atom<string[] | undefined>(undefined),
 );
 
 // hoge:foo: で検索した時に hoge:foo: がないが hoge: がある場合にそのキャッシュをフィルタリングして返す
@@ -30,7 +30,7 @@ const prefixedKeys = atomFamily((prefix: string) =>
       }
     }
     return undefined;
-  })
+  }),
 );
 
 const prefixedStorages = atomFamily((prefix: string) =>
@@ -46,7 +46,7 @@ const prefixedStorages = atomFamily((prefix: string) =>
       }
       return storage;
     });
-  })
+  }),
 );
 
 const keysStorages = atomFamily(
@@ -54,7 +54,7 @@ const keysStorages = atomFamily(
     atom<Map<string, S | undefined | typeof notFound>>((get) => {
       return new Map(keys.map((key) => [key, get(valuesCache(key))] as const));
     }),
-  equal
+  equal,
 );
 
 function splitKey(key: string): string[] {
@@ -148,7 +148,7 @@ const DeleteStorageMutationDocument = graphql(/* GraphQL */ `
 export function usePrefixedStorageCollection<T>(
   storageCollection: StorageCollection<T>,
   // `:`で区切られ`:`で終わる
-  additionalPrefix?: string
+  additionalPrefix?: string,
 ): T[] {
   const { value: userData } = useUserContext();
   const prefix = `${storageCollection.keyPrefix}${additionalPrefix ?? ""}`;
@@ -162,7 +162,7 @@ export function usePrefixedStorageCollection<T>(
             prefix,
           },
         }
-      : skipToken
+      : skipToken,
   );
   const store = useStore();
   React.useEffect(() => {
@@ -188,7 +188,7 @@ export function usePrefixedStorageCollection<T>(
     for (const storage of storages) {
       try {
         result.push(
-          storageCollection.validator.parse(JSON.parse(storage.value))
+          storageCollection.validator.parse(JSON.parse(storage.value)),
         );
       } catch (e) {
         // ignore
@@ -207,12 +207,12 @@ export function usePrefixedStorageCollection<T>(
 export function useStorage<T, K extends keyof T, D>(
   storageCollection: StorageCollection<T, K>,
   keyObjects: Pick<T, K>[],
-  defaultValue: D | T // `| T` は不要だが補完のため
+  defaultValue: D | T, // `| T` は不要だが補完のため
 ): (key: Pick<T, K>) => T | D {
   const { value: userData } = useUserContext();
   const keys = React.useMemo(
     () => keyObjects.map((key) => getKey(storageCollection, key)).sort(),
-    [storageCollection, keyObjects]
+    [storageCollection, keyObjects],
   );
   const cachedStorages = useAtomValue(keysStorages(keys));
   const requestKeys = React.useMemo(() => {
@@ -228,7 +228,7 @@ export function useStorage<T, K extends keyof T, D>(
             keys: requestKeys,
           },
         }
-      : skipToken
+      : skipToken,
   );
   const store = useStore();
   React.useEffect(() => {
@@ -252,7 +252,7 @@ export function useStorage<T, K extends keyof T, D>(
       try {
         map.set(
           storage.key,
-          storageCollection.validator.parse(JSON.parse(storage.value))
+          storageCollection.validator.parse(JSON.parse(storage.value)),
         );
       } catch (e) {
         // ignore
@@ -272,7 +272,7 @@ export function useStorage<T, K extends keyof T, D>(
 export function useSingleStorage<T, K extends keyof T, D>(
   storageCollection: StorageCollection<T, K>,
   key: Pick<T, K>,
-  defaultValue: D | T
+  defaultValue: D | T,
 ): T | D {
   const storages = useStorage(storageCollection, [key], defaultValue);
   return storages(key);
@@ -298,7 +298,7 @@ export function useSetStorage<T>(storageCollection: StorageCollection<T>) {
               store.set(valuesCache(key), data.setStorages.storages[0]);
               for (const prefix of splitKey(key)) {
                 store.set(prefixedKeysCache(prefix), (prev) =>
-                  prev === undefined ? undefined : updateCacheSetKey(prev, key)
+                  prev === undefined ? undefined : updateCacheSetKey(prev, key),
                 );
               }
             },
@@ -306,12 +306,12 @@ export function useSetStorage<T>(storageCollection: StorageCollection<T>) {
         },
         result,
       ] as const,
-    [store, storageCollection, mutation, result]
+    [store, storageCollection, mutation, result],
   );
 }
 
 export function useDeleteStorage<T, K extends keyof T>(
-  storageCollection: StorageCollection<T, K>
+  storageCollection: StorageCollection<T, K>,
 ) {
   const [mutation, result] = useMutation(DeleteStorageMutationDocument);
   const store = useStore();
@@ -331,7 +331,7 @@ export function useDeleteStorage<T, K extends keyof T>(
                 store.set(prefixedKeysCache(prefix), (prev) =>
                   prev === undefined
                     ? undefined
-                    : updateCacheDeleteKey(prev, key)
+                    : updateCacheDeleteKey(prev, key),
                 );
               }
             },
@@ -339,6 +339,6 @@ export function useDeleteStorage<T, K extends keyof T>(
         },
         result,
       ] as const,
-    [store, mutation, result, storageCollection]
+    [store, mutation, result, storageCollection],
   );
 }
