@@ -6,12 +6,9 @@
   <title>Anontown</title>
   <base href="/">
   <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <meta name="description" content="高機能匿名掲示板Anontown">
   <link rel="mask-icon" href="/icon.svg" color="#FFFFFF">
   <meta name="theme-color" content="#00ff00">
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108693999-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -20,6 +17,7 @@
     }
     gtag('js', new Date());
   </script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <link rel="icon" type="image/png" sizes="196x196" href="./favicon-196.png">
   <link rel="apple-touch-icon" href="./apple-icon-180.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -79,7 +77,6 @@
 
 <body>
   <div id="root"></div>
-  <script src="https://www.google.com/recaptcha/api.js"></script>
   <script>
     globalThis.APP_ENV = __APP_ENV__;
   </script>
