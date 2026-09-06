@@ -9,6 +9,8 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
+      - run: npm run codegen
+      - run: git diff --exit-code
       - run: npx lerna run build
       - run: npx lerna run check
       - run: npm run format:check

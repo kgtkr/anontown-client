@@ -17,6 +17,7 @@
     "lint:fix": "eslint --fix 'packages/*/src/**/*.{ts,tsx}'",
     "format:check": "prettier --check 'packages/*/src/**/*.{ts,tsx}'",
     "format": "prettier --write 'packages/*/src/**/*.{ts,tsx}'",
+    "codegen": "lerna run codegen",
     "dev": "lerna run --include-dependencies --parallel --stream --scope @anontown-frontend/client dev",
     "dev-bff": "lerna run --include-dependencies build --scope @anontown-frontend/client && lerna run --include-dependencies --parallel --stream --scope @anontown-frontend/bff dev"
   },
