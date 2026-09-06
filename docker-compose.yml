@@ -40,7 +40,7 @@ services:
     environment:
       - GOCAMO_HMAC=${CAMO_KEY}
   faktory:
-    image: contribsys/faktory:1.6.2
+    image: contribsys/faktory:1.10.0
     volumes:
       - faktory:/var/lib/faktory/db
 volumes:
